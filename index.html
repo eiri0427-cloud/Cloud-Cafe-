@@ -151,7 +151,7 @@ img.pix{image-rendering:pixelated;image-rendering:crisp-edges;vertical-align:mid
 .hud.hl{left:6px;top:6px}.hud b{font-weight:400;font-size:16px;letter-spacing:.03em}
 .rushb{animation:blink .6s infinite}
 .hudbar{position:absolute;left:0;right:0;bottom:0;height:4px;background:rgba(0,0,0,.18);z-index:3}.hudbar i{display:block;height:100%;background:linear-gradient(90deg,#E2A93B,#D9566B)}
-.acts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:10px}
+.acts{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px}
 .act{border:1px solid var(--line);background:linear-gradient(#fff,#FBF5EC);border-radius:14px;padding:7px 4px 6px;font:inherit;font-size:13px;font-weight:700;color:var(--ink);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:1px;box-shadow:0 2px 0 #EADBC6;transition:transform .08s}
 .act span{font-size:22px;line-height:1.1}.act small{font-size:10.5px;color:var(--mute);font-weight:500}
 .act:active{transform:translateY(2px);box-shadow:none}.act:disabled{opacity:.42}
@@ -248,6 +248,14 @@ canvas.por{border:2px solid var(--line);border-radius:12px}
 .crane:before{content:'';position:absolute;left:50%;bottom:100%;width:2px;height:200px;background:#555}
 .prize{position:absolute;bottom:8px;font-size:30px;transform:translateX(-50%)}
 .btn.pink{background:#D9748A;border-color:#D9748A;color:#fff}
+.bwbar{position:relative;height:34px;border:2px solid var(--ink);border-radius:10px;background:#efe6d8;margin:6px 0;overflow:hidden}.bwz{position:absolute;top:0;bottom:0;background:rgba(224,164,58,.45)}.bwg{position:absolute;top:0;bottom:0;opacity:.9}.bwn{position:absolute;top:-2px;bottom:-2px;width:3px;margin-left:-1px;background:#2b2622}
+.bwsc{display:flex;gap:10px;justify-content:center;font-size:12px;color:var(--mute);min-height:18px}.bwsc b{color:var(--ink);font-size:15px;font-weight:400}
+.dslots{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}.dslot{border:1px dashed #cdb89a;border-radius:12px;background:#FBF5EC;padding:7px 4px;font:inherit;cursor:pointer;display:flex;flex-direction:column;gap:2px}.dslot small{font-size:10px;color:var(--mute)}.dslot b{font-size:12.5px}
+canvas.dpv{width:40px;height:40px;image-rendering:pixelated;border-radius:10px;background:#F6EFE5;flex:none}
+.act{padding:7px 2px 6px}.act small{font-size:10px}
+.unlock{border:2px solid #E2A93B;background:linear-gradient(135deg,#FFF8E8,#FDEFF2)}
+.todo{background:#FFFDF8}.tdi{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px dashed var(--line);font-size:13.5px}.tdi:last-child{border:0}.tdi>span{font-size:18px;width:24px;text-align:center}
+.board{background:#2e4038;border:3px solid #8a5a32;border-radius:10px;padding:6px 8px;margin-top:8px;color:#f6efe2}.bslot{display:flex;justify-content:space-between;align-items:center;padding:3px 0;border-bottom:1px dashed rgba(255,255,255,.15);font-size:13px}.bslot:last-child{border:0}.board .hint{color:rgba(246,239,226,.5)}.board .link{background:rgba(255,255,255,.12);color:#f6efe2;margin-left:2px}
 .link.on{background:var(--pink,#D9748A);color:#fff}
 </style>
 </head>
@@ -340,10 +348,13 @@ const UPG=[
  {id:'cups',tab:'店裡',n:'高級杯具',lv:[{c:800,d:'職人陶杯：顧客願付 +3%'},{c:2000,d:'手作杯盤：顧客願付 +6%'}]},
  {id:'aircon',tab:'店裡',n:'冷暖空調',lv:[{c:900,d:'炎熱、寒流日來客懲罰減半'}]},
  {id:'app',tab:'街上',n:'手機預點系統',lv:[{c:2500,d:'約 22% 客人用手機先點好，不用排隊直接取餐；取餐區 +2 位'}]},
+ {id:'truck',tab:'街上',n:'行動咖啡車',lv:[{c:8000,d:'週末可以派員工開咖啡車去市集、音樂祭擺攤'}]},
  {id:'card',tab:'街上',n:'會員集點卡',lv:[{c:700,d:'鄰居熟客來客 +15%，熟客每次來訪好感 +1'}]},
  {id:'awning',tab:'街上',n:'雨棚與傘架',lv:[{c:300,d:'下雨天來客懲罰減半'}]},
  {id:'window',tab:'隔壁',n:'外帶窗口',lv:[{c:1500,d:'上班族來客 +10%，上班族排隊耐心 +3 分鐘'}]},
  {id:'storage',tab:'隔壁',n:'倉庫擴建',lv:[{c:1000,d:'食材保存 +1 天（現烤與冰塊除外），批發價 -5%'}]},
+ {id:'nightlic',tab:'店裡',n:'夜間營業執照',lv:[{c:2000,d:'可以延長營業到 21:00（到「經營 › 升級」設定營業時段）'}]},
+ {id:'roaster',tab:'店裡',n:'小型烘豆機',lv:[{c:6000,d:'自家烘豆：咖啡豆成本 -15%、可選烘焙度、每天烘一爐提升願付'}]},
  {id:'bar2',tab:'店裡',n:'第二工作台',lv:[{c:1800,d:'多一組吧台與收銀機：吧台、收銀名額各 +1，多開一個點餐窗口，出杯 +10 杯/時，取餐區 +3 位'}]},
  {id:'staffroom',tab:'隔壁',n:'員工休息室',lv:[{c:900,d:'員工名冊上限 +2；休息室員工每天恢復疲勞 +10'},{c:2400,d:'名冊上限再 +2，外場名額 +1，休息恢復再 +10'}]},
  {id:'expand',tab:'隔壁',n:'打通隔壁',lv:[{c:5000,d:'店面加大：來客 +35%、多 4 張桌子、咖啡師與外場名額各 +1，租金 +$80/天'}]}];
@@ -406,6 +417,50 @@ const REGS={
    3:[['mika','最近接案好少，有點懷疑自己是不是該轉行。'],['me','你畫的東西，會讓人想停下來看。'],['mika','…謝謝。我會再撐一下。']],
    4:[['mika','我想在店裡辦一個小畫展，展出這條巷子的插畫。'],['mika','會有很多外地人來看喔！'],['me','牆壁隨你用！']],
    5:[['mika','我的繪本要出版了！封面就是這間店。'],['mika','書名叫《巷口的咖啡香》。'],['me','我要在櫃檯擺一整排。']]}},
+ anan:{n:'小安',job:'夜班護理師',fav:['latte'],alt:['americano','hotcocoa'],win:[960,1060],days:[0,1,2,3,4,5,6],p:.7,dine:.4,stay:[20,40],req:()=>S.day>=8,reqT:'第 8 天後出現',
+  look:{skin:'#f6d8bc',hair:'#2b2622',shirt:'#7ab0c8',pants:'#3d4a5a',long:1},
+  perks:{2:'傍晚 4 點後來客 +8%（她介紹同事下班來）',4:'員工每天疲勞 -4（她教大家伸展操）'},
+  greet:[['一杯熱拿鐵，外帶。','要上大夜班了…'],['今天也要靠你續命了。','老樣子，謝謝！'],['今天病房好忙，終於喘口氣。','你的拿鐵是我上班前的儀式。'],['欸，我今天休假特地來的喔。','你最近有好好睡覺嗎？看起來好累。'],['不管多累，來這裡就覺得回家了。','老闆，謝謝你一直在這裡。']],
+  talk:['護理師的生理時鐘早就壞掉了。','你知道嗎？熱飲真的能讓人安心。','今天有位阿伯出院了，好開心。'],
+  out:'拿鐵賣完了？那…給我一杯熱的就好。',exp:'這價格…護理師薪水好難啊。',wait:'來不及了，我要遲到了！',
+  story:{1:[['anan','請問…還有開嗎？我六點要上班。'],['me','有的，剛好最後一批豆子。'],['anan','太好了。我叫小安，在附近醫院上大夜班。']],
+   2:[['anan','我跟護理站的同事推薦你們家了。'],['anan','以後下班時間可能會有一群穿制服的人來。'],['me','歡迎歡迎，我多準備一些外帶杯。']],
+   3:[['anan','昨天有一位病人走了……我送他走的。'],['me','……辛苦了。'],['anan','謝謝你什麼都不問。這杯拿鐵，好溫暖。']],
+   4:[['anan','老闆，你站一整天腳會不會痠？'],['anan','我教你幾個伸展動作，員工也一起做吧！'],['sys','小安教大家護理師版伸展操']],
+   5:[['anan','我升護理長了。'],['me','恭喜！今天我請客。'],['anan','如果沒有每天上班前的這一杯，我大概撐不到今天。']]}},
+ xiaoqing:{n:'小晴',job:'高三學生',fav:['icedmatcha'],alt:['matcha','iced'],win:[990,1060],days:[0,1,2,3,4],p:.7,dine:.85,stay:[30,60],req:()=>S.day>=12,reqT:'第 12 天後出現',
+  look:{skin:'#f6d8bc',hair:'#5a3a22',shirt:'#f2f2f2',pants:'#2e4a7a',long:1,bag:1},
+  perks:{2:'學生來客 +8%（她拉同學來念書）',4:'顧客願付 +2%（她拍的店內照片爆紅）'},
+  greet:[['一杯冰抹茶，謝謝！','可以坐這裡念書嗎？'],['老闆～我又來了！','今天模擬考考爛了QQ'],['我帶同學來了，她超愛你們家！','學測倒數 100 天…'],['老闆，你覺得我念設計好還是念醫好？','我把你們家拍成短影片了！'],['考完試第一件事就是來這裡！','老闆，謝謝你陪我度過高三。']],
+  talk:['數學好難，人生好難。','我們班有一半的人都知道這間店。','老闆你高中的時候是怎樣的人？'],
+  out:'冰抹茶沒了…好吧，冰美式提神！',exp:'零用錢不夠了啦…',wait:'補習要遲到了，掰掰！',
+  story:{1:[['xiaoqing','請問……這裡可以念書嗎？圖書館都沒位子了。'],['me','可以啊，只要不嫌吵。'],['xiaoqing','太好了！我叫小晴，高三。']],
+   2:[['xiaoqing','我把同學都拉來了！我們組了一個讀書會。'],['xiaoqing','每天放學都來這裡報到～'],['me','那我得多放幾個插座了。']],
+   3:[['xiaoqing','老闆……我好像不想念爸媽要我念的科系。'],['me','那你想做什麼？'],['xiaoqing','我想……設計像這樣的空間。讓人覺得安心的地方。']],
+   4:[['xiaoqing','我拍的店內短影片破十萬觀看了！'],['xiaoqing','留言都在問這是哪裡～'],['sys','小晴的影片讓店裡多了好多新客人']],
+   5:[['xiaoqing','我考上了！室內設計系！'],['xiaoqing','爸媽最後也同意了。'],['xiaoqing','老闆，以後我一定要幫你設計第二家店！']]}},
+ zhou:{n:'老周',job:'退休爵士樂手',fav:['pourover'],alt:['americano','latte'],win:[840,960],days:[1,3,5,6],p:.7,dine:.95,stay:[60,100],req:()=>S.day>=15&&lv('pour')>0,reqT:'第 15 天後、有手沖吧台',
+  look:{skin:'#c98e66',hair:'#8a8a8a',shirt:'#3a3a4a',pants:'#2b2622',gl:1},
+  perks:{2:'下午來客 +6%（他在店裡即興演奏）',4:'口碑上限 +3'},
+  greet:[['一杯手沖，豆子你挑。','嗯，今天的音樂不錯。'],['午安，年輕人。','老位子，謝了。'],['我今天帶了口琴來。','這間店的節奏，剛剛好。'],['你知道嗎？好咖啡跟好音樂一樣，要留白。','今天想聽什麼？我吹給你聽。'],['這把年紀還能找到這樣的地方，真幸運。','老朋友，來杯老樣子。']],
+  talk:['我年輕時在紐約的小酒館演奏過。','Bill Evans 的鋼琴，最適合配手沖。','節奏不要太滿，人生也是。'],
+  out:'手沖沒有啊…那就美式吧，簡單也好。',exp:'這價錢，比我當年一場演出還貴。',wait:'人太多了，老人家改天再來。',
+  story:{1:[['zhou','你們放的這張專輯……是 Chet Baker？'],['me','對，您也喜歡？'],['zhou','我以前在樂團吹小號。叫我老周就好。']],
+   2:[['zhou','介意我在角落吹一段嗎？很小聲的。'],['me','求之不得。'],['sys','老周吹了一段〈My Funny Valentine〉，全店安靜下來聽']],
+   3:[['zhou','我太太以前是駐唱。她走了以後，我就不吹了。'],['zhou','直到在這裡，才又想拿起樂器。']],
+   4:[['zhou','我找了幾個老團員，週末想在這裡辦個小演出。'],['zhou','不收錢，就當回饋這間店。'],['sys','老周的週末爵士夜成了巷口話題']],
+   5:[['zhou','這把小號跟了我五十年，送給這間店吧。'],['me','這太珍貴了…'],['zhou','掛在牆上。以後有人問起，你就說：有個老頭在這裡找回了音樂。']]}},
+ claire:{n:'Claire',job:'法式甜點主廚',fav:['cake'],alt:['latte','americano'],win:[600,720],days:[0,2,4,6],p:.6,dine:.6,stay:[30,50],req:()=>S.day>=20&&S.rep>=60,reqT:'第 20 天後、口碑 60',
+  look:{skin:'#f6d8bc',hair:'#c9a24a',shirt:'#f6efe2',pants:'#2b2622',bun:1},
+  perks:{2:'甜點加購率 +8%',4:'自由實驗費用減半（她分享配方心得）'},
+  greet:[['Bonjour！一份蛋糕和拿鐵。','讓我看看今天的甜點。'],['你們的巴斯克，火候進步了。','老樣子，merci！'],['我剛從巴黎回來，帶了一點香草莢給你。','甜點和咖啡，要像戀人一樣搭。'],['下次試試看在奶油裡加一點海鹽。','你的味覺越來越好了。'],['在台北，這裡是我最喜歡的咖啡店。','我的老朋友，今天想吃什麼？']],
+  talk:['甜點是精準的藝術，咖啡是感性的藝術。','巴黎的咖啡其實沒有你的好喝，噓。','奶油的溫度決定一切。'],
+  out:'蛋糕賣完了？Dommage…那就拿鐵吧。',exp:'這價格，在巴黎都可以吃一份可頌了。',wait:'我還要回廚房，下次見。',
+  story:{1:[['claire','這個巴斯克……是你自己烤的嗎？'],['me','是的，還在練習。'],['claire','焦面再深一點會更好。我是 Claire，在附近開甜點店。']],
+   2:[['claire','我們的甜點和你的咖啡，可以一起推套餐。'],['claire','我的客人常問哪裡有好咖啡，我都推薦你。'],['me','那我也推薦你的甜點！']],
+   3:[['claire','我的店……可能要收了。房東要漲租金。'],['me','如果需要幫忙，儘管說。'],['claire','謝謝。至少在這裡，我可以好好喝一杯咖啡。']],
+   4:[['claire','我決定不收店了，換一個小一點的地方繼續。'],['claire','這是我的筆記本，裡面有我的配方心得，送你。'],['sys','Claire 分享了她的研發心得']],
+   5:[['claire','法國的甜點比賽邀請我當評審。'],['claire','我跟他們說，台北有一間咖啡店，是我的靈感來源。'],['claire','你要繼續做讓人幸福的東西喔，mon ami。']]}},
  leo:{n:'Leo',job:'旅遊部落客',fav:['seasonal'],alt:['pourover','latte'],win:[660,900],days:[5,6],p:.75,dine:.7,req:()=>S.rep>=55,reqT:'口碑達 55',
   look:{skin:'#c98e66',hair:'#2b2622',shirt:'#e8c547',pants:'#4e5d78',cap:'#4e78a6',cam:1},
   perks:{2:'遊客來客 +10%（部落格文章）',4:'整體來客 +8%（雜誌專欄）'},
@@ -417,8 +472,20 @@ const REGS={
    3:[['leo','跑了這麼多城市，我最喜歡的還是這種有人情味的小店。']],
    4:[['leo','雜誌社邀我寫專欄，第一篇想寫你的店。'],['leo','標題就叫「一間會記得你名字的咖啡館」。']],
    5:[['leo','我決定在這附近租房子定居了。'],['leo','以後我就不是遊客，是熟客啦！']]}}};
-const REG_ORDER=['azhe','grandma','xiaoyu','wang','mika','leo'];
+const REG_ORDER=['azhe','grandma','xiaoyu','wang','mika','leo','anan','xiaoqing','zhou','claire'];
 const REGX={
+ anan:{rain:['下雨天醫院特別忙…','傘忘在病房了。'],hot:['冷氣房待太久，來杯熱的。'],cold:['好冷，大夜班更難熬了。'],am:['剛下大夜，回家前來一杯。'],pm:['睡醒了，準備上班。','今天輪小夜。'],
+  season:[['秋天流感季要開始了。'],['冬天病人好多。'],['春天花粉症的病人變多了。'],['夏天中暑的人好多。']],fest:['過節也要上班，護理師的日常。'],seat:['（看病歷筆記）','（揉眼睛）','終於可以坐下了…'],busy:['今天好熱鬧。'],newItem:['新品？下班來試試。'],
+  talk:['今天有個小朋友送我一張畫。','護理站的零食都被我吃光了。'],treat:['謝謝你，我會帶著這杯撐過今晚。','你真的好溫柔。']},
+ xiaoqing:{rain:['淋濕了啦…','下雨天補習班好遠。'],hot:['好熱！冰抹茶救我！'],cold:['好冷，可以喝熱的嗎？'],am:['今天沒課！'],pm:['放學啦～','補習前來充電。'],
+  season:[['開學了…好不想。'],['期末考地獄。'],['畢業倒數！'],['暑假萬歲！']],fest:['放假！可以待一整天！'],seat:['（寫考卷）','這題到底怎麼解…','（偷滑手機）'],busy:['哇今天好多人！'],newItem:['新品！我要拍照！'],
+  talk:['我們班導超兇的。','我最近在學畫畫。'],treat:['真的嗎！老闆最好了！','我要發限動感謝老闆！']},
+ zhou:{rain:['雨天適合聽藍調。'],hot:['熱天就該來點 Bossa Nova。'],cold:['冷天適合 Ballad。'],am:['老人家起得早。'],pm:['午後的光，像一段慢板。'],
+  season:[['秋天是 Autumn Leaves 的季節。'],['冬天，Coltrane 的季節。'],['春天，來點輕快的。'],['夏天，Getz 的薩克斯風。']],fest:['過節要熱鬧一點，來首 Swing！'],seat:['（手指輕敲桌面打拍子）','（哼著旋律）','嗯……這段即興不錯。'],busy:['熱鬧，像當年的酒館。'],newItem:['新口味？像新的和弦。'],
+  talk:['好的樂手懂得什麼時候不吹。','我第一支小號是在當鋪買的。'],treat:['這杯，我會吹一首歌回報你。','謝謝，年輕人。']},
+ claire:{rain:['下雨天，奶油比較難打發。'],hot:['天氣熱，巧克力都融了。'],cold:['冷天最適合吃甜點。'],am:['早上試做了新的塔。'],pm:['午茶時間！'],
+  season:[['秋天是栗子的季節。'],['冬天要做聖誕樹幹蛋糕。'],['春天有草莓！'],['夏天做芒果慕斯。']],fest:['過節，甜點店最忙了。'],seat:['（素描新甜點）','嗯，這個比例……','（品嚐咖啡做筆記）'],busy:['生意真好呢。'],newItem:['新品？我來品評一下。'],
+  talk:['馬卡龍要靜置一晚才好吃。','我在巴黎學了十年。'],treat:['Merci beaucoup！','你真是個甜蜜的人。']},
  azhe:{rain:['又下雨…傘都濕了。','雨天就是要熱美式。'],hot:['外面根本是烤箱，冰美式救我。','熱到不想上班。'],cold:['好冷，手都凍僵了。','今天加一個 shot，拜託。'],
   am:['昨天又被 bug 追到半夜…','早會前一定要先來這。'],pm:['下午偷溜出來，噓。','今天提早下班，難得。'],
   season:[['秋天了，適合寫程式（？）'],['年底要結算 KPI，好可怕。'],['春天…過敏季又來了。'],['夏天冷氣房待到發冷。']],
@@ -456,6 +523,10 @@ const REGX={
   talk:['我去過 32 個國家了。','最好喝的咖啡是在山上喝的那杯…第二名是你這。','讀者問我你單身嗎（笑）','我的相機比我的車還貴。'],
   treat:['招待？我要寫進文章裡！','老闆太帥了吧！','這杯一定要拍。']}};
 const DUO=[
+ {a:'anan',b:'grandma',l:[['grandma','小安，又上大夜啊？要記得吃飯。'],['anan','陳奶奶，您血壓有按時量嗎？'],['grandma','哎呀，被護理師管了。']]},
+ {a:'xiaoqing',b:'xiaoyu',l:[['xiaoqing','學姊！妳是念設計的對不對？'],['xiaoyu','對呀～妳想念設計嗎？'],['xiaoqing','想！可以教我作品集嗎？']]},
+ {a:'zhou',b:'mika',l:[['mika','周爺爺，可以畫你吹小號的樣子嗎？'],['zhou','把我畫年輕一點就好。'],['mika','不用，現在的樣子最有味道！']]},
+ {a:'claire',b:'wang',l:[['wang','妳的可頌……比我的好吃。'],['claire','你的麵包有家的味道，這是學不來的。'],['wang','……這話我記住了。']]},
  {a:'azhe',b:'xiaoyu',l:[['azhe','妳也在趕 deadline 嗎？'],['xiaoyu','對啊…你也是？'],['azhe','工程師的人生就是一連串的 deadline。']]},
  {a:'grandma',b:'xiaoyu',l:[['grandma','小雨，畫得怎麼樣了？'],['xiaoyu','奶奶！我畫了一張您坐在窗邊的圖喔。'],['grandma','哎呀，把我畫漂亮一點。']]},
  {a:'grandma',b:'wang',l:[['wang','陳老師，今天的麵包留了一個給您。'],['grandma','你小時候在我班上，就最會偷吃。'],['wang','哈哈哈，老師還記得啊。']]},
@@ -620,7 +691,7 @@ const yearTarget=y=>Math.round(45000*Math.pow(y,1.45)/1000)*1000;
 const CHAPTERS=[
  {t:'站穩腳步',d:'存款達到 $8,000',ok:()=>S.money>=8000,rw:600,prog:()=>`目前 ${fm(S.money)}`,
   story:[['grandma','聽說你的店最近很熱鬧。'],['grandma','錢存下來了。下一步，讓這裡成為大家心中的名店吧。']]},
- {t:'巷口名店',d:'口碑達到 90、認識全部 6 位熟客，並有 2 位好感達 Lv3',ok:()=>S.rep>=90&&REG_ORDER.every(id=>S.reg[id].met)&&REG_ORDER.filter(id=>regLv(id)>=3).length>=2,rw:1200,prog:()=>`口碑 ${Math.round(S.rep)}/90　熟客 ${REG_ORDER.filter(id=>S.reg[id].met).length}/6　朋友 ${REG_ORDER.filter(id=>regLv(id)>=3).length}/2`,
+ {t:'巷口名店',d:'口碑達到 90、認識最初的 6 位熟客，並有 2 位好感達 Lv3',ok:()=>S.rep>=90&&REG_ORDER.slice(0,6).every(id=>S.reg[id].met)&&REG_ORDER.filter(id=>regLv(id)>=3).length>=2,rw:1200,prog:()=>`口碑 ${Math.round(S.rep)}/90　熟客 ${REG_ORDER.filter(id=>S.reg[id].met).length}/6　朋友 ${REG_ORDER.filter(id=>regLv(id)>=3).length}/2`,
   story:[['grandma','現在整條巷子的人都知道你了。'],['grandma','有沒有想過，把這份味道帶到別的地方？'],['sys','🔓 解鎖「品牌 › 分店」與大額貸款']]},
  {t:'第一家分店',d:'在「品牌 › 分店」開設第一家分店',ok:()=>Object.keys(S.br).length>=1,rw:1500,prog:()=>`分店 ${Object.keys(S.br).length}/1`,
   story:[['wang','聽說你開分店了？不錯嘛，兄弟。'],['wang','不過別忘了，本店才是你的根。']]},
@@ -702,16 +773,21 @@ function sfx(k,force){
 /* Lo-fi 背景音樂：Fmaj7 – Em7 – Dm7 – Cmaj7 */
 const PROG=[[53,57,60,64,67],[52,55,59,62,67],[50,53,57,60,64],[48,52,55,59,62]];
 const PENTA=[72,74,76,79,81,84];
+const PROGJ=[[50,53,57,60,64],[55,59,62,65,69],[48,52,55,59,64],[45,48,52,55,60]];
+function musicMode(){if(!S||S.phase!=='open')return {bpm:66,tr:[0,-2,2,5][cal().s],prog:PROGJ,hat:0,mel:.08,swing:.3};const t=S.t,tr=[0,-2,2,5][cal().s];
+ if(t<660)return {bpm:78,tr,prog:PROG,hat:1,mel:.12,swing:.18};if(t<840)return {bpm:92,tr,prog:PROG,hat:2,mel:.16,swing:.12};if(t<960)return {bpm:80,tr:tr+3,prog:PROG,hat:1,mel:.13,swing:.18};return {bpm:68,tr,prog:PROGJ,hat:0,mel:.1,swing:.33}}
 function sched(){
- if(!AU.ctx)return;const c=AU.ctx,stepDur=60/74/4;
- while(AU.next<c.currentTime+.25){const st=AU.step%16,t=AU.next+(st%2?stepDur*.18:0);
-  if(AU.m){const ch=PROG[AU.bar%4],G=AU.mG;
+ if(!AU.ctx)return;const c=AU.ctx,MM=musicMode(),stepDur=60/MM.bpm/4;
+ while(AU.next<c.currentTime+.25){const st=AU.step%16,t=AU.next+(st%2?stepDur*MM.swing:0);
+  if(AU.m){const ch=MM.prog[AU.bar%4].map(n=>n+MM.tr),G=AU.mG;
+   if(MM.hat>=2&&st%2===1)nz(t,.02,.018,'highpass',8000,G);
+   if(MM.hat===0&&(st===6||st===14))osc('sine',mtof(ch[0]-24),t,.01,.3,.12,G);
    if(st===0||st===10)ch.slice(0,4).forEach((n,i)=>{osc('sine',mtof(n),t+i*.012,.03,st?1.0:1.8,.06,G);osc('triangle',mtof(n)*1.003,t+i*.012,.03,st?.8:1.4,.02,G)});
    if(st===0||st===7||st===8)osc('triangle',mtof(ch[0]-12),t,.01,.45,.16,G);
    if(st===0||st===9)osc('sine',110,t,.002,.22,.35,G,42);
    if(st===4||st===12)nz(t,.12,.07,'bandpass',1800,G,.7);
-   if(st%2===0)nz(t,.03,.025,'highpass',7000,G);
-   if(R()<.13&&st%2===0)osc('triangle',mtof(pickA(PENTA)),t,.02,.7,.035,G);
+   if(st%2===0&&MM.hat)nz(t,.03,.025,'highpass',7000,G);
+   if(R()<MM.mel&&st%2===0)osc('triangle',mtof(pickA(PENTA)+MM.tr),t,.02,.7,.035,G);
   }
   AU.next+=stepDur;AU.step++;if(AU.step%16===0)AU.bar++;}
 }
@@ -855,8 +931,12 @@ let CATS=[];
 function resetCats(){CATS=(S.cats||[]).map((id,i)=>({id,x:id==='mikan'?64:40+i*30,y:id==='mikan'?56:130,tx:0,ty:0,st:'sit',t:R()*30,f:0,dir:1,sill:id==='mikan',h:0}))}
 const CAT_SPOTS=[[40,56,1],[56,56,1],[84,56,1],[30,125,0],[70,150,0],[120,128,0],[150,165,0],[160,104,0],[24,170,0],[248,64,0]];
 function catsTick(dm){for(const c of CATS){c.t-=dm;if(c.h>0)c.h-=dm;
- if(c.st==='walk'){const dx=c.tx-c.x,dy=c.ty-c.y,d=Math.hypot(dx,dy),st=14*dm;if(d<=st){c.x=c.tx;c.y=c.ty;c.st=c.want||(R()<.4?'sleep':R()<.5?'groom':'sit');c.t=25+R()*60}else{c.x+=dx/d*st;c.y+=dy/d*st;c.f+=dm*6;c.dir=dx>0?1:-1}}
+ if(c.st!=='walk'&&!c.table&&S.phase==='open'&&!S.skipping&&R()<.0025*dm){const st=SEATS.find(s=>s.occ&&s.occ.st==='sit');if(st){c.tx=st.tx+(R()<.5?-5:5);c.ty=st.ty-1;c.table=st;c.want='sit';c.st='walk';c.sill=false}}
+ if(c.st==='walk'){const dx=c.tx-c.x,dy=c.ty-c.y,d=Math.hypot(dx,dy),st=14*dm;if(d<=st){c.x=c.tx;c.y=c.ty;c.st=c.want||(R()<.4?'sleep':R()<.5?'groom':'sit');c.t=25+R()*60;if(c.table){catTable(c);c.table=null}}else{c.x+=dx/d*st;c.y+=dy/d*st;c.f+=dm*6;c.dir=dx>0?1:-1}}
  else if(c.t<=0){const sp=pickA(catSpots());c.tx=sp[0]+(sp[3]?0:rr(-6,6));c.ty=sp[1];c.sill=!!sp[2];c.want=sp[3]||null;c.st='walk'}}}
+function catTable(c){const st=c.table;if(!st||!st.occ)return;const e=st.occ;
+ if(R()<.15){spillAt();SPILLS[SPILLS.length-1].x=st.tx;SPILLS[SPILLS.length-1].y=st.ty+10;sfx('sad',1);fl('喵！打翻了','#C4553D',{x:st.tx,y:st.ty-14},false);pushFeed('🐱 店貓跳上桌，把杯子打翻了！快去擦地板');return}
+ S.rep=clamp(S.rep+.3,0,repCap());e.icon='heart';e.icT=4;spawnHeart(e);sfx('meow',1);fl('📸 好可愛！','#D9566B',{x:st.tx,y:st.ty-14},false);if(R()<.3)pushFeed('📸 客人拍下店貓跳上桌的照片上傳 IG');if(R()<.15)addFan(1)}
 function drawCat(c,ts){const def=CATDEF.find(d=>d.id===c.id);if(!def)return;const [m,dk,lt]=def.c,x=Math.round(c.x),y=Math.round(c.y),d=c.dir>0;
  P(x-5,y,10,1,'rgba(0,0,0,.18)');
  if(c.st==='sleep'){P(x-5,y-4,10,4,m);P(x-4,y-5,8,1,m);P(d?x+2:x-5,y-4,3,3,m);P(d?x+2:x-5,y-5,1,1,dk);P(d?x+4:x-3,y-5,1,1,dk);P(x-5,y-1,10,1,dk);P(x-3,y-3,4,1,lt);
@@ -926,6 +1006,186 @@ const EVDEF=[
  {id:'photo',w:2,mk:()=>({ic:'📸',t:'客人想拍照上傳',d:'有客人想拍店內和飲料上傳 IG，可以嗎？',btn:[['歡迎！',()=>{S.today.boostUntil=Math.max(S.today.boostUntil||0,S.t)+60;S.rep=clamp(S.rep+.3,0,repCap())}],['婉拒',()=>{}]]})},
  {id:'stray',w:3,ok:()=>S.day>=3&&!S.today.stray&&CATDEF.some(d=>!catOwn(d.id)),mk:()=>{const d=pickA(CATDEF.filter(d=>!catOwn(d.id)));S.today.stray=1;const price=Math.round(d.cost*.5);return {ic:'🐱',t:'門口有隻流浪貓',d:`一隻小貓在門口徘徊，好像想進來…（${d.trait.split('：')[0]}）收留牠的話只要 ${fm(price)} 健康檢查費。`,
   btn:[[`收留 ${fm(price)}`,()=>{if(!adoptCat(d.id,price))toast('錢不夠…')}],['給點食物',()=>{S.rep=clamp(S.rep+.2,0,repCap())}]]}}}];
+
+const stDown=n=>{S.today.sta=Math.max(0,(S.today.sta??100)-n)};
+const boost=m=>{S.today.boostUntil=Math.max(S.today.boostUntil||0,S.t)+m};
+const addFan=n=>{S.fans=(S.fans||0)+n};
+EVDEF.push(
+ {id:'influ',w:2,ok:()=>S.rep>=40&&!S.today.influ,mk:()=>{S.today.influ=1;const k=pickDrinkInStock(2);return {ic:'📱',t:'網紅來店直播',d:`百萬訂閱的美食網紅「咖啡阿肥」走進店裡，想直播介紹${MENU[k].n}。`,
+  btn:[['招待＋親自介紹（體力 -15）',()=>{if(canMake(k,1))for(const i in MENU[k].need)consume(i,MENU[k].need[i]);stDown(15);if(R()<.8){boost(180);S.rep=clamp(S.rep+3,0,repCap());S.hype[k]=3;addFan(3);toast(`📱 直播爆紅！${MENU[k].n}成了話題，接下來 3 小時人潮湧入`)}else{S.rep=clamp(S.rep+1,0,repCap());toast('📱 直播反應普普，但多了一些追蹤者')}}],
+   ['照常收費',()=>{if(R()<.4){boost(90);toast('📱 網紅給了不錯的評價')}else{S.rep=clamp(S.rep-1,0,100);toast('📱 網紅說「服務有點冷淡」…')}}],['婉拒拍攝',()=>{}]]}}},
+ {id:'tour',w:2,ok:()=>S.t<930&&!S.today.tourDone,mk:()=>{S.today.tourDone=1;return {ic:'🚌',t:'旅行團來了！',d:'一台遊覽車停在巷口，導遊問能不能接待 12 位團客。他們會一口氣湧進店裡！',
+  btn:[['全部接待',()=>{for(let i=0;i<12;i++){const e=newEnt('tourist');e.pat=45;joinLine(e,false)}S.rep=clamp(S.rep+1,0,repCap());addFan(1);toast('🚌 團客湧入！善用衝刺和收銀員')}],['只接一半',()=>{for(let i=0;i<6;i++){const e=newEnt('tourist');e.pat=40;joinLine(e,false)}}],['今天太忙了',()=>{}]]}}},
+ {id:'typhoon',w:8,ok:()=>S.weather==='typhoon'&&!S.today.tyDone,mk:()=>{S.today.tyDone=1;return {ic:'🌀',t:'颱風天怎麼辦？',d:'風雨越來越大，店裡幾乎沒人。要改成只做外送嗎？',
+  btn:[['只做外送（外送單 ×3）',()=>{S.today.noDine=1;S.today.delivX=3;toast('🛵 改成外送模式，外送單大增')}],['發颱風津貼 $100',()=>{S.money-=100;S.staff.forEach(s=>s.fat=Math.max(0,s.fat-15));toast('💰 員工很感動，疲勞下降')}],['照常營業',()=>{}]]}}},
+ {id:'complain',w:3,mk:()=>{const k=pickA(Object.keys(MENU).filter(k=>unlocked(k)&&!MENU[k].food));const q=pickA(['太甜','太苦','不夠熱','奶泡太少','冰塊太多']);return {ic:'😠',t:'客人來抱怨',d:`一位客人皺著眉說：「這杯${MENU[k].n}${q}了吧？」`,
+  btn:[['馬上重做一杯',()=>{if(canMake(k,1))for(const i in MENU[k].need)consume(i,MENU[k].need[i]);S.rep=clamp(S.rep+.8,0,repCap());if(R()<.45){addFan(1);toast('😊 客人被你的態度感動，成為鐵粉！')}else toast('😊 客人滿意地離開了')}],
+   ['道歉並送一片餅乾',()=>{if(ING.cookie&&stock('cookie')>0)consume('cookie',1);S.rep=clamp(S.rep+.4,0,repCap());if(R()<.25){addFan(1);toast('🍪 客人笑了，說下次還會再來')}else toast('🍪 客人接受了道歉')}],
+   ['解釋這是店裡的配方',()=>{if(R()<.3){S.rep=clamp(S.rep+.5,0,repCap());toast('☕ 客人聽完覺得很有道理')}else{S.rep=clamp(S.rep-1,0,100);toast('😤 客人不太高興地走了')}}]]}}},
+ {id:'fight',w:2,ok:()=>S.staff.filter(onShift).length>=2,mk:()=>{const L=S.staff.filter(onShift).sort(()=>R()-.5),a=L[0],b=L[1];return {ic:'💢',t:'員工起爭執',d:`${a.n} 和 ${b.n} 為了誰該洗杯子吵起來了…`,
+  btn:[['親自調解（體力 -15）',()=>{stDown(15);a.fat=Math.max(0,a.fat-10);b.fat=Math.max(0,b.fat-10);toast(`🤝 ${a.n}和${b.n}握手言和`)}],['請大家喝飲料（$30）',()=>{S.money-=30;S.staff.forEach(s=>s.fat=Math.max(0,s.fat-5));toast('🧋 大家喝了飲料，氣氛緩和了')}],['讓他們自己處理',()=>{if(R()<.5){a.fat=Math.min(100,a.fat+15);b.fat=Math.min(100,b.fat+15);toast('😒 兩人冷戰了一整天，疲勞上升')}else toast('他們自己和好了')}]]}}},
+ {id:'broken',w:1,ok:()=>!S.today.capX&&S.t<960,mk:()=>({ic:'🔧',t:'咖啡機出狀況了！',d:'蒸氣管突然噴不出蒸氣，出杯速度掉了一大半。',
+  btn:[['叫師傅來修（$200）',()=>{S.money-=200;S.today.spend+=200;toast('🔧 師傅很快修好了')}],['自己動手修（體力 -30）',()=>{stDown(30);if(R()<.6)toast('🔧 修好了！店長真厲害');else{S.today.capX=.6;toast('😵 沒修好…今天出杯 -40%')}}],['先撐著用',()=>{S.today.capX=.6;toast('今天出杯速度 -40%')}]]})},
+ {id:'propose',w:1,ok:()=>S.rep>=50&&!S.today.prop,mk:()=>{S.today.prop=1;return {ic:'💍',t:'有人想在店裡求婚',d:'一位緊張的年輕人問：可以幫我準備一個驚喜嗎？他想在這裡求婚。',
+  btn:[['全力幫忙佈置（$60、體力 -10）',()=>{S.money-=60;stDown(10);S.rep=clamp(S.rep+3,0,repCap());addFan(2);boost(60);toast('💍 她答應了！全店一起鼓掌，影片在網路上瘋傳')}],['給他一個安靜的角落',()=>{S.rep=clamp(S.rep+1,0,repCap());toast('💍 求婚成功，兩人說以後每年都會回來')}]]}}},
+ {id:'foreign',w:2,mk:()=>({ic:'🌏',t:'外國客人看不懂菜單',d:'一對外國觀光客對著菜單一臉困惑。',
+  btn:[['比手畫腳推薦招牌',()=>{S.rep=clamp(S.rep+.5,0,repCap());if(R()<.5){S.today.jar=Math.min(40,(S.today.jar||0)+3);toast('🌏 他們超開心，還給了小費！')}else toast('🌏 溝通成功，點了兩杯')}],['用翻譯 App 慢慢解釋（體力 -5）',()=>{stDown(5);S.rep=clamp(S.rep+.8,0,repCap());addFan(1);toast('🌏 他們說要寫進旅遊部落格')}]]})},
+ {id:'kid',w:2,mk:()=>({ic:'🧒',t:'小朋友哭了',d:'一位媽媽帶著的小朋友不小心把熱可可打翻，哭得好大聲。',
+  btn:[['送他一杯新的＋擦乾淨',()=>{S.money-=2;S.rep=clamp(S.rep+.8,0,repCap());if(R()<.4)addFan(1);toast('🧒 小朋友破涕為笑，媽媽連聲道謝')}],['請店貓出馬',()=>{if((S.cats||[]).length){S.rep=clamp(S.rep+1,0,repCap());toast('🐱 小朋友摸著貓咪就不哭了！')}else{toast('…店裡還沒有貓。小朋友繼續哭');S.rep=clamp(S.rep-.3,0,100)}}]]})},
+ {id:'regular_sick',w:1,ok:()=>REG_ORDER.some(id=>S.reg[id].met&&regLv(id)>=3),mk:()=>{const id=pickA(REG_ORDER.filter(id=>S.reg[id].met&&regLv(id)>=3));return {ic:'🤒',t:`${REGS[id].n}好幾天沒來了`,d:`聽說${REGS[id].n}感冒在家休息。要送杯熱飲過去嗎？`,
+  btn:[['外送一杯過去（體力 -10）',()=>{stDown(10);addAff(id,8);toast(`💗 ${REGS[id].n}很感動（好感 +8）`)}],['等他回來再說',()=>{}]]}}});
+
+let BREW=null;
+const BSTEP=[['萃取濃縮','#6b3e22','在最佳時間停止萃取'],['打奶泡','#cfe3ea','溫度剛好就停'],['拉花','#E0A43A','對準中心倒奶']];
+function brewGame(){const T=S.today,e=PICK.find(x=>!x.ready);if(S.phase!=='open'||(T.sta??100)<15||!e)return;stDown(15);audioInit();
+ BREW={e,i:0,pos:0,v:1,sc:[],timer:null};
+ openModal(`<div class="kicker">☕ 親手做一杯 · ${e.item?MENU[e.item].n:'飲料'}</div><h2 class="px" id="bwT" style="margin:4px 0 6px;font-weight:400"></h2>
+ <div class="bwbar"><div class="bwz" id="bwZ"></div><div class="bwg" id="bwG"></div><div class="bwn" id="bwN"></div></div><div class="hint" id="bwH"></div>
+ <div class="bwsc" id="bwS"></div><button class="btn big dark" style="margin-top:10px" onclick="brewTap()">停！</button>`);
+ brewStage()}
+function brewStage(){const b=BREW,z=[.22,.18,.14][b.i];b.pos=R()<.5?0:1;b.v=b.pos?-1:1;b.c=.25+R()*.5;
+ document.getElementById('bwT').textContent=`步驟 ${b.i+1}/3：${BSTEP[b.i][0]}`;document.getElementById('bwH').textContent=BSTEP[b.i][2];
+ const Z=document.getElementById('bwZ'),G=document.getElementById('bwG');Z.style.left=(b.c-z/2)*100+'%';Z.style.width=z*100+'%';G.style.left=(b.c-z/6)*100+'%';G.style.width=z/3*100+'%';G.style.background=BSTEP[b.i][1];b.z=z;
+ clearInterval(b.timer);b.timer=setInterval(()=>{if(!BREW)return;const n=document.getElementById('bwN');if(!n){clearInterval(b.timer);BREW=null;return}b.pos+=b.v*(.018+.007*b.i);if(b.pos>1){b.pos=1;b.v=-1}if(b.pos<0){b.pos=0;b.v=1}n.style.left=b.pos*100+'%'},16)}
+function brewTap(){const b=BREW;if(!b)return;const d=Math.abs(b.pos-b.c),sc=Math.round(clamp(100*(1-Math.max(0,d-b.z/6)/(b.z*.85)),0,100));b.sc.push(sc);sfx(sc>=85?'spark':sc>=50?'clink':'sad',1);
+ document.getElementById('bwS').innerHTML=b.sc.map((x,i)=>`<span>${BSTEP[i][0]} <b class="px">${x}</b></span>`).join('');b.i++;
+ if(b.i<3){brewStage();return}clearInterval(b.timer);const avg=Math.round(b.sc.reduce((a,c)=>a+c,0)/3),e=b.e;BREW=null;
+ if(PICK.includes(e)&&!e.ready){e.ready=true;S.prog=0}
+ const tip=+(avg/40).toFixed(2);S.today.jar=Math.min(40,(S.today.jar||0)+tip);ownXp(8+Math.round(avg/10));if(e.item){S.mast[e.item]=(S.mast[e.item]||0)+2}
+ let msg;if(avg>=85){S.rep=clamp(S.rep+.4,0,repCap());e.icon='heart';e.icT=4;if(R()<.3)addFan(1);msg=`完美的一杯！${avg} 分，客人感動到拍照（口碑 +、小費 +${f2(tip)}）`}else if(avg>=60)msg=`不錯喔！${avg} 分（小費 +${f2(tip)}）`;else msg=`${avg} 分…客人還是喝完了（小費 +${f2(tip)}）`;
+ S.today.hand=(S.today.hand||0)+1;closeModal();toast('☕ '+msg);render()}
+
+const DSLOT=[{id:'ceilA',n:'左側吊飾',k:'ceil',x:48,y:0},{id:'ceilB',n:'右側吊飾',k:'ceil',x:150,y:0},{id:'wallA',n:'窗下左',k:'wall',x:44,y:81},{id:'wallB',n:'窗下右',k:'wall',x:88,y:81},{id:'floorL',n:'左下角落',k:'floor',x:10,y:178},{id:'floorR',n:'右下角落',k:'floor',x:246,y:178}];
+const DECOS={
+ vine:{n:'綠蘿吊盆',k:'ceil',c:400,g:1,e:'願付 +0.5%'},rattan:{n:'藤編吊燈',k:'ceil',c:600,e:'願付 +0.5%',mood:1},stars:{n:'星星燈串',k:'ceil',c:500,e:'願付 +0.5%',mood:1},chime:{n:'玻璃風鈴',k:'ceil',c:300,e:'來客 +1%'},
+ pot:{n:'小盆栽',k:'wall',c:200,g:1,e:'願付 +0.5%'},bench:{n:'木長凳',k:'wall',c:500,e:'內用客更開心'},rack:{n:'報紙架',k:'wall',c:350,book:1,e:'願付 +0.5%'},aboard:{n:'手寫立牌',k:'wall',c:300,e:'來客 +3%'},vinyl:{n:'黑膠唱機',k:'wall',c:900,book:1,e:'願付 +0.5%'},
+ fig:{n:'琴葉榕',k:'floor',c:700,g:1,e:'願付 +0.5%'},monstera:{n:'龜背芋',k:'floor',c:600,g:1,e:'願付 +0.5%'},books:{n:'小書櫃',k:'floor',c:900,book:1,e:'願付 +0.5%'},bike:{n:'復古腳踏車',k:'floor',c:1200,e:'來客 +2%'},lucky:{n:'招財貓',k:'floor',c:888,e:'來客 +3%'}};
+const DSETS=[{n:'🌿 綠意角落',d:'放 3 件植物：願付 +2%',ok:p=>p.filter(k=>DECOS[k].g).length>=3},{n:'📚 文青書香',d:'放 2 件書香擺設：學生來客 +12%',ok:p=>p.filter(k=>DECOS[k].book).length>=2},{n:'✨ 暖光氛圍',d:'藤編吊燈＋星星燈串：口碑上限 +2',ok:p=>p.includes('rattan')&&p.includes('stars')}];
+const placed=()=>Object.values(S.deco||{}).filter(k=>DECOS[k]);
+const dset=i=>DSETS[i].ok(placed());
+const decoWill=()=>{const p=placed();return p.filter(k=>/願付/.test(DECOS[k].e)).length*.005+(dset(0)?.02:0)};
+const decoTraffic=()=>{const p=placed();return 1+(p.includes('aboard')?.03:0)+(p.includes('lucky')?.03:0)+(p.includes('bike')?.02:0)+(p.includes('chime')?.01:0)};
+function decoDlg(slot){const sl=DSLOT.find(x=>x.id===slot),cur=S.deco[slot];
+ openModal(`<div class="kicker">🪴 店內擺設 · ${sl.n}</div><h2 class="px" style="margin:4px 0 8px;font-weight:400">選一件擺上去</h2>
+ ${Object.keys(DECOS).filter(k=>DECOS[k].k===sl.k&&(!DECOS[k].trip||S.decoOwn.includes(k))).map(k=>{const d=DECOS[k],own=S.decoOwn.includes(k),on=cur===k,used=!on&&Object.values(S.deco).includes(k);
+ return `<div class="line"><canvas class="dpv" data-deco="${k}" width="40" height="40"></canvas><div class="grow"><div class="name">${d.n}${on?'<span class="tag g">擺放中</span>':used?'<span class="tag">在別的位置</span>':''}</div><div class="meta">${d.e}${d.g?'・🌿植物':''}${d.book?'・📚書香':''}</div></div>
+ ${own?(on?`<button class="btn sm" onclick="placeDeco('${slot}','')">收起來</button>`:`<button class="btn sm dark" onclick="placeDeco('${slot}','${k}')">擺這裡</button>`):`<button class="btn sm ${S.money>=d.c?'dark':''}" ${S.money<d.c?'disabled':''} onclick="buyDeco('${slot}','${k}')">${fm(d.c)}</button>`}</div>`}).join('')}
+ <button class="btn" style="margin-top:8px" onclick="closeModal();render()">完成</button>`);drawDecoPv()}
+function drawDecoPv(){if(typeof document==='undefined')return;document.querySelectorAll('canvas.dpv').forEach(c=>{const k=c.dataset.deco,g=c.getContext('2d');const sv=cx;cx=g;g.clearRect(0,0,40,40);g.save();
+ const d=DECOS[k];if(d.k==='ceil'){g.translate(20,2)}else{g.translate(20,38)}try{drawDecoItem(k,0,0,0)}catch(e){}g.restore();cx=sv})}
+function buyDeco(slot,k){const d=DECOS[k];if(S.money<d.c||S.decoOwn.includes(k))return;S.money-=d.c;S.today.mkt+=d.c;S.decoOwn.push(k);placeDeco(slot,k)}
+function placeDeco(slot,k){for(const sl in S.deco)if(S.deco[sl]===k)delete S.deco[sl];if(k)S.deco[slot]=k;else delete S.deco[slot];sfx('click',1);save();decoDlg(slot)}
+function decoCard(){const p=placed();return `<h3 class="sec">店內擺設 <span class="hint" style="font-weight:400">自由搭配，湊齊組合有加成</span></h3>
+ <div class="dslots">${DSLOT.map(sl=>{const k=S.deco[sl.id];return `<button class="dslot" onclick="decoDlg('${sl.id}')"><small>${sl.n}</small><b>${k?DECOS[k].n:'＋ 空位'}</b></button>`}).join('')}</div>
+ <div class="hint" style="margin-top:6px">${DSETS.map((st,i)=>`<span class="tag ${dset(i)?'g':''}">${st.n}${dset(i)?' ✓':''}</span>`).join(' ')}<br>${DSETS.map(st=>st.d).join('；')}</div>`}
+function drawDecoItem(k,x,y,ts){
+ switch(k){
+  case'vine':P(x,y,1,10,'#6a5a4a');RR(x-5,y+10,11,6,'#c8784a',OL);EL(x,y+16,7,3,'#3f7a34');for(let i=0;i<4;i++){P(x-6+i*4,y+17,2,6+((i*3)%4),'#5e9a45');P(x-6+i*4,y+22+((i*3)%4),2,2,'#7ab858')}break;
+  case'rattan':P(x,y,1,9,'#4a3a30');EL(x,y+14,8,5,'#b8864a');EL(x,y+13,7,4,'#d8a868');for(let i=-6;i<=6;i+=3)P(x+i,y+10,1,8,'#a87a40');P(x-3,y+18,7,1,'#ffd27a');if(S.t>=930||S.phase!=='open'){cx.fillStyle='rgba(255,214,140,.14)';cx.beginPath();cx.moveTo(x-4,y+18);cx.lineTo(x-18,y+70);cx.lineTo(x+18,y+70);cx.lineTo(x+4,y+18);cx.fill()}break;
+  case'stars':for(let i=0;i<9;i++){const sx=x-24+i*6,sy=y+3+Math.round(Math.sin(i*.8)*2)+((i%2)?2:0);P(sx,sy-1,1,1,'#6a5a4a');const on=(Math.floor((ts||0)/400)+i)%3!==0;P(sx-1,sy,3,3,on?'#ffe38a':'#c8a850');if(on)P(sx,sy+1,1,1,'#fff')}P(x-24,y+2,48,1,'#6a5a4a');break;
+  case'chime':P(x,y,1,8,'#6a5a4a');EL(x,y+9,4,2,'#9ad0ee');for(let i=-2;i<=2;i+=2)P(x+i,y+11,1,4+Math.abs(i),'#cfe3ea');P(x,y+16,3,4,'#f2a7c0');break;
+  case'pot':RR(x-4,y-7,9,7,'#c8784a',OL);P(x-3,y-6,7,1,'#e09a6a');EL(x,y-10,5,4,'#3f7a34');EL(x-2,y-12,3,2,'#5e9a45');EL(x+2,y-13,2,2,'#7ab858');break;
+  case'bench':RR(x-14,y-8,29,4,WD2,OL);P(x-13,y-7,27,1,WD1);P(x-12,y-4,2,4,OL);P(x+11,y-4,2,4,OL);RR(x-14,y-16,29,3,WD3,OL);P(x-12,y-13,1,5,OL);P(x+12,y-13,1,5,OL);break;
+  case'rack':RR(x-6,y-18,13,18,'#7a5236',OL);P(x-5,y-16,11,4,'#f2ece0');P(x-5,y-11,11,4,'#e8e0d0');P(x-5,y-6,11,4,'#f6f0e4');P(x-4,y-15,6,1,'#888');P(x-4,y-10,7,1,'#888');P(x-4,y-5,5,1,'#888');break;
+  case'aboard':P(x-6,y-18,1,18,OL);P(x+6,y-18,1,18,OL);RR(x-6,y-18,13,14,'#2e4038',OL);P(x-4,y-15,8,1,'#f6efe2');P(x-4,y-12,6,1,'#f0c060');P(x-4,y-9,7,1,'#f6efe2');break;
+  case'vinyl':RR(x-8,y-10,17,10,'#8a5a32',OL);P(x-7,y-9,15,1,'#b07a48');RR(x-7,y-16,15,6,'#5a3e2b',OL);EL(x-1,y-13,4,2,'#222');EL(x-1,y-13,1,1,'#e0574a');P(x+4,y-17,1,4,'#bbb');if(S.phase==='open'&&((ts||0)>>8)%2)P(x+7,y-22,2,2,'#2b2622');break;
+  case'fig':RR(x-5,y-8,11,8,'#e8e2d6',OL);P(x,y-26,1,18,'#6a4a2a');EL(x-4,y-24,4,3,'#3f7a34');EL(x+4,y-21,4,3,'#4f8a3c');EL(x-3,y-17,4,3,'#5e9a45');EL(x+3,y-28,4,3,'#5e9a45');EL(x,y-31,3,3,'#7ab858');break;
+  case'monstera':RR(x-6,y-8,13,8,'#3a3a3a',OL);P(x-5,y-7,11,1,'#555');EL(x-5,y-15,6,4,'#2f6a34');EL(x+5,y-17,6,4,'#3f7a34');EL(x,y-22,6,4,'#4f8a3c');P(x-6,y-15,2,1,'#c8d8a0');P(x+4,y-17,2,1,'#c8d8a0');P(x,y-22,1,1,'#c8d8a0');break;
+  case'books':RR(x-9,y-26,19,26,WD2,OL);P(x-8,y-17,17,1,OL);P(x-8,y-9,17,1,OL);[[0,'#c4553d'],[3,'#4f7ca8'],[6,'#e0a43a'],[9,'#6a9150'],[12,'#8a5a9a']].forEach(([o,c])=>{P(x-7+o,y-24,2,7,c);P(x-7+o,y-16,2,7,c==='#4f7ca8'?'#d98fa0':c)});P(x-6,y-7,8,6,'#f2ece0');break;
+  case'bike':EL(x-7,y-5,5,5,OL);EL(x-7,y-5,4,4,'#e8f0f4');EL(x+7,y-5,5,5,OL);EL(x+7,y-5,4,4,'#e8f0f4');P(x-7,y-10,14,1,'#2f8a8a');P(x-1,y-10,1,6,'#2f8a8a');P(x+5,y-14,1,9,'#2f8a8a');P(x+3,y-15,5,1,OL);P(x-9,y-12,5,2,'#7a5236');RR(x+4,y-13,7,4,'#c89060',OL);P(x+5,y-14,2,2,'#f07090');break;
+  case'lantern':P(x,y,1,6,'#2b2622');RR(x-4,y+6,9,12,'#f6efe2',OL);P(x-3,y+8,7,1,'#c4553d');P(x-3,y+15,7,1,'#c4553d');P(x-1,y+10,3,4,'#2b2622');P(x-2,y+18,5,1,'#2b2622');if(S.t>=930||S.phase!=='open')P(x-3,y+9,7,6,'rgba(255,200,120,.35)');break;
+  case'pikesign':RR(x-12,y-18,25,9,'#2b2622',OL);P(x-10,y-16,21,2,'#e0574a');P(x-10,y-13,14,1,'#f6efe2');P(x-9,y-9,1,9,OL);P(x+9,y-9,1,9,OL);EL(x+6,y-13,3,1,'#e8a040');break;
+  case'moka':RR(x-14,y-4,29,4,WD2,OL);[[-9,'#b8b8c0'],[0,'#c4553d'],[9,'#d8d8e0']].forEach(([o,c])=>{P(x+o-3,y-10,6,6,c);P(x+o-2,y-14,4,4,c);P(x+o+3,y-12,2,3,OL);P(x+o-3,y-11,6,1,OL)});break;
+  case'eiffel':P(x-5,y-2,11,2,OL);for(let i=0;i<26;i++){const w=Math.max(1,Math.round(5-i*.18));P(x-w,y-4-i,1,1,'#8a7a5a');P(x+w,y-4-i,1,1,'#8a7a5a')}P(x-4,y-10,9,1,'#8a7a5a');P(x-3,y-18,7,1,'#8a7a5a');P(x,y-31,1,4,'#8a7a5a');break;
+  case'jebena':EL(x,y-6,6,6,OL);EL(x,y-6,5,5,'#3a2a20');P(x-1,y-18,3,7,'#3a2a20');P(x-2,y-18,5,1,OL);P(x+5,y-12,4,1,'#3a2a20');P(x+8,y-13,1,2,'#3a2a20');P(x-3,y-8,2,1,'#c89060');P(x-6,y,13,1,'#a87a40');break;
+  case'lucky':EL(x,y-5,6,5,'#fff');EL(x,y-5,6,5,'rgba(0,0,0,0)');RR(x-5,y-9,11,9,'#fff',OL);EL(x,y-13,5,4,'#fff');P(x-4,y-17,2,2,'#fff');P(x+3,y-17,2,2,'#fff');P(x-2,y-14,1,1,OL);P(x+2,y-14,1,1,OL);P(x-1,y-12,3,1,'#e0574a');P(x+5,y-17,2,6,'#fff');P(x-2,y-7,5,3,'#e0a43a');P(x-5,y-1,11,1,'#c4453d');break;
+ }}
+function drawDecor(kind,ts){for(const sl of DSLOT){if(sl.k!==kind&&!(kind==='low'&&sl.k!=='floor'))continue;const k=S.deco&&S.deco[sl.id];if(k&&DECOS[k])drawDecoItem(k,sl.x,sl.y,ts)}}
+
+const CERT=['','咖啡師證照','拉花認證','冠軍咖啡師'],CERTC=[600,1500,3000],CERTD=[2,3,4],CERTLV=[2,3,5];
+function trainStaff(id){const s=S.staff.find(x=>x.id===id);if(!s||S.phase!=='prep')return;const c=s.cert||0;if(c>=3||s.lv<CERTLV[c]||S.money<CERTC[c]||s.train)return;
+ S.money-=CERTC[c];S.today.mkt+=CERTC[c];s.train=CERTD[c];sfx('level',1);save();render();toast(`🎓 ${s.n} 出發去進修「${CERT[c+1]}」（${CERTD[c]} 天，照領薪水）`)}
+function indepStaff(id){const s=S.staff.find(x=>x.id===id);if(!s||(s.cert||0)<3||s.lv<5||S.money<5000)return;S.money-=5000;S.staff=S.staff.filter(x=>x!==s);S.fran=S.fran||[];S.fran.push({n:s.n,day:S.day,shop:`${s.n}的咖啡小站`});resetCleaners();sfx('level',1);save();render();
+ showVN([['sys',`🌱 ${s.n} 要獨立開店了`],['sys',`${s.n}：「店長，謝謝你教會我的一切。」`],['sys',`${s.n}：「我的店會掛上『${S.name}』的招牌，你永遠是我的師父！」`],['sys','每天會收到加盟分紅 $200，口碑也會慢慢傳開']])}
+const franInc=()=>(S.fran||[]).length*200;
+
+const MKTEV=[
+ {k:'beans',m:1.35,d:7,t:'☕ 咖啡豆產地歉收',x:'巴西霜害，咖啡豆批發價 +35%（7 天）'},
+ {k:'beans',m:.8,d:5,t:'☕ 咖啡豆大豐收',x:'新一季生豆到港，咖啡豆 -20%（5 天）'},
+ {k:'milk',m:.75,d:5,t:'🥛 鮮奶產季',x:'牧場產量大增，鮮奶 -25%（5 天）'},
+ {k:'milk',m:1.3,d:6,t:'🥛 鮮奶短缺',x:'酷熱讓乳牛減產，鮮奶 +30%（6 天）'},
+ {k:'berry',m:.7,d:5,t:'🍓 莓果盛產',x:'莓果 -30%（5 天）',ok:()=>cal().s===2},
+ {k:'ice',m:1.4,d:5,t:'🧊 夏季冰塊荒',x:'冰塊 +40%（5 天）',ok:()=>cal().s===3},
+ {k:'cream',m:.8,d:5,t:'🍦 鮮奶油促銷',x:'鮮奶油 -20%（5 天）'}];
+function mktTick(){if(S.mkt&&S.mkt.until<S.day)S.mkt=null;if(S.mkt||S.day<5||R()>.14)return;const ev=pickA(MKTEV.filter(e=>!e.ok||e.ok()));S.mkt={k:ev.k,m:ev.m,until:S.day+ev.d-1,t:ev.t,x:ev.x};addMod('price_'+ev.k,ev.m,ev.d,ev.t)}
+const CONTK=['beans','milk'];
+const contOn=k=>S.cont&&S.cont[k]&&S.cont[k].until>=S.day;
+function signCont(k){if(contOn(k)||S.phase!=='prep'||S.money<150)return;const pr=+(S.prices[k]*.95).toFixed(2);S.money-=150;S.today.mkt+=150;S.cont=S.cont||{};S.cont[k]={p:pr,until:S.day+13};sfx('level',1);save();render();toast(`📝 已簽約：${ING[k].n}鎖定 ${f2(pr)}/箱，14 天`)}
+function mktCard(){const m=S.mkt;return `<div class="card"><div class="kicker">📈 市場行情</div>
+ ${m?`<div class="tip ${m.m>1?'warn':''}"><b>${m.t}</b><br>${m.x}　到第 ${m.until} 天${m.m<1?'<br><span class="hint">便宜的時候可以多進一點，但要注意保存期限！</span>':''}</div>`:'<div class="hint">目前行情平穩。偶爾會有歉收或盛產，記得把握時機。</div>'}
+ <div class="hint" style="margin-top:6px">供應商合約：付 $150 手續費，用今天價格的 95 折鎖價 14 天，漲價也不怕。</div>
+ ${CONTK.map(k=>{const c=S.cont&&S.cont[k],on=contOn(k),diff=Math.round((S.prices[k]/ING[k].base-1)*100);return `<div class="line"><div class="grow"><div class="name">${ING[k].n}<span class="tag ${diff>5?'':'g'}">${diff>=0?'+':''}${diff}% vs 平均</span></div><div class="meta">${on?`🔒 合約價 ${f2(c.p)}/箱，到第 ${c.until} 天`:`今日 ${f2(S.prices[k])}/箱 → 合約價 ${f2(S.prices[k]*.95)}`}</div></div>
+ ${on?'<span class="tag g">合約中</span>':`<button class="btn sm ${S.phase==='prep'&&S.money>=150?'dark':''}" ${S.phase!=='prep'||S.money<150?'disabled':''} onclick="signCont('${k}')">簽約 $150</button>`}</div>`}).join('')}</div>`}
+
+const menuWill=()=>0;
+const boardIdx=k=>(S.board||[]).indexOf(k);
+function toggleBoard(k){S.board=S.board||[];const i=S.board.indexOf(k);if(i>=0)S.board.splice(i,1);else{if(S.board.length>=4){toast('看板最多放 4 項');return}S.board.push(k)}sfx('click');save();render()}
+function moveBoard(k,d){const b=S.board,i=b.indexOf(k),j=i+d;if(i<0||j<0||j>=b.length)return;[b[i],b[j]]=[b[j],b[i]];save();render()}
+function setPick(k){if(S.phase!=='prep'){toast('今日推薦要在開店前設定');return}S.today.pick=S.today.pick===k?null:k;sfx('click');save();render()}
+const BOARDM=[1.18,1.12,1.08,1.05];
+function boardCard(){const b=(S.board||[]).filter(k=>MENU[k]&&unlocked(k));return `<div class="card"><div class="kicker">🪧 菜單看板</div><div class="hint">放上黑板的品項更容易被點（第 1 格 +18%、第 2 格 +12%、第 3 格 +8%、第 4 格 +5%）。開店前還能選一項「今日推薦」（+35%）。</div>
+ <div class="board">${[0,1,2,3].map(i=>{const k=b[i];return `<div class="bslot">${k?`<span>${i+1}. ${MENU[k].n}${S.today.pick===k?' ⭐':''}</span><span><button class="link" onclick="moveBoard('${k}',-1)">↑</button><button class="link" onclick="moveBoard('${k}',1)">↓</button><button class="link" onclick="toggleBoard('${k}')">✕</button></span>`:`<span class="hint">${i+1}. （空）</span>`}</div>`}).join('')}</div>
+ ${S.today.pick?`<div class="hint">⭐ 今日推薦：${MENU[S.today.pick].n}</div>`:''}</div>`}
+
+const BOSS=[
+ {n:'米其林評審 杜邦先生',ic:'🎩',look:{skin:'#f1c7a0',hair:'#d8d4cc',shirt:'#2b2622',pants:'#2b2622',gl:1},hi:'Bonjour. 我只喝最好的。',ok:'……Très bien。',ng:'太令人失望了。'},
+ {n:'科技集團總裁 林董',ic:'💼',look:{skin:'#e3b088',hair:'#2b2622',shirt:'#3a4a6a',pants:'#2b2622'},hi:'我的時間很寶貴，動作快。',ok:'效率不錯，我記住你了。',ng:'浪費我的時間。'},
+ {n:'美食節目製作人 Vivian',ic:'🎬',look:{skin:'#f6d8bc',hair:'#8a2a3a',shirt:'#d84a6a',pants:'#2b2622',long:1},hi:'鏡頭準備好了嗎？我們開拍囉！',ok:'太上鏡了！這集會很好看。',ng:'這段要剪掉了……'},
+ {n:'傳奇咖啡大師 山田先生',ic:'🍵',look:{skin:'#f1c7a0',hair:'#8a8a8a',shirt:'#5a6a4a',pants:'#3a3a3a'},hi:'讓我看看你的咖啡之道。',ok:'嗯。你的心，在杯子裡。',ng:'還需要修行。'}];
+const BOSSDAYS=[3,7,11];
+function bossCheck(){const k=passKey();if(!S.boss||S.boss.key!==k)S.boss={key:k,i:cal().s,n:0,ok:0,fin:false};
+ const C=cal();if(S.day>=10&&BOSSDAYS.includes(C.d)&&!S.boss.fin){const ks=Object.keys(MENU).filter(k=>unlocked(k)&&!MENU[k].food).sort((a,b)=>MENU[b].ref-MENU[a].ref).slice(0,5);if(ks.length)S.today.boss={at:Math.floor(rr(600,900)),want:pickA(ks)}}}
+function spawnBoss(quiet){const B=BOSS[S.boss.i],e=newEnt('office',B.look);e.boss=1;e.pat=60;e.cap=B.look.shirt;joinLine(e,quiet);S.today.boss.here=1;if(!quiet){say(e,B.hi);toast(`${B.ic} ${B.n}來了！指定 ${MENU[S.today.boss.want].n}`);sfx('bell',1)}pushFeed(`${B.ic} ${B.n}走進店裡`)}
+function bossDone(ok,why){const b=S.today.boss;if(!b||b.done)return;b.done=1;const B=BOSS[S.boss.i];S.boss.n++;if(ok)S.boss.ok++;
+ pushFeed(`${B.ic} ${B.n}：「${ok?B.ok:B.ng}」${ok?'':`（${why}）`}`);if(!S.skipping&&typeof document!=='undefined')toast(`${B.ic} ${ok?'考驗通過！':'考驗失敗…'} ${S.boss.ok}/${BOSSDAYS.length}`);
+ if(S.boss.n>=BOSSDAYS.length){S.boss.fin=true;const o=S.boss.ok;let rw;if(o>=3){const m=3000*cal().y;S.money+=m;S.rep=clamp(S.rep+5,0,100);passPts(80);ownXp(400);S.bossWins=(S.bossWins||0)+1;
+   const lock=Object.keys(DECOS).filter(k=>!S.decoOwn.includes(k)&&!DECOS[k].trip);let ex='';if(lock.length){const d=pickA(lock);S.decoOwn.push(d);ex=`、稀有擺設「${DECOS[d].n}」`}rw=`🏆 完美通過 ${B.n} 的三次考驗！獎金 ${fm(m)}、口碑 +5${ex}`}
+  else if(o===2){const m=1000*cal().y;S.money+=m;S.rep=clamp(S.rep+2,0,100);rw=`👍 通過 2/3 次考驗，獎金 ${fm(m)}、口碑 +2`}else rw=`😔 ${B.n}對這間店不太滿意（通過 ${o}/3）。下一季再挑戰！`;
+  S.stories.push({txt:[['sys',`${B.ic} ${B.n} · 季節考驗結果`],['sys',`「${o>=2?B.ok:B.ng}」`],['sys',rw]]})}}
+function bossCard(){const b=S.boss;if(!b||S.day<10)return `<div class="card"><div class="kicker">👑 季節考驗</div><div class="hint" style="margin-top:6px">第 10 天起，每季會有一位重量級客人來考驗你（每季第 3、7、11 天）。</div></div>`;const B=BOSS[b.i];
+ return `<div class="card"><div class="kicker">👑 季節考驗 · ${B.ic} ${B.n}</div><div style="margin:6px 0;font-size:18px">${BOSSDAYS.map((d,i)=>i<b.n?(i<b.ok?'✅':'❌'):'⬜').join(' ')}</div>
+ <div class="hint">每季第 ${BOSSDAYS.join('、')} 天來店，指定一款飲品（開店前簡報會告訴你），要在 20 分鐘內出餐。三次全過可得大獎與稀有擺設。${b.fin?'本季考驗已結束。':''}${S.bossWins?`　累計完美通過 ${S.bossWins} 次`:''}</div></div>`}
+
+const CATST=[
+ [c=>[['sys',`🐱 ${c.n}的故事 · 1`],['sys',`打烊後，${c.n}跳上吧台，把頭靠在你的手上。`],['sys',`牠好像終於把這裡當成家了。`],['sys','🎁 口碑 +1']],()=>{S.rep=clamp(S.rep+1,0,100)}],
+ [c=>[['sys',`🐱 ${c.n}的故事 · 2`],['sys',`早上開門時，門口放著一隻小魚乾……是${c.n}叼來的？`],['sys',`熟客們說，貓咪送禮物代表最高的信任。`],['sys','🎁 今天小費機率 ×2、店長經驗 +100']],()=>{S.nb.tip=2;ownXp(100)}],
+ [c=>[['sys',`🐱 ${c.n}的故事 · 3`],['sys',`有位客人說小時候養過一隻跟${c.n}很像的貓。`],['sys',`那天，${c.n}一直窩在她腿上，她哭著說謝謝。`],['sys',`${c.n}成了巷口的明星貓，粉絲專頁開張了！`],['sys','🎁 鐵粉 +5、口碑 +2']],()=>{addFan(5);S.rep=clamp(S.rep+2,0,100)}]];
+const CATSTLV=[2,3.5,5];
+function catStoryTick(){S.catSt=S.catSt||{};for(const id of (S.cats||[])){const d=CATDEF.find(x=>x.id===id);if(!d)continue;const done=S.catSt[id]||0;if(done<3&&catH(id)>=CATSTLV[done]){S.catSt[id]=done+1;const [lines,f]=CATST[done];f();S.stories.push({txt:lines(d)});break}}}
+EVDEF.push(
+ {id:'catlost',w:1,ok:()=>(S.cats||[]).length>0&&!S.today.catlost,mk:()=>{S.today.catlost=1;const d=CATDEF.find(x=>x.id===pickA(S.cats));return {ic:'😿',t:`${d.n}不見了！`,d:`到處都找不到${d.n}，客人們也很擔心……`,
+  btn:[['立刻出去找（體力 -20）',()=>{stDown(20);S.catAff[d.id]=Math.min(5,(S.catAff[d.id]||1)+.5);toast(`🐱 在巷尾的紙箱裡找到${d.n}了！牠撒嬌蹭著你（親密度提升）`)}],['請客人幫忙留意',()=>{if(R()<.6){addFan(2);toast(`🐱 一位熟客抱著${d.n}回來了，大家都鬆了一口氣（鐵粉 +2）`)}else{S.rep=clamp(S.rep-.5,0,100);toast(`😿 ${d.n}到傍晚才自己回來，大家擔心了一整天`)}}]]}}},
+ {id:'catwant',w:1,ok:()=>(S.cats||[]).length>0,mk:()=>{const d=CATDEF.find(x=>x.id===pickA(S.cats));return {ic:'🥺',t:'客人想領養店貓',d:`一位客人非常喜歡${d.n}，問可不可以帶牠回家。`,
+  btn:[['婉拒，牠是店裡的家人',()=>{S.catAff[d.id]=Math.min(5,(S.catAff[d.id]||1)+.3);S.rep=clamp(S.rep+.5,0,repCap());toast(`🐱 客人說：「那我以後常來看牠！」（鐵粉 +1）`);addFan(1)}],['邀請她當「貓咪志工」',()=>{addFan(2);toast('🐱 她每週會來幫忙照顧店貓，還帶了逗貓棒')}]]}}});
+
+const SEALAB={
+ chestnut:{n:'栗子蒙布朗拿鐵',sea:0,need:{beans:1,milk:1,cream:1},ref:5.8,d:'秋天限定：綿密栗子泥配奶油'},
+ osman:{n:'桂花蜂蜜拿鐵',sea:0,need:{beans:1,milk:1,honey:1},ref:5.6,d:'秋天限定：淡淡桂花香'},
+ ginger:{n:'薑汁黑糖拿鐵',sea:1,need:{beans:1,milk:1,spice:1},ref:5.6,d:'冬天限定：暖身又暖心'},
+ xmasmocha:{n:'聖誕薄荷摩卡',sea:1,need:{beans:1,milk:1,cream:1,spice:1},ref:6.2,d:'冬天限定：節慶氣氛滿點'},
+ sakura:{n:'櫻花草莓拿鐵',sea:2,need:{milk:1,berry:1,cream:1},ref:5.8,d:'春天限定：粉嫩上相'},
+ strawcof:{n:'草莓牛奶咖啡',sea:2,need:{beans:1,milk:1,berry:1},ref:5.6,d:'春天限定：酸甜可口'},
+ lemonfrap:{n:'檸檬蜂蜜咖啡冰沙',sea:3,need:{beans:1,ice:1,lemon:1,honey:1},ref:5.8,cold:1,d:'夏天限定：清爽解暑'},
+ honeyice:{n:'蜂蜜冰拿鐵',sea:3,need:{beans:1,milk:1,ice:1,honey:1},ref:5.4,cold:1,d:'夏天限定：冰涼甜蜜'}};
+for(const k in SEALAB){MENU[k]=Object.assign({w:.85,seaLab:1},SEALAB[k])}
+Object.assign(DRINK,{chestnut:['mug','#a87a50','#e8d0b0',{cream:1,drz:'#6a3a1a'}],osman:['mug','#c09858','#f6e6b8',{steam:1,dot:'#f0b020'}],ginger:['mug','#8a5a32','#e8c8a0',{steam:1,dot:'#c0502a'}],xmasmocha:['mug','#4a2618','#fff',{cream:1,drz:'#3fa060'}],
+ sakura:['glass',['#f6c8d6','#f8d8e0','#fff2f6'],{cream:1,berry:1}],strawcof:['glass',['#6b3e22','#f6a8c0','#fff8ee'],{straw:'#f28aa8'}],lemonfrap:['glass',['#e8d8a0','#f0e4b8','#fff8e0'],{cream:1,lemon:1,straw:'#e0c040'}],honeyice:['glass',['#c89060','#f3e3c3','#fff8ee'],{ice:1,straw:'#f0b020'}]});
+const SEACOST=800;
+function seaResearch(k){const d=SEALAB[k];if(S.seaRec[k]||d.sea!==cal().s||S.money<SEACOST)return;S.money-=SEACOST;S.today.mkt+=SEACOST;S.seaRec[k]=true;if(S.price[k]===undefined)S.price[k]=d.ref;S.hype[k]=3;sfx('level',1);checkAch(true);save();render();toast(`🍂 季節限定「${d.n}」上市！本季話題品`)}
+function seaView(){const cs=cal().s;return `<div class="hint">每一季都有專屬限定飲品，只能在當季研發與販售。錯過了就要等明年同一季！研發費 ${fm(SEACOST)}，研發完立刻上市。</div>
+ ${[0,1,2,3].map(s=>`<h3 class="sec">${SEASONS[s].ic} ${SEASONS[s].n}季限定${s===cs?'<span class="tag g">本季</span>':''}</h3>`+Object.keys(SEALAB).filter(k=>SEALAB[k].sea===s).map(k=>{const d=SEALAB[k],got=S.seaRec[k];
+ return `<div class="line"><div class="icbox">${pimg(k,32)}</div><div class="grow"><div class="name">${d.n}${got?'<span class="tag g">已研發</span>':''}</div><div class="meta">${d.d}</div><div class="meta">材料：${Object.keys(d.need).map(i=>ING[i].n).join('、')}　參考價 ${f2(d.ref)}</div></div>
+ ${got?(s===cs?'<span class="tag p">販售中</span>':'<span class="tag">等待回歸</span>'):s===cs?`<button class="btn sm ${S.money>=SEACOST?'dark':''}" ${S.money<SEACOST?'disabled':''} onclick="seaResearch('${k}')">研發</button>`:'<span class="tag">🔒 非當季</span>'}</div>`}).join('')).join('')}`}
 function lowIng(){if(S.t>960)return null;const est=estimate(),left=(1080-S.t)/600;return Object.keys(ING).find(k=>ingUnlocked(k)&&est.ing[k]*left>stock(k)*1.3&&est.ing[k]>4&&!S.pending.some(p=>p.k===k))||null}
 function maybeEvent(){if(CUREV||S.skipping||S.t<520||S.t>1030||typeof document==='undefined')return;
  if(R()>.014)return;const opts=EVDEF.filter(e=>!e.ok||e.ok());if(!opts.length)return;const def=opts[wpickIdx(opts.map(o=>o.w))];const ev=def.mk();ev.id=def.id;ev.until=performance.now()+(S.speed>=8?9000:15000);
@@ -941,6 +1201,7 @@ function actHTML(){const T=S.today,sta=Math.round(T.sta??100),on=rushOn(),gcd=(T
  return `<div class="acts">
   <button class="act ${on?'on':''}" ${!open||on||sta<30?'disabled':''} onclick="rush()"><span>🔥</span>${on?`衝刺中 ${Math.ceil(T.rushUntil-S.t)}分`:'全力衝刺'}<small>體力 30</small></button>
   <button class="act" ${!open||gcd||sta<10||!queued()?'disabled':''} onclick="greet()"><span>👋</span>${gcd?`冷卻 ${Math.ceil(T.greetCD-S.t)}分`:'招呼排隊'}<small>體力 10</small></button>
+  <button class="act" ${!open||sta<15||!PICK.some(e=>!e.ready)?'disabled':''} onclick="brewGame()"><span>☕</span>親手做<small>體力 15</small></button>
   <button class="act ${jar>=10?'glow':''}" ${jar<=0?'disabled':''} onclick="collectJar()"><span>🫙</span>小費 ${f2(jar)}<small>${jar>=35?'快滿了！':'點我收下'}</small></button>
  </div><div class="sta"><span>店長體力</span><div class="bar grow"><i style="width:${sta/staMax()*100}%;background:${sta<30?'var(--red)':'linear-gradient(90deg,#E2A93B,#6A9150)'}"></i></div><b class="px">${sta}</b></div>`}
 
@@ -985,14 +1246,14 @@ function doImport(){const v=(document.getElementById('svi').value||'').trim();le
  backupSave();try{localStorage.setItem(SAVE_KEY,JSON.stringify(o))}catch(e){toast('儲存空間不足');return}
  toast('✅ 匯入成功，重新載入中…');setTimeout(()=>location.reload(),600)}
 function normalize(){
- const d={houses:['room'],house:'room',cars:['bike'],car:'bike',origins:['brazil'],origin:'brazil',ach:{},title:'',nights:0,nb:{},city:'alley',legacy:{lp:0,pk:{},gen:1,cities:['alley']},wish:[],trend:null,login:null,owner:{lv:1,xp:0,sp:1,sk:{}},mast:{},sig:[],guide:null,pass:null,cfurn:[],cats:['mikan'],catAff:{mikan:1},catPet:{},sets:[],labLog:[],weekWins:0,themes:['wood'],theme:'wood',yearRev:0,trophies:[],staff:[],cands:[],rec:{},lab:null,hype:{},br:{},ch:0,medals:{gold:0,silver:0,bronze:0},totalRev:0,loan:null,beanGrade:0,maxRep:S.rep||30,artBest:0,stories:[],reviews:[],reg:{},mods:[],pending:[]};
+ const d={mem:null,artP:{},artPat:'heart',feat:{},tipHide:{},spRec:{},trips:{},arc:{},me:{ep:0,f:{}},hours:'std',roast:'medium',seaRec:{},catSt:{},board:[],mkt:null,cont:{},boss:null,bossWins:0,deco:{},decoOwn:[],fans:0,fran:[],rival:null,cup:null,worldCups:0,rivalBeat:0,houses:['room'],house:'room',cars:['bike'],car:'bike',origins:['brazil'],origin:'brazil',ach:{},title:'',nights:0,nb:{},city:'alley',legacy:{lp:0,pk:{},gen:1,cities:['alley']},wish:[],trend:null,login:null,owner:{lv:1,xp:0,sp:1,sk:{}},mast:{},sig:[],guide:null,pass:null,cfurn:[],cats:['mikan'],catAff:{mikan:1},catPet:{},sets:[],labLog:[],weekWins:0,themes:['wood'],theme:'wood',yearRev:0,trophies:[],staff:[],cands:[],rec:{},lab:null,hype:{},br:{},ch:0,medals:{gold:0,silver:0,bronze:0},totalRev:0,loan:null,beanGrade:0,maxRep:S.rep||30,artBest:0,stories:[],reviews:[],reg:{},mods:[],pending:[]};
  for(const k in d)if(S[k]===undefined||S[k]===null&&k!=='lab'&&k!=='loan')S[k]=d[k];
  for(const id of REG_ORDER)if(!S.reg[id])S.reg[id]={aff:0,met:false,visits:0,seen:0};
  for(const k in ING)if(!S.inv[k])S.inv[k]=[];
  for(const k in MENU)if(S.price[k]===undefined)S.price[k]=MENU[k].ref;
  if(S.baristas){for(let i=0;i<S.baristas;i++)S.staff.push(genCand('barista'));S.baristas=0}
  if(S.cleaner){S.staff.push(genCand('floor'));S.cleaner=0}
- applySeason();passCheck();trendCheck();
+ applySeason();passCheck();trendCheck();if(!S.feat||!Object.keys(S.feat).length){S.feat={};for(const id in FEAT)if(feat(id))S.feat[id]=1}
  if(!S.week)S.week=genWeek();
 }
 
@@ -1003,7 +1264,7 @@ const lv=id=>S.lv[id]||0;
 const regLv=id=>Math.min(5,Math.floor((S.reg[id]?.aff||0)/20));
 const perk=(id,l)=>regLv(id)>=l;
 const isWeekend=()=>(S.day-1)%7>=5;
-const unlocked=k=>MENU[k].rec?!!(S.rec&&S.rec[k]):(!MENU[k].lock||lv(MENU[k].lock)>0);
+const unlocked=k=>MENU[k].sp?!!(S.spRec&&S.spRec[k]):MENU[k].seaLab?!!(S.seaRec&&S.seaRec[k]&&cal().s===MENU[k].sea):MENU[k].rec?!!(S.rec&&S.rec[k]):(!MENU[k].lock||lv(MENU[k].lock)>0);
 const ingUnlocked=k=>ING[k].needRec?ING[k].needRec.some(r=>S.rec&&S.rec[r]):(!ING[k].lock||lv(ING[k].lock)>0);
 const POS={bar:'吧台',cashier:'收銀',floor:'外場'},POSN={bar:'吧台',cashier:'收銀',floor:'外場',rest:'休息室'},SHIFT={all:'全天',am:'早班 8–13',pm:'晚班 13–18'};
 const slotCap=p=>{const e=lv('expand')?1:0;return p==='bar'?2+e+lv('bar2'):p==='cashier'?1+e+lv('bar2'):p==='floor'?1+e+(lv('staffroom')>=2?1:0):99};
@@ -1069,41 +1330,41 @@ function checkLogin(){const now=new Date(),td=dstr(now),yd=dstr(new Date(now.get
 const guideCups=()=>(S.guide&&S.guide.cups)||0;
 const posOf=s=>s.pos||(s.role==='floor'?'floor':'bar');
 const shiftOf=s=>s.shift||'all';
-const onShift=s=>{if(s.leave||s.pos==='rest')return false;const sh=shiftOf(s),t=S.t||480;return sh==='all'||(sh==='am'&&t<780)||(sh==='pm'&&t>=780)};
+const onShift=s=>{if(s.leave||s.pos==='rest'||s.train||s.truckDay===S.day)return false;const sh=shiftOf(s),t=S.t||480;return sh==='all'||(sh==='am'&&t<780)||(sh==='pm'&&t>=780)};
 const effOf=s=>{const p=posOf(s);return (p==='bar'&&s.role==='barista')||(p==='floor'&&s.role==='floor')?1:p==='cashier'?(s.trait==='kind'?1.2:1):.7};
 const ROLE2POS={barista:'bar',floor:'floor',cashier:'cashier'};
 const workStaff=role=>(S.staff||[]).filter(s=>onShift(s)&&(!role||posOf(s)===ROLE2POS[role]));
 const cashierCount=()=>workStaff('cashier').length?Math.min(4,workStaff('cashier').reduce((a,s)=>a+effOf(s),0)*1.5):0;
 const cashierSpeed=()=>(lv('kiosk')?2:1)*(1+.6*workStaff('cashier').reduce((a,s)=>a+effOf(s),0));
 const tcount=t=>workStaff().filter(s=>s.trait===t).length;
-const staffSpeed=s=>effOf(s)*14*(1+.12*(s.lv-1))*(s.trait==='fast'?1.3:1)*(s.fat>=80?.7:1);
-const capacity=()=>Math.round((16+4*sk('hand')+(lv('bar2')?10:0)+[0,10,20][lv('machine')]+[0,6,12][lv('grinder')]+workStaff('barista').reduce((a,s)=>a+staffSpeed(s),0))*(rushOn()?1.5:1));
+const staffSpeed=s=>(1+.1*(s.cert||0))*effOf(s)*14*(1+.12*(s.lv-1))*(s.trait==='fast'?1.3:1)*(s.fat>=80?.7:1);
+const capacity=()=>Math.round((16+4*sk('hand')+(lv('bar2')?10:0)+[0,10,20][lv('machine')]+[0,6,12][lv('grinder')]+workStaff('barista').reduce((a,s)=>a+staffSpeed(s),0))*(rushOn()?1.5:1)*((S.today&&S.today.capX)||1));
 const quality=()=>GRADES[(S.inv.beans[0]&&S.inv.beans[0].g)||0].q;
 const dailyRent=()=>Math.round((RENT+(lv('expand')?80:0))*(1+.15*(cal().y-1))*city().r);
 const dailyFixed=()=>dailyRent()+UTIL+(S.staff||[]).reduce((a,s)=>a+wageOf(s),0);
 const tableCount=()=>[2,4,6][lv('seats')]+(lv('expand')?4:0);
 function modMult(kind){return S.mods.filter(m=>m.kind===kind).reduce((a,m)=>a*m.mult,1)}
-function segMult(seg){const cm=((city().seg||{})[seg]||1)*(seg==='tourist'&&S.origin&&origin().tour?origin().tour:1);return cm*segMult0(seg)}
+function segMult(seg){const rb=lv('roaster')?(S.roast==='light'&&seg==='tourist'?1.05:S.roast==='dark'&&seg==='office'?1.05:1):1;const cm=rb*((city().seg||{})[seg]||1)*(seg==='tourist'&&S.origin&&origin().tour?origin().tour:1);return cm*segMult0(seg)}
 function segMult0(seg){
  if(seg==='office')return (perk('azhe',4)?1.12:1)*(lv('window')?1.1:1);
- if(seg==='student')return (perk('xiaoyu',2)?1.1:1)*(lv('wifi')?1.15:1);
+ if(seg==='student')return (perk('xiaoqing',2)?1.08:1)*(perk('xiaoyu',2)?1.1:1)*(lv('wifi')?1.15:1);
  if(seg==='regular')return lv('card')?1.15:1;
  if(seg==='tourist')return (perk('mika',4)?1.15:1)*(perk('leo',2)?1.1:1)*(catOwn('mikan')?1.05+catH('mikan')*.01:1);return 1}
 function segPk(seg){return SEG[seg].pk+(seg==='student'&&perk('xiaoyu',4)?.08:0)}
 function trafficMult(){
  const w=WEATHER[S.weather];let wt=w.t;if(lv('aircon')&&(S.weather==='hot'||S.weather==='cold'))wt=1-(1-wt)/2;if(lv('awning')&&S.weather==='rainy')wt=1-(1-wt)/2;
- let m=wt*WDF[(S.day-1)%7]*(1+[0,.12,.25][lv('sign')])*(lv('expand')?1.35:1)*(0.5+S.rep/100)*modMult('traffic')*(perk('leo',4)?1.08:1)*brandMult()*(Object.keys(S.hype||{}).length?1.06:1)*(S.today&&S.today.boostUntil>S.t?1.2:1)*(cfOwn('hammock')?1.04:1)*(1+.05*guideCups())*(1+.02*(S.sig||[]).length)*city().t*(1+.04*lg('traffic'))*(carT()>=4?1.05:1)*(city().sun?(S.weather==='sunny'||S.weather==='hot'?1.2:WEATHER[S.weather].rain?.8:1):1);
+ let m=wt*WDF[(S.day-1)%7]*(1+[0,.12,.25][lv('sign')])*(lv('expand')?1.35:1)*(0.5+S.rep/100)*modMult('traffic')*(perk('leo',4)?1.08:1)*brandMult()*(Object.keys(S.hype||{}).length?1.06:1)*(S.today&&S.today.boostUntil>S.t?1.2:1)*(cfOwn('hammock')?1.04:1)*(1+.05*guideCups())*(1+.02*(S.sig||[]).length)*city().t*(1+.04*lg('traffic'))*(1-rivalHit())*(1+Math.min(.1,.002*(S.fans||0)))*decoTraffic()*memTraffic()*(perk('anan',2)&&S.t>=960?1.08:1)*(perk('zhou',2)&&S.t>=780&&S.t<960?1.06:1)*(carT()>=4?1.05:1)*(city().sun?(S.weather==='sunny'||S.weather==='hot'?1.2:WEATHER[S.weather].rain?.8:1):1);
  if(lv('outdoor'))m*=(S.weather==='sunny'||S.weather==='hot')?1.15:1.05;return m}
 function curve(m){const we=isWeekend();return 0.22+(we?0.6:1)*gauss(m,525,45)+1.1*gauss(m,750,55)+(we?0.9:0.55)*modMult('afternoon')*gauss(m,930,70)}
 const arrRate=m=>0.3*curve(m)*trafficMult();
-const willK=()=>[0,.03,.06][lv('cups')]+(cfOwn('tree')?.02:0)+0.75+S.rep/200+[0,.06,.12][lv('decor')]+(perk('mika',2)?.04:0)+.03*Math.min(2,tcount('art'))+quality()+themeBonus()+.02*sk('art')+city().w+.02*lg('will')+(S.house?house().will:0)+.005*Math.max(0,(S.origins||[]).length-1)+((S.today&&S.today.willB)||0);
-function accept(k,p,pk=1){const x=p/(MENU[k].ref*willK()*pk*(1+.03*star(k))*(isTrend(k)?1.1:1)*(S.origin&&originFit(k)?1.08:1));return clamp((1.45-x)/0.6,0,1)}
-const mktPrice=k=>(1-.04*sk('deal'))*(1-.03*lg('cost'))*(carT()>=2?.95:1)*(k==='beans'&&S.origin?origin().m:1)*(lv('storage')?.95:1)*(S.prices[k]||ING[k].base)*(k==='beans'?GRADES[S.beanGrade||0].m:1)*((k==='beans'||k==='milk')&&tcount('thrifty')?.94:1);
+const willK=()=>[0,.03,.06][lv('cups')]+(cfOwn('tree')?.02:0)+0.75+S.rep/200+[0,.06,.12][lv('decor')]+(perk('mika',2)?.04:0)+.03*Math.min(2,tcount('art'))+quality()+themeBonus()+.02*sk('art')+city().w+.02*lg('will')+(S.house?house().will:0)+.005*Math.max(0,(S.origins||[]).length-1)+((S.today&&S.today.willB)||0)+(perk('xiaoqing',4)?.02:0)+decoWill()+menuWill()+((S.today&&S.today.roastQ)||0)*.0004+(S.artPat?curPat().w:0)+(lv('roaster')&&S.roast==='medium'?.02:0);
+function accept(k,p,pk=1){const x=p/(MENU[k].ref*willK()*pk*(1+.03*star(k))*(isTrend(k)?1.1:1)*(S.origin&&originFit(k)?1.08:1)*(roastFit(k)?1.1:1));return clamp((1.45-x)/0.6,0,1)}
+const mktPrice=k=>(k==='beans'&&lv('roaster')?.85:1)*(1-.04*sk('deal'))*(1-.03*lg('cost'))*(carT()>=2?.95:1)*(k==='beans'&&S.origin?origin().m:1)*(lv('storage')?.95:1)*(contOn(k)?S.cont[k].p:(S.prices[k]||ING[k].base))*(k==='beans'?GRADES[S.beanGrade||0].m:1)*((k==='beans'||k==='milk')&&tcount('thrifty')?.94:1);
 const unitCost=k=>mktPrice(k)/ING[k].pack;
 function itemCost(k){let c=0;for(const i in MENU[k].need)c+=unitCost(i)*MENU[k].need[i];return c}
 function bestPrice(k){const c=itemCost(k);let bp=c,bv=-1;for(let p=Math.max(1,c);p<=MENU[k].ref*2.2;p+=0.1){const v=accept(k,p)*(p-c);if(v>bv){bv=v;bp=p}}return Math.round(bp*10)/10}
 function choiceWeights(seg){const c=WEATHER[S.weather].c,pf=seg?SEG[seg].pref:{};
- return Object.keys(MENU).filter(unlocked).map(k=>[k,MENU[k].w*(MENU[k].cold?c*(lv('icemaker')?1.1:1):1)*(MENU[k].warm?clamp(1.6-c*.6,.2,1.6):1)*(pf[k]||1)*(S.hype&&S.hype[k]?1.8:1)*(isSig(k)?1.5:1)*(isTrend(k)?1.7:1)*(S.origin&&originFit(k)?1.25:1)])}
+ return Object.keys(MENU).filter(unlocked).map(k=>[k,MENU[k].w*(MENU[k].cold?c*(lv('icemaker')?1.1:1):1)*(MENU[k].warm?clamp(1.6-c*.6,.2,1.6):1)*(pf[k]||1)*(S.hype&&S.hype[k]?1.8:1)*(isSig(k)?1.5:1)*(isTrend(k)?1.7:1)*(S.origin&&originFit(k)?1.25:1)*(boardIdx(k)>=0?BOARDM[boardIdx(k)]:1)*(S.today&&S.today.pick===k?1.35:1)])}
 const stock=k=>S.inv[k].reduce((a,l)=>a+l.q,0);
 function hasStock(item){for(const i in MENU[item].need)if(stock(i)<MENU[item].need[i])return false;return true}
 function shelfOf(k){return (k==='ice'&&lv('icemaker')?1:0)+(lv('storage')&&ING[k].shelf>1?1:0)+ING[k].shelf+(ING[k].fridge&&lv('fridge')?3:0)+(k==='croissant'&&lv('oven')?1:0)+(k==='croissant'&&perk('wang',4)?1:0)}
@@ -1120,7 +1381,8 @@ function estimate(){
  if(lv('delivery')){const d=cust*0.2*0.6;buyers+=d;items.latte=(items.latte||0)+d*.5;items.americano=(items.americano||0)+d*.5}
  let work=0;for(const k in items)work+=items[k]*(MENU[k].work||1)*(MENU[k].food?0:1);
  const scale=work>cap*0.92?cap*0.92/work:1;
- for(const k in items)items[k]*=scale;
+ const hx=1+((S.hours==='early'||S.hours==='both')?.12:0)+((S.hours==='night'||S.hours==='both')?.32:0)+(S.today&&S.today.truck?.25:0);
+ for(const k in items)items[k]*=scale*(MENU[k].food?1:hx);
  const drinks=Object.keys(items).filter(k=>!MENU[k].food).reduce((a,k)=>a+items[k],0);
  const foods=Object.keys(MENU).filter(k=>MENU[k].food&&unlocked(k)),fw=foods.map(k=>(MENU[k].w||.3)*(MENU[k].am?1.1:1)),fwt=fw.reduce((a,b)=>a+b,0)||1;
  foods.forEach((k,i)=>{items[k]=(items[k]||0)+drinks*(0.3+(lv('oven')?.1:0))*fw[i]/fwt*accept(k,S.price[k])});
@@ -1178,12 +1440,13 @@ function startDay(first){
  if(!first&&!fe&&R()<0.3){const ev=EVENTS.filter(e=>!e.ok||e.ok(C));const e=pickA(ev);S.event={t:e.t,d:e.d};e.f()}
  for(const k in ING){let m=modMult('price_'+k);if(k==='croissant')m*=perk('wang',4)?.7:perk('wang',2)?.85:1;
   S.prices[k]=+(ING[k].base*(0.88+R()*0.24)*m).toFixed(2)}
+ mktTick();
  S.quest=first?{t:'賣出 20 杯拿鐵',k:'sold',item:'latte',n:20,reward:80,done:false}:genQuest();
  // 熟客來訪計畫
  const wd=(S.day-1)%7,wx=S.weather==='typhoon'?.15:WEATHER[S.weather].rain?.7:1;
  for(const id of REG_ORDER){const r=REGS[id];if(!r.req()||!r.days.includes(wd))continue;
   if(R()<r.p*wx*(1+S.reg[id].aff/250))S.today.regPlan.push({id,at:Math.floor(rr(r.win[0],r.win[1]))})}
- passCheck();trendCheck();S.today.sta=staMax();applyNB();S.t=480;S.acc=0;S.regT=0;S.phase='prep';S.prog=0;S.cart={};S.feed=[];
+ passCheck();trendCheck();bossCheck();featTick();S.today.sta=staMax();applyNB();S.t=480;S.acc=0;S.regT=0;S.phase='prep';S.prog=0;S.cart={};S.feed=[];
  resetScene();save();
 }
 function resetScene(){ENT=[];LINE=[];PICK=[];SPARK=[];SEATS=[];SPILLS=[];CUREV=null;HEARTS.forEach(h=>h.el.remove());HEARTS=[];clearBubbles();buildSeats();resetCleaners();resetCats()}
@@ -1212,16 +1475,17 @@ function simMinute(quiet){
  S.pending=S.pending.filter(p=>{if(p.at<=m){addLot(p.k,p.q,p.c);pushFeed(`📦 ${ING[p.k].n} 緊急到貨 ×${p.q}`);return false}return true});
  for(const e of ENT)if(e.st==='sit'&&e.until<=m)leaveSeat(e);
  // 排隊等太久 → 離開
- for(const e of LINE.slice()){const i=LINE.indexOf(e);if(i>0&&m-e.qs>e.pat){T.lostWait++;T.hL[h]++;
+ for(const e of LINE.slice()){const i=LINE.indexOf(e);if(i>0&&m-e.qs>e.pat){T.lostWait++;T.hL[h]++;if(e.boss)bossDone(false,'等太久了');
   if(e.rid){addAff(e.rid,-5);say(e,REGS[e.rid].wait,true)}else if(!quiet&&R()<.5)say(e,pickA(['等太久了啦','算了，下次吧','趕時間…']));
   leave(e,'angry',quiet);if(R()<.3)pushFeed(`😤 一位${e.rid?REGS[e.rid].n:SEG[e.seg].n}等太久，離開了`)}}
  // 熟客
  for(const p of T.regPlan)if(p.at===m)spawnRegular(p.id,quiet);
+ if(T.boss&&!T.boss.here&&m===T.boss.at)spawnBoss(quiet);
  const black=T.blackout&&m>=840&&m<900;
  if(black&&m===840)pushFeed('⚡ 停電中，暫停出杯…');
  if(!black){
   const n=poisson(arrRate(m));for(let i=0;i<n;i++)arrive(quiet);
-  if(lv('delivery')){const d=poisson(arrRate(m)*0.2*(carT()>=2?1.15:1));for(let i=0;i<d;i++)rider(quiet)}
+  if(lv('delivery')||S.today.delivX){const d=poisson(arrRate(m)*0.2*(carT()>=2?1.15:1)*(S.today.delivX||1));for(let i=0;i<d;i++)rider(quiet)}
   // 吧台出杯
   if(PICK.some(e=>!e.ready)){S.prog+=capacity()/60;
    for(const e of PICK){if(e.ready)continue;if(S.prog>=e.work){S.prog-=e.work;e.ready=true;if(!quiet&&R()<.5)sfx('steam')}else break}}
@@ -1282,7 +1546,8 @@ function decide(e,quiet){
  const T=S.today,h=hourIdx(),sg=SEG[e.seg],r=e.rid?REGS[e.rid]:null;
  T.waitSum+=S.t-e.qs;T.waitN++;
  let item;
- if(r){const opts=r.fav.concat(r.alt).filter(k=>unlocked(k)&&hasStock(k)),favOK=r.fav.some(k=>unlocked(k)&&hasStock(k));
+ if(e.boss){item=S.today.boss.want;if(!hasStock(item)){bossDone(false,'指定的飲品賣完了');return leave(e,'angry',quiet)}}
+ else if(r){const opts=r.fav.concat(r.alt).filter(k=>unlocked(k)&&hasStock(k)),favOK=r.fav.some(k=>unlocked(k)&&hasStock(k));
   if(!opts.length){T.lostStock++;T.hL[h]++;say(e,r.out,true);addAff(e.rid,-5);return leave(e,'q',quiet)}
   item=opts[0];if(!favOK&&r.fav.some(unlocked)){say(e,r.out,true);addAff(e.rid,-3)}else addAff(e.rid,2);
  }else{
@@ -1295,9 +1560,9 @@ function decide(e,quiet){
  }
  const p=S.price[item],a=accept(item,p,segPk(e.seg)*(r?1.25:1));
  if(r){if(a<=0.02){T.lostPrice++;T.hL[h]++;say(e,r.exp,true);addAff(e.rid,-6);return leave(e,'$',quiet)}if(a<.45){say(e,r.exp,true);addAff(e.rid,-2)}}
- else if(R()>a){T.lostPrice++;T.hL[h]++;if(!quiet&&R()<.6)say(e,pickA(['嗯…有點貴','這價格…算了','下次再來好了']));fl('太貴了…','#87601A',e,quiet);
+ else if(!e.boss&&R()>a){T.lostPrice++;T.hL[h]++;if(!quiet&&R()<.6)say(e,pickA(['嗯…有點貴','這價格…算了','下次再來好了']));fl('太貴了…','#87601A',e,quiet);
   if(R()<.15)pushFeed(`💸 ${sg.n}覺得${MENU[item].n} ${f2(p)} 太貴`);return leave(e,'$',quiet)}
- let dine=R()<(r?r.dine:sg.dine*(WEATHER[S.weather].rain?1.2:1));
+ let dine=!S.today.noDine&&R()<(r?r.dine:sg.dine*(WEATHER[S.weather].rain?1.2:1));
  if(dine){const s=SEATS.find(s=>!s.occ&&!s.res&&!s.dirty);
   if(s){s.res=e;e.seat=s;if(r)addAff(e.rid,1)}
   else if(r||R()<0.5){dine=false;if(r){addAff(e.rid,-1);say(e,'沒位子了，那我外帶吧。',true)}}
@@ -1313,7 +1578,7 @@ function decide(e,quiet){
     T.setSold=T.setSold||{};T.setSold[i]=(T.setSold[i]||0)+1;tot+=pf-off;txt+='＋'+MENU[st.f].n+'（套餐）';setDone=true}}}
  if(!setDone&&!MENU[item].food){
   const food=r&&r.food&&hasStock(r.food)?r.food:foodPick(e.seg);
-  const ch=r&&r.food?1:(0.22+(lv('oven')?.1:0)+(S.t<660?.08:0)+(dine?.15:0)+(e.seg==='tourist'?.1:0)+(foodCount()>2?.06:0));
+  const ch=r&&r.food?1:((perk('claire',2)?.08:0)+0.22+(lv('oven')?.1:0)+(S.t<660?.08:0)+(dine?.15:0)+(e.seg==='tourist'?.1:0)+(foodCount()>2?.06:0));
   if(food&&R()<ch&&hasStock(food)&&R()<accept(food,S.price[food],segPk(e.seg)*(r?1.3:1))){sell(food);txt+='＋'+MENU[food].n;tot+=S.price[food]}}
  if(!r&&R()<.02&&(S.wish||[]).length<3){const ks=Object.keys(LAB).filter(k=>!S.rec[k]&&!(S.wish||[]).some(w=>w.k===k));if(ks.length){const k=ks[Math.floor(R()*ks.length)];(S.wish=S.wish||[]).push({k,seg:e.seg,day:S.day});if(!quiet)say(e,`要是有${LAB[k].n}就好了～`);pushFeed(`💭 有位${sg.n}許願想喝「${LAB[k].n}」（到研發查看）`)}}
  T.hS[h]++;e.item=item;e.work=MENU[item].work||1;e.st='pick';e.order=txt;e.dine=dine;PICK.push(e);
@@ -1333,7 +1598,7 @@ function leave(e,icon,quiet){const i=LINE.indexOf(e);if(i>=0)LINE.splice(i,1);
  e.st='out';e.icon=icon;e.icT=4;e.wp=[{x:e.x,y:LANE},{x:-14,y:LANE}];if(!quiet)sfx('sad')}
 function depart(e,quiet){
  const i=PICK.indexOf(e);if(i>=0)PICK.splice(i,1);
- S.today.served++;e.cup=1;if(!quiet)sfx('clink');ownXp(1);if((S.today.passC||0)<40){S.today.passC=(S.today.passC||0)+.3;passPts(.3)}
+ S.today.served++;e.cup=1;if(!quiet)sfx('clink');if(e.boss)bossDone(S.t-e.qs<=20,'出餐太慢了');ownXp(1);if((S.today.passC||0)<40){S.today.passC=(S.today.passC||0)+.3;passPts(.3)}
  if(e.rid&&regLv(e.rid)>=5)bondUp(e.rid);if(e.rid){const w=S.t-e.qs;addAff(e.rid,(lv('card')?1:0)+(w<10?3:w<20?1:-1)+(catOwn('purin')&&w<20&&R()<.5+catH('purin')*.1?1:0))}
  if(!e.rider&&R()<.12*(1+.25*sk('tips'))*((S.today&&S.today.tipX)||1)*(catOwn('mike')?1.5+catH('mike')*.05:1)*(S.rep/100+.5))S.today.jar=Math.min(40,(S.today.jar||0)+rr(.5,2));
  if(e.critic){const w=S.t-e.qs;if(w<=12){S.rep=clamp(S.rep+4,0,repCap());S.money+=50;toast('🎩 評論家：「出杯又快又好喝！」口碑 +4、獎金 $50');pushFeed('🎩 評論家大讚！')}else{S.rep=clamp(S.rep-2,0,100);toast('🎩 評論家：「等太久了…」口碑 -2');pushFeed('🎩 評論家不太滿意')}S.today.critic='done'}
@@ -1344,7 +1609,7 @@ function leaveSeat(e){const s=e.seat;s.occ=null;s.dirty=true;e.seat=null;e.st='o
  e.wp=[{x:s.aisle,y:s.y},{x:s.aisle,y:LANE},{x:-14,y:LANE}]}
 function cleanTable(tx,ty,auto){let n=0;SEATS.forEach(s=>{if(s.tx===tx&&s.ty===ty&&s.dirty){s.dirty=false;n++}});
  if(n){SPARK.push({x:tx,y:ty-6,t:1.2});if(!auto){sfx('spark',1);fl('✨ 清潔完成','#4E78A6',{x:tx,y:ty-10},false)}}return n}
-function repCap(){return (carT()>=4?2:0)+2*sk('charm')+(lv('sound')?3:0)+[85,92,100][lv('decor')]+(perk('grandma',4)?5:0)}
+function repCap(){return (perk('zhou',4)?3:0)+(dset(2)?2:0)+(carT()>=4?2:0)+2*sk('charm')+(lv('sound')?3:0)+[85,92,100][lv('decor')]+(perk('grandma',4)?5:0)}
 
 /* ---------- 熟客好感度 ---------- */
 function addAff(id,d){const st=S.reg[id],before=regLv(id);st.aff=clamp(st.aff+d,0,100);
@@ -1403,11 +1668,14 @@ function closeShop(){
  T.catFood=(S.cats||[]).length*6*(cfOwn('bowl')?.5:1);S.money-=T.catFood;
  if(T.jar>0){T.tips=(T.tips||0);T.jarLost=T.jar;T.jar=0}
  T.wages=S.staff.reduce((a,s)=>a+wageOf(s),0);T.rent=dailyRent();T.util=UTIL;
- T.life=lifeUp();S.money-=T.wages+T.rent+T.util+T.life;if(S.house&&house().rep)S.rep=clamp(S.rep+house().rep,0,100);
+ {const H=S.hours||'std';T.xs=[];if(H==='early'||H==='both'){const r=extraSession(T,'early');r.k='🌅 早鳥時段';T.xs.push(r)}if(H==='night'||H==='both'){const r=extraSession(T,'night');r.k='🌙 夜間時段';T.xs.push(r)}T.truckR=truckResult(T)}
+ memberTick(T);
+ T.life=lifeUp();T.franInc=franInc();S.money+=T.franInc;if(T.franInc)S.rep=clamp(S.rep+.05*S.fran.length,0,100);S.money-=T.wages+T.rent+T.util+T.life;if(S.house&&house().rep)S.rep=clamp(S.rep+house().rep,0,100);
  T.brInc=0;for(const id in S.br){const b=BRANCH.find(x=>x.id===id);T.brInc+=Math.round(branchInc(b,S.br[id]))}S.money+=T.brInc;
  if(S.loan){T.loanPay=S.loan.pay;S.money-=S.loan.pay;S.loan.left--;if(S.loan.left<=0){S.loan=null;T.loanDone=1}}
  T.staffUp=[];T.tired=[];
- for(const s of S.staff){if(s.pos==='rest'){s.leave=false;s.fat=Math.max(0,s.fat-20-10*lv('staffroom'))}else if(s.leave){s.fat=Math.max(0,s.fat-45);s.leave=false}else{s.xp++;s.fat=Math.min(100,s.fat+Math.round(((shiftOf(s)==='all'?10:6)+(T.cups>150?6:0))*(1-.2*sk('manage'))));if(s.xp>=s.lv*5&&s.lv<5){s.lv++;s.xp=0;T.staffUp.push(s.n)}}if(s.fat>=80)T.tired.push(s.n)}
+ if(perk('anan',4))S.staff.forEach(s=>s.fat=Math.max(0,s.fat-4));
+ for(const s of S.staff){if(s.train){s.train--;s.fat=Math.max(0,s.fat-10);if(!s.train){s.cert=(s.cert||0)+1;S.stories.push({txt:[['sys',`🎓 ${s.n} 取得「${CERT[s.cert]}」！`],['sys',`${s.n}：「${pickA(['學到好多東西，迫不及待要用在店裡了！','老師說我的手很穩，是天生的咖啡師！','謝謝店長願意栽培我，我會更努力的！'])}」`],['sys','出杯速度 +10%'+(s.cert>=3?'・可以考慮支持他獨立開店了':'')]]})}continue}if(s.pos==='rest'){s.leave=false;s.fat=Math.max(0,s.fat-20-10*lv('staffroom'))}else if(s.leave){s.fat=Math.max(0,s.fat-45);s.leave=false}else{s.xp++;s.fat=Math.min(100,s.fat+Math.round(((shiftOf(s)==='all'?10:6)+(T.cups>150?6:0))*(1-.2*sk('manage'))));if(s.xp>=s.lv*5&&s.lv<5){s.lv++;s.xp=0;T.staffUp.push(s.n)}}if(s.fat>=80)T.tired.push(s.n)}
  const extra=[];
  if(S.lab){S.lab.left--;if(S.lab.left<=0){const k=S.lab.k;S.rec[k]=true;S.hype[k]=4;if(S.price[k]===undefined)S.price[k]=MENU[k].ref;T.newRec=k;S.lab=null;extra.push({txt:[['sys',`🧪 新配方「${MENU[k].n}」研發成功！已加入菜單，接下來 3 天是話題期。`]]})}}
  for(const k in S.hype){S.hype[k]--;if(S.hype[k]<=0)delete S.hype[k]}
@@ -1417,8 +1685,8 @@ function closeShop(){
  if(T.blogger){if(sat>=0.85){S.rep=clamp(S.rep+8,0,100);T.bloggerOK=true}else{S.rep=clamp(S.rep-4,0,100);T.bloggerOK=false}}
  if(S.quest&&questOK()){S.quest.done=true;S.money+=S.quest.reward;S.rep=clamp(S.rep+2,0,100);S.questDone=(S.questDone||0)+1;passPts(25);ownXp(60)}
  S.maxRep=Math.max(S.maxRep||0,S.rep);
- weekAdd(T);
- passPts(20+(T.fest?40:0));ownXp(30);
+ weekAdd(T);if(T.boss&&!T.boss.done)bossDone(false,'今天沒能好好招待');
+ passPts(20+(T.fest?40:0));ownXp(30);rivalTick(T);if(T.rivalNew)extra.push({txt:[['sys','📢 巷口對面開了一間「星辰連鎖咖啡」！'],['wang','兄弟，那間連鎖店來勢洶洶，你可別輸啊！'],['sys','到「品牌 › 對手」查看並反擊']]});if(T.rivalRes)extra.push({txt:[['sys',T.rivalRes]]});
  if(S.day%28===0){const avgSat=(S.history.slice(-27).length?1:1)*sat,menuN=Object.keys(MENU).filter(unlocked).length,stars=Object.keys(MENU).filter(k=>unlocked(k)&&star(k)>=2).length;
   const sc=S.rep*.45+avgSat*30+Math.min(15,menuN*.6)+Math.min(10,stars*1.5)+(quality()>0?5:0)+(S.sig||[]).length*2;
   const cups=sc>=92?3:sc>=80?2:sc>=66?1:0,prev=guideCups();S.guide={cups,day:S.day,sc:Math.round(sc)};T.guide=S.guide;
@@ -1435,7 +1703,7 @@ function closeShop(){
  S.mods.forEach(m=>m.days--);S.mods=S.mods.filter(m=>m.days>0);
  if(S.money<0)S.broke++;else S.broke=0;if(S.broke>=3)S.over=true;
  T.newMs=[];MILESTONES.forEach(m=>{if(!S.ms[m.id]&&m.f()){S.ms[m.id]=S.day;T.newMs.push(m.t)}});
- T.reviews=makeReviews();checkAch(false);
+ T.reviews=makeReviews();catStoryTick();arcTick();meTick();checkAch(false);
  ENT.forEach(e=>{if(e.st==='sit')leaveSeat(e)});
  save();render();
  const st=S.stories.splice(0).concat(extra);save();
@@ -1446,6 +1714,7 @@ function playStories(list,done){
  const s=list.shift();
  if(s.ch!==undefined){const c=CHAPTERS[s.ch],nx=CHAPTERS[s.ch+1];showVN([['sys',`📖 主線第 ${s.ch+1} 章「${c.t}」完成！`]].concat(c.story).concat([['sys',`🎁 獎勵 ${fm(c.rw)}`],['sys',nx?`下一章「${nx.t}」：${nx.d}`:'所有章節完成！巷口咖啡的故事會繼續下去。']]),()=>playStories(list,done));return}
  if(s.txt){showVN(s.txt,()=>playStories(list,done));return}
+ if(s.me!==undefined){playMe(s.me,()=>playStories(list,done));return}
  const lines=REGS[s.id].story[s.lv]||[];
  showVN([['sys',`💗 ${REGS[s.id].n} · 好感度 Lv${s.lv}「${LVN[s.lv]}」`]].concat(lines).concat(REGS[s.id].perks[s.lv]?[['sys',`🎁 解鎖效果：${REGS[s.id].perks[s.lv]}`]]:[]),()=>playStories(list,done));
 }
@@ -1577,7 +1846,7 @@ function drawScene(ts){
  if(perk('grandma',5)){P(188,58,5,8,'#7a5236');P(189,55,3,3,'#5a3e2b')}
  // 菜單板
  RR(172,4,76,36,WD2,OL);P(174,5,72,1,WD1);RR(175,7,70,30,perk('mika',2)?'#2e4038':'#384038');
- Object.keys(MENU).filter(unlocked).slice(0,6).forEach((k,i)=>{const yy=11+i*4;P(180,yy,24+(k.length*3)%14,2,'#e8e2d6');P(232,yy,8,2,'#e0a43a')});
+ [...(S.board||[]).filter(k=>MENU[k]&&unlocked(k)),...Object.keys(MENU).filter(k=>unlocked(k)&&!(S.board||[]).includes(k))].slice(0,6).forEach((k,i)=>{const yy=11+i*4;P(180,yy,24+(k.length*3)%14,2,'#e8e2d6');P(232,yy,8,2,'#e0a43a')});
  if(perk('mika',2)){P(214,12,8,6,'#d16a8a');P(216,14,4,2,'#fff')}
  // 吊燈
  if(lv('decor')){for(const lx of [70,130]){P(lx,0,1,12,'#4a3a30');EL(lx,15,6,3,'#4a6a4a');EL(lx,14,5,2,'#6a8a6a');P(lx-4,17,9,1,'#ffd27a');P(lx-1,18,3,1,'#fff2c0');
@@ -1588,7 +1857,11 @@ function drawScene(ts){
  if(fd==='lantern')for(const lx of [40,100,160,220]){P(lx,0,1,6,'#2b2622');P(lx-3,6,7,9,'#c4553d');P(lx-2,8,5,5,'#ffd27a');P(lx-1,15,3,2,'#e0a43a')}
  if(fd==='sakura')for(let x=2;x<CW;x+=8)P(x,3+((x/8)%2)*2,3,3,(x/8)%2?'#f2a7c0':'#fff');
  if(SE.n==='冬'||fd==='xmas'){const tx=160;for(let r=0;r<6;r++)P(tx-2-r*1.5,58+r*3,5+r*3,3,'#3f7a4a');P(tx-1,76,3,4,'#5a3e2b');P(tx,55,2,2,'#ffd25a');if(fd==='xmas'||SE.n==='冬')for(let k=0;k<5;k++)P(tx-6+((k*7)%13),62+k*3,2,2,Math.floor(ts/400+k)%2?'#c4553d':'#ffd25a')}
- drawCatFurn(ts,'wall');
+ drawCatFurn(ts,'wall');drawDecor('low',ts);
+ {const C=cal();if(SE.n==='秋'&&C.d>=9){for(const [px,sz] of [[150,5],[158,4]]){EL(px,79-sz,sz+1,sz,'#e07a2a');P(px-1,79-sz*2,2,2,'#5a7a34');P(px-2,77-sz,1,1,'#2b2622');P(px+1,77-sz,1,1,'#2b2622')}}
+  if(SE.n==='春'&&C.d<=4){P(5,36,3,26,'#c4453d');P(24,36,3,26,'#c4453d');P(6,40,1,1,'#ffd25a');P(25,44,1,1,'#ffd25a');RR(11,28,10,5,'#c4453d');P(14,29,4,2,'#ffd25a')}
+  if(SE.n==='夏'&&C.d>=6&&C.d<=10){P(16,26,1,6,'#6a5a4a');EL(16,33,3,2,'#9ad0ee');P(16,35,1,3,'#f2a7c0')}
+  if(WEATHER[S.weather].rain&&open){RR(31,70,8,11,'#4f7ca8',OL);P(33,62,1,8,'#c4553d');P(36,64,1,6,'#e0a43a');P(0,82,40,2,'rgba(160,200,230,.35)')}}
  // 吧台後店員
  const busy=open&&PICK.some(e=>!e.ready),taking=open&&LINE[0]&&LINE[0].ordering;
  const staff=[{x:180,c:'#2b2622',b:taking,sk:'#f1c7a0',h:'#2b2622'}],wb=workStaff('barista'),bx=[204,246,192];
@@ -1635,7 +1908,7 @@ function drawScene(ts){
    if(ss.some(s=>s.dirty)&&open&&Math.floor(ts/500)%2){P(tx-1,ty-17,2,5,'#c4553d');P(tx-1,ty-11,2,2,'#c4553d')}
   }})}
  ENT.forEach(e=>{if(e.st!=='sit')items.push({y:e.y,d:()=>person(e,false)})});
- items.push({y:150,d:()=>drawCatFurn(ts,'floor')});
+ items.push({y:150,d:()=>drawCatFurn(ts,'floor')});items.push({y:178,d:()=>drawDecor('floor',ts)});
  CATS.filter(c=>!(c.sill&&c.st!=='walk')).forEach(c=>items.push({y:c.y,d:()=>drawCat(c,ts)}));
  SPILLS.forEach(sp=>items.push({y:sp.y-20,d:()=>{P(sp.x-7,sp.y-2,14,4,'#6b3e22');P(sp.x-5,sp.y-3,10,1,'#6b3e22');P(sp.x-4,sp.y-1,4,1,'#9a6438');P(sp.x+4,sp.y-4,3,2,'#6b3e22');if(Math.floor(ts/400)%2){P(sp.x-1,sp.y-16,2,6,'#c4553d');P(sp.x-1,sp.y-8,2,2,'#c4553d')}}}));
  CLEANERS.forEach(c=>items.push({y:c.y,d:()=>{person({x:c.x,y:c.y,f:c.f,dir:c.dir,wp:c.cl>0?[]:[1],skin:c.s.skin,hair:c.s.hair,shirt:c.s.shirt,pants:'#2b2622',apron:1,long:c.s.long},false);
@@ -1647,6 +1920,8 @@ function drawScene(ts){
  ENT.forEach(e=>{if(e.icT>0&&e.icon)icon(Math.round(e.x),Math.round(e.y-26),e.icon)});
  SPARK.forEach(s=>{const a=s.t;for(let k=0;k<4;k++){const ang=k*1.57+ts/200;P(s.x+Math.cos(ang)*6*(1.4-a),s.y+Math.sin(ang)*4,2,2,'#ffe38a')}});
  if(prog>0.7&&open){cx.fillStyle=`rgba(255,140,60,${(prog-0.7)*0.25})`;cx.fillRect(0,0,CW,CH)}
+ // 傍晚燈光
+ if(prog>.8&&open||S.phase==='night'){for(const lx of [70,130,200]){const g=cx.createRadialGradient(lx,20,2,lx,20,46);g.addColorStop(0,'rgba(255,220,150,.22)');g.addColorStop(1,'rgba(255,220,150,0)');cx.fillStyle=g;cx.fillRect(lx-46,0,92,90)}}
  if(S.phase==='night'){cx.fillStyle='rgba(20,15,40,.35)';cx.fillRect(0,0,CW,CH)}
  else if(S.phase==='prep'){cx.fillStyle='rgba(30,20,10,.15)';cx.fillRect(0,0,CW,CH)}
 }
@@ -1775,7 +2050,7 @@ function render(){
  const app=document.getElementById('app');clearBubbles();const tbe=document.getElementById('tb');if(tbe)tbe.innerHTML=tbHTML();
  app.innerHTML=tab==='shop'?shopView():tab==='buy'?buyView():tab==='menu'?menuView():tab==='store'?storeView():tab==='regs'?regsView():tab==='life'?lifeView():brandView();
  const newMet=REG_ORDER.some(id=>S.reg[id].met&&S.reg[id].seen===0);
- const tabs=[['shop','nav_shop','營業'],['buy','nav_buy',S.phase==='open'?'叫貨':'進貨'],['menu','nav_menu','定價'],['store','nav_store','經營'],['regs','nav_regs','熟客'],['life','nav_life','生活'],['report','nav_brand','品牌']];
+ const tabs=[['shop','nav_shop','營業'],['buy','nav_buy',S.phase==='open'?'叫貨':'進貨'],['menu','nav_menu','定價'],['store','nav_store','經營'],['regs','nav_regs','熟客'],['life','nav_life','生活'],['report','nav_brand','品牌']].filter(t=>t[0]!=='life'||feat('life'));
  document.getElementById('nav').innerHTML=tabs.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="go('${t[0]}')"><span class="i">${pimg(t[1],28)}</span><span class="nl">${t[2]}</span>${t[0]==='regs'&&newMet?'<span class="dot"></span>':''}</button>`).join('');
  cv=document.getElementById('cv');cx=cv?cv.getContext('2d'):null;
  if(cv)cv.onclick=ev=>guard('tap',()=>onSceneTap(ev));
@@ -1804,7 +2079,8 @@ function renderLive(){
  set('stats',liveStatsHTML());set('inv',invHTML());set('qst',questHTML());set('pres',presentHTML());
  set('feed',S.feed.map(f=>`<div>${f}</div>`).join('')||'<div>—</div>');
 }
-function shopView(){
+function shopView(){return featCard()+todoCard()+shopView0()}
+function shopView0(){
  let pre='';
  if(S.phase==='prep'){const est=estimate();
   const ev=S.event?`<div class="tip"><b>${S.event.t}</b><br>${S.event.d}</div>`:'';
@@ -1816,12 +2092,14 @@ function shopView(){
   const tired=S.staff.filter(s=>s.fat>=80&&!s.leave);
   const lab=S.lab?`<div class="hint" style="margin-top:6px">🧪 研發中：${RECIPES[S.lab.k].n}（剩 ${S.lab.left} 天）</div>`:'';
   const trd=S.trend?`<div class="tip">🔥 <b>本週流行：${MENU[S.trend.k].n}</b>　點單 ×1.7、願付 +10%，記得多備料！</div>`:'';
+  const mkb=S.mkt?`<div class="tip ${S.mkt.m>1?'warn':''}">${S.mkt.t}：${S.mkt.x}</div>`:'';const bsb=S.today.boss?`<div class="tip love">${BOSS[S.boss.i].ic} <b>${BOSS[S.boss.i].n}</b> 今天會來！他指定要喝 <b>${MENU[S.today.boss.want].n}</b>，要在 20 分鐘內出餐。記得備料！</div>`:'';
   pre=`<div class="card"><div class="kicker">開店前簡報 · ${calStr()}</div>
   <div style="margin-top:6px;line-height:1.7">預估來客 <b class="px">${Math.round(est.cust)}</b> 人　產能 <b class="px">${est.cap}</b> 杯　座位 <b class="px">${SEATS.length}</b> 席<br>
-  明日預報：${WEATHER[S.forecast].ic} ${WEATHER[S.forecast].n}<span class="hint">（準確率約 75%）</span></div>${trd}${fe}${ev}${mods}${lab}
+  明日預報：${WEATHER[S.forecast].ic} ${WEATHER[S.forecast].n}<span class="hint">（準確率約 75%）</span></div>${bsb}${trd}${mkb}${fe}${ev}${mods}${lab}
   ${tired.length?`<div class="tip warn">😵 ${tired.map(s=>s.n).join('、')} 太累了，效率下降。可到「經營 › 員工」讓他今天休假。</div>`:''}
   ${regs.length?`<div class="tip love">💗 今天可能會來的熟客：${regs.map(r=>r.n).join('、')}${favNeed.length?`<br><span class="hint">他們愛點：${favNeed.map(k=>MENU[k].n).join('、')}，記得備料</span>`:''}</div>`:''}
   ${short.length?`<div class="tip warn">⚠️ 庫存可能不夠：${short.map(k=>ING[k].n).join('、')}　<button class="btn sm" onclick="go('buy')">去進貨</button></div>`:''}
+  ${lv('truck')&&isWeekend()?(S.today.truck?`<div class="tip">🚐 咖啡車今天在「${MARKETS.find(m=>m.id===S.today.truck.m).n}」擺攤</div>`:`<button class="btn big" style="margin-top:8px" onclick="truckDlg()">🚐 派咖啡車出攤</button>`):''}${lv('roaster')?(S.today.roastQ!==undefined?`<div class="hint" style="margin-top:6px">🔥 今天烘豆 ${S.today.roastQ} 分（${ROAST[S.roast||'medium'].n}）</div>`:`<button class="btn big" style="margin-top:8px" onclick="roastGame()">🔥 烘一爐豆子</button>`):''}${(S.hours||'std')!=='std'?`<div class="hint" style="margin-top:6px">⏰ 營業時段：${HOURS[S.hours].n}（額外時段在打烊時結算）</div>`:''}
   <button class="btn big dark" style="margin-top:12px" onclick="openShop()">開門營業 ☕</button></div>`}
  if(S.phase==='night')pre=`<div class="card"><button class="btn big dark" onclick="showSummary()">查看今日結算 🌙</button>${S.today.night?'':`<button class="btn big pink" style="margin-top:8px" onclick="go('life')">🌃 下班去玩</button>`}</div>`;
  const L=(x,y,t)=>`<div class="lbl" style="left:${x/CW*100}%;top:${y/CH*100}%">${t}</div>`;
@@ -1836,7 +2114,7 @@ function shopView(){
  <div class="card"><div class="row between"><div class="kicker">庫存</div><div class="hint">少＝今天可能不夠　期＝今晚到期</div></div><div class="inv" id="inv">${invHTML()}</div></div>
  <div class="card"><div class="kicker">店內動態</div><div class="feed" id="feed" style="margin-top:6px">${S.feed.map(f=>`<div>${f}</div>`).join('')||'<div>開店後會顯示顧客動態</div>'}</div></div>`;
 }
-function buyView(){return buyView0()+(S.phase==='prep'?originCard():'')}
+function buyView(){return (S.phase==='prep'?mktCard():'')+buyView0()+(S.phase==='prep'?originCard():'')}
 function buyView0(){
  const em=S.phase==='open',mult=em?1.5:1;
  if(S.phase==='night')return `<div class="card"><div class="kicker">進貨</div><p class="sub">已打烊，明早再進貨。</p></div>`;
@@ -1862,7 +2140,7 @@ function priceRow(k){
  const fans=Object.keys(SEG).filter(s=>(SEG[s].pref[k]||1)>1.25).map(s=>SEG[s].n);
  const regFans=REG_ORDER.filter(id=>S.reg[id].met&&REGS[id].fav.includes(k)).map(id=>REGS[id].n);
  return `<div class="line"><div class="icbox">${pimg(k,32)}</div><div class="grow"><div class="name">${MENU[k].n}${S.hype&&S.hype[k]?'<span class="tag p">話題</span>':''}${MENU[k].cold?'<span class="tag">冰</span>':''}${MENU[k].work?'<span class="tag">製作×2</span>':''}${isSig(k)?'<span class="tag p">招牌</span>':''}${isTrend(k)?'<span class="tag y">🔥本週流行</span>':''}${fans.map(f=>`<span class="tag y">${f}</span>`).join('')}${regFans.map(f=>`<span class="tag p">♥${f}</span>`).join('')}</div>
-  <div class="meta">${'★'.repeat(star(k))}${'☆'.repeat(5-star(k))} <span class="hint">熟練 ${(S.mast&&S.mast[k])||0}${star(k)<5?'/'+MAST[star(k)]:''}</span> <button class="link ${isSig(k)?'on':''}" onclick="toggleSig('${k}')">${isSig(k)?'🏷 招牌中':'設為招牌'}</button></div>
+  <div class="meta">${'★'.repeat(star(k))}${'☆'.repeat(5-star(k))} <span class="hint">熟練 ${(S.mast&&S.mast[k])||0}${star(k)<5?'/'+MAST[star(k)]:''}</span> <button class="link ${isSig(k)?'on':''}" onclick="toggleSig('${k}')">${isSig(k)?'🏷 招牌中':'設為招牌'}</button> <button class="link ${boardIdx(k)>=0?'on':''}" onclick="toggleBoard('${k}')">${boardIdx(k)>=0?'🪧 看板 '+(boardIdx(k)+1):'上看板'}</button> <button class="link ${S.today.pick===k?'on':''}" onclick="setPick('${k}')">${S.today.pick===k?'⭐ 推薦中':'今日推薦'}</button></div>
   <div class="meta">成本 ${f2(c)}　毛利 <b style="color:${mg<.5?'var(--red)':'var(--ink)'}">${Math.round(mg*100)}%</b>　接受度 ${Math.round(a*100)}%　<button class="link" onclick="setP('${k}',${bp})">建議 ${f2(bp)}</button></div>
   <div class="bar"><i style="width:${a*100}%;background:${col}"></i></div></div>
   <div class="step"><button onclick="adjP('${k}',-0.1)">−</button><span>${f2(p)}</span><button onclick="adjP('${k}',0.1)">＋</button></div></div>`}
@@ -1889,14 +2167,14 @@ function makeSet(){if(!SD.d||!SD.f||S.sets.length>=setMax())return;S.sets.push({
 function delSet(i){S.sets.splice(i,1);save();render()}
 function menuView(){
  const ks=Object.keys(MENU).filter(unlocked),drinks=ks.filter(k=>!MENU[k].food),foods=ks.filter(k=>MENU[k].food),locked=Object.keys(MENU).length-ks.length;
- return `<div class="card"><div class="row between"><div><div class="kicker">套餐 · ${S.sets.length}/${setMax()}</div><div class="sub">飲品＋甜點自由搭配</div></div>
+ return boardCard()+`<div class="card"><div class="row between"><div><div class="kicker">套餐 · ${S.sets.length}/${setMax()}</div><div class="sub">飲品＋甜點自由搭配</div></div>
   <button class="btn sm dark" ${S.sets.length>=setMax()?'disabled':''} onclick="setDlg()">＋ 新增套餐</button></div>${setsHTML()}</div>
  <div class="card"><div class="kicker">飲品 · ${drinks.length}</div>${drinks.map(priceRow).join('')}</div>
  <div class="card"><div class="kicker">甜點 · ${foods.length}</div>${foods.map(priceRow).join('')}</div>
  <div class="card"><div class="hint">還有 <b>${locked}</b> 道品項未解鎖：到「經營 › 研發」自由實驗或研發配方，或到「經營 › 升級」解鎖菜單。<br>黃色＝愛點的客群，粉紅＝愛點的熟客。建議價讓每位客人帶來最多毛利，沒考慮產能與座位。</div></div>`;
 }
 function storeView(){
- const segs=['升級','員工','店長','研發','店貓'];if(!segs.includes(subTab))subTab='升級';
+ const segs=['升級','員工','店長','研發','店貓'].filter(t=>({員工:'staff',店長:'owner',研發:'lab',店貓:'cats'})[t]?feat(({員工:'staff',店長:'owner',研發:'lab',店貓:'cats'})[t]):true);if(!segs.includes(subTab))subTab='升級';
  let body='';
  if(subTab==='升級'){
   for(const g of ['街上','店裡','隔壁']){body+=`<h3 class="sec">${g}</h3>`+UPG.filter(u=>u.tab===g).map(u=>{const L=lv(u.id),max=L>=u.lv.length,nx=u.lv[L];
@@ -1905,6 +2183,7 @@ function storeView(){
    ${max?'':`<button class="btn sm ${S.money>=nx.c?'dark':''}" ${S.money<nx.c?'disabled':''} onclick="buyUpg('${u.id}')">${fm(nx.c)}</button>`}</div>`}).join('');
    if(g==='街上')body+=`<div class="line"><div class="grow"><div class="name">社群行銷活動</div><div class="meta">投放廣告：接下來 2 天來客 +30%</div></div>
     <button class="btn sm ${S.money>=150?'dark':''}" ${S.money<150?'disabled':''} onclick="mkt()">$150</button></div>`}
+  body+=stratCard()+(feat('member')?memCard():'')+decoCard();
   body+=`<h3 class="sec">主題裝潢 <span class="hint" style="font-weight:400">每收藏一套，顧客願付 +1%</span></h3>`+THEMES.map(t=>{const own=S.themes.includes(t.id),on=S.theme===t.id;
    return `<div class="line"><div style="display:grid;grid-template-columns:1fr 1fr;width:34px;height:34px;border:2px solid var(--ink);flex:none"><i style="background:${t.wall}"></i><i style="background:${t.wain}"></i><i style="background:${t.f1}"></i><i style="background:${t.f2}"></i></div>
    <div class="grow"><div class="name">${t.n}${on?'<span class="tag g">使用中</span>':''}</div></div>
@@ -1932,13 +2211,13 @@ function scheduleHTML(){
 function staffView(){
  const full=S.staff.length>=rosterCap(),nRest=S.staff.filter(s=>s.pos==='rest').length;
  const rows=S.staff.map(s=>`<div class="line" style="align-items:flex-start"><canvas class="por sm" data-staff="${s.id}"></canvas><div class="grow">
-  <div class="name">${s.n} <span class="tag">${s.role==='barista'?'咖啡師':'外場'}</span><span class="tag y">Lv${s.lv}</span>${s.pos==='rest'?'<span class="tag">🛋 休息室</span>':s.leave?'<span class="tag g">今天休假</span>':onShift(s)&&S.phase==='open'?'<span class="tag g">上班中</span>':''}</div>
+  <div class="name">${s.n} <span class="tag">${s.role==='barista'?'咖啡師':'外場'}</span><span class="tag y">Lv${s.lv}</span>${s.cert?`<span class="tag p">🎓${CERT[s.cert]}</span>`:''}${s.train?`<span class="tag y">進修中 ${s.train} 天</span>`:s.pos==='rest'?'<span class="tag">🛋 休息室</span>':s.leave?'<span class="tag g">今天休假</span>':onShift(s)&&S.phase==='open'?'<span class="tag g">上班中</span>':''}</div>
   <div class="meta">✨ ${TRAITS[s.trait].n}：${TRAITS[s.trait].d}</div>
   <div class="meta">日薪 $${wageOf(s)}　${s.role==='barista'?'出杯 '+Math.round(staffSpeed(s))+' 杯/時　':''}經驗 ${s.xp}/${s.lv*5}${s.lv>=5?'（滿級）':''}</div>
   <div class="meta">疲勞 <b style="color:${s.fat>=80?'var(--red)':'inherit'}">${s.fat}</b>/100${s.fat>=80?'　太累了，效率 -30%':''}</div><div class="bar"><i style="width:${s.fat}%;background:${s.fat>=80?'var(--red)':'var(--gold)'}"></i></div>
   <div class="meta" style="margin-top:6px">崗位</div><div class="mini">${Object.keys(POSN).map(p=>`<button class="${posOf(s)===p?'on':''}" onclick="setPos('${s.id}','${p}')">${POSN[p]}${(p==='bar'&&s.role==='barista')||(p==='floor'&&s.role==='floor')?'★':''}</button>`).join('')}</div>
   <div class="meta">班別</div><div class="mini">${Object.keys(SHIFT).map(h=>`<button class="${shiftOf(s)===h?'on':''}" onclick="setShift('${s.id}','${h}')">${SHIFT[h]}</button>`).join('')}</div>
-  <div class="row" style="margin-top:6px">${S.phase==='prep'?`<button class="btn sm" onclick="toggleLeave('${s.id}')">${s.leave?'取消休假':'今天休假'}</button>`:''}<button class="btn sm" onclick="fire('${s.id}')">解雇</button></div></div></div>`).join('')||'<p class="sub">目前只有你一個人顧店。雇用咖啡師可以加快出杯，外場人員會自動收桌。</p>';
+  <div class="row" style="margin-top:6px">${S.phase==='prep'?`<button class="btn sm" onclick="toggleLeave('${s.id}')">${s.leave?'取消休假':'今天休假'}</button>`:''}${(()=>{const c=s.cert||0;if(s.train)return '';if(c<3){const ok=S.phase==='prep'&&s.lv>=CERTLV[c]&&S.money>=CERTC[c];return `<button class="btn sm ${ok?'dark':''}" ${ok?'':'disabled'} onclick="trainStaff('${s.id}')" title="需 Lv${CERTLV[c]}">🎓 進修${CERT[c+1]} ${fm(CERTC[c])}${s.lv<CERTLV[c]?`（需Lv${CERTLV[c]}）`:''}</button>`}return s.lv>=5?`<button class="btn sm ${S.money>=5000?'dark':''}" ${S.money<5000?'disabled':''} onclick="indepStaff('${s.id}')">🌱 支持獨立開店 $5,000</button>`:''})()}<button class="btn sm" onclick="fire('${s.id}')">解雇</button></div></div></div>`).join('')||'<p class="sub">目前只有你一個人顧店。雇用咖啡師可以加快出杯，外場人員會自動收桌。</p>';
  const cands=(S.cands||[]).map(c=>{
   return `<div class="line" style="align-items:flex-start"><canvas class="por sm" data-staff="${c.id}"></canvas><div class="grow">
   <div class="name">${c.n} <span class="tag">${c.role==='barista'?'咖啡師':'外場'}</span><span class="tag y">Lv${c.lv}</span></div>
@@ -1948,11 +2227,12 @@ function staffView(){
  <div class="hint">崗位坐滿的員工會待在<b>休息室</b>：不上班、不累積經驗，但<b>照領全薪</b>，每天恢復疲勞 ${20+10*lv('staffroom')}。可以當輪替替補。第二工作台、員工休息室、打通隔壁可增加名額。員工每上班一天累積經驗，最高 Lv5；每天會累積疲勞，80 以上效率下降，開店前可安排休假（照付薪水）。</div>
  ${scheduleHTML()}
  <h3 class="sec">我的團隊</h3>${rows}
+ ${(S.fran||[]).length?`<h3 class="sec">🌱 弟子店</h3>${S.fran.map(f=>`<div class="line"><div class="grow"><div class="name">${f.shop}</div><div class="meta">第 ${f.day} 天開幕・每天分紅 $200</div></div></div>`).join('')}`:''}
  <h3 class="sec">應徵者<span class="hint" style="font-weight:400">　每週一更新</span></h3>${cands}
  <button class="btn sm" style="margin-top:8px" ${S.money<60?'disabled':''} onclick="postJob()">📋 刊登徵才 $60（立即換一批）</button>`;
 }
 let labTab='自由實驗',EXP=[];
-function labView(){return `<div class="seg" style="margin-top:4px">${['自由實驗','配方研發'].map(t=>`<button class="${labTab===t?'on':''}" onclick="labTab='${t}';render()">${t}</button>`).join('')}</div>`+(labTab==='自由實驗'?expView():recipeView())}
+function labView(){return `<div class="seg" style="margin-top:4px">${['自由實驗','配方研發','季節限定'].map(t=>`<button class="${labTab===t?'on':''}" onclick="labTab='${t}';render()">${t}</button>`).join('')}</div>`+(labTab==='自由實驗'?expView():labTab==='季節限定'?seaView():recipeView())}
 function expView(){
  const pool=LABING.map(k=>{const lk=ING[k].lock&&lv(ING[k].lock)===0;return `<button class="ingb ${EXP.includes(k)?'sel':''}" ${lk?'disabled':''} onclick="expPick('${k}')"><span>${pimg(k,26)}</span>${ING[k].n}${lk?'🔒':''}</button>`}).join('');
  const found=Object.keys(LAB).filter(k=>S.rec[k]).length;
@@ -1966,7 +2246,7 @@ function expView(){
  <h3 class="sec">自由實驗圖鑑 ${found} / ${Object.keys(LAB).length}</h3>
  <div class="ingg">${Object.keys(LAB).map(k=>S.rec[k]?`<div class="dex on"><span>${pimg(k,26)}</span>${LAB[k].n}</div>`:`<div class="dex"><span>❔</span>${Object.keys(LAB[k].need).length} 種素材${LAB[k].food?' · 甜點':' · 飲品'}</div>`).join('')}</div>`}
 function expPick(k){const i=EXP.indexOf(k);if(i>=0)EXP.splice(i,1);else{if(EXP.length>=3)EXP.shift();EXP.push(k)}sfx('click');render()}
-function experiment(){if(EXP.length<2||S.money<100)return;S.money-=100;S.today.mkt+=100;S.labLog=S.labLog||[];
+function experiment(){const LC=perk('claire',4)?50:100;if(EXP.length<2||S.money<LC)return;S.money-=LC;S.today.mkt+=LC;S.labLog=S.labLog||[];
  const key=EXP.slice().sort().join('+'),names=EXP.map(k=>ING[k].n).join('＋');
  const hit=Object.keys(LAB).find(k=>Object.keys(LAB[k].need).sort().join('+')===key);
  if(hit&&!S.rec[hit]){S.rec[hit]=true;S.hype[hit]=4;const wi=(S.wish||[]).findIndex(w=>w.k===hit);if(wi>=0){S.wish.splice(wi,1);S.money+=400;S.rep=clamp(S.rep+2,0,100);passPts(30);ownXp(120);setTimeout(()=>toast(`💭 實現客人的願望！獎勵 $400、口碑 +2`),900)}if(S.price[hit]===undefined)S.price[hit]=MENU[hit].ref;S.labLog.push(`✅ ${names} → <b>${LAB[hit].n}</b>`);EXP=[];sfx('level',1);save();
@@ -1987,7 +2267,7 @@ function recipeView(){
  return `<div class="hint">研發要花幾天，同時只能進行一項，每天打烊時推進。新品上架後有 3 天話題期：點的人變多、來客 +6%。含可可的配方會解鎖「可可粉」進貨。</div>${cards}
  <div class="hint" style="margin-top:8px">配方圖鑑 ${Object.keys(S.rec).length} / ${Object.keys(RECIPES).length}</div>`;
 }
-function regsView(){return regsView0()+ch2Card()}
+function regsView(){return regsView0()+arcCard()+ch2Card()}
 function regsView0(){
  REG_ORDER.forEach(id=>{if(S.reg[id].met)S.reg[id].seen=1});save();
  const cards=REG_ORDER.map(id=>{const r=REGS[id],st=S.reg[id],l=regLv(id);
@@ -2070,6 +2350,10 @@ function originCard(){
 /* ---------- 熟客第二章 ---------- */
 const BONDN=[3,10,20];
 const REG2={
+ anan:[[['anan','我在考慮要不要去偏鄉醫院。'],['anan','那裡很缺人，可是……就不能常來這裡了。']],[['anan','我決定去了。'],['anan','你可以寄咖啡豆給我嗎？我想讓那裡的同事也喝到。'],['sys','開始每月寄豆子到偏鄉醫院']],[['anan','我回來了！偏鄉的同事都叫你「咖啡天使」。'],['anan','這是他們寫給你的卡片。'],['sys','💌 收到一整疊感謝卡']]],
+ xiaoqing:[[['xiaoqing','大學好忙！但我每週還是會回來。'],['xiaoqing','我的第一個作業，就是設計一間咖啡店。']],[['xiaoqing','老闆，我的作品拿到系上第一名！'],['xiaoqing','題目是「巷口的光」，就是你的店。']],[['xiaoqing','我畢業了，在設計公司上班。'],['xiaoqing','第一個案子，我想幫你設計新的店面！'],['sys','🎨 小晴成為你的空間設計師']]],
+ zhou:[[['zhou','我的老團員們想錄一張唱片。'],['zhou','錄音室太冷冰冰了，可以在你這裡錄嗎？']],[['zhou','唱片做好了，名字叫《巷口午後》。'],['zhou','第一張送你。']],[['zhou','唱片上了爵士電台。'],['zhou','好多人寫信問：那間咖啡店在哪？'],['sys','🎺 老周的唱片讓店裡成為爵士迷的朝聖地']]],
+ claire:[[['claire','我收到法國甜點大賽的參賽邀請。'],['claire','我想做一道以台灣咖啡為主題的甜點。'],['claire','可以用你的豆子嗎？']],[['claire','我拿到銀牌了！'],['claire','評審說咖啡的風味很特別，我說是台北一間小店烘的。']],[['claire','我要開新的甜點店了，就在你隔壁街。'],['claire','招牌甜點會用你的咖啡，我們一起讓這條街變得更甜吧！'],['sys','🍰 Claire 的新店和你成為聯名夥伴']]],
  azhe:[[['azhe','老闆…我想辭職了。'],['azhe','我想做一個 App，讓小店也能有自己的點餐系統。'],['azhe','如果失敗了，可以讓我在這裡打工嗎？哈哈。']],
   [['azhe','App 上線了！第一個合作店家，我只想找你。'],['azhe','這間店陪我寫完了每一行程式。'],['sys','阿哲的新創公司成為合作夥伴']],
   [['azhe','我……要在這裡求婚。就在我們第一次見面的那個位子。'],['azhe','她說好了！！'],['sys','💍 店裡的這一天，被很多人記住了']]],
@@ -2110,7 +2394,7 @@ const ACH=[
  {id:'m100k',t:'十萬店長',d:'存款達 $100,000',r:2000,ok:()=>S.money>=100000},
  {id:'m1m',t:'咖啡大亨',d:'存款達 $1,000,000',r:10000,ok:()=>S.money>=1e6},
  {id:'rep95',t:'口碑之王',d:'口碑達 95',r:800,ok:()=>(S.maxRep||0)>=95},
- {id:'regall',t:'巷口的家人',d:'6 位熟客好感都達 Lv5',r:3000,ok:()=>REG_ORDER.every(id=>regLv(id)>=5)},
+ {id:'regall',t:'巷口的家人',d:'全部熟客好感都達 Lv5',r:3000,ok:()=>REG_ORDER.every(id=>regLv(id)>=5)},
  {id:'ch2one',t:'人生見證者',d:'完成一位熟客的第二章',r:1500,ok:()=>REG_ORDER.some(id=>(S.reg[id].ch2||0)>=3)},
  {id:'ch2all',t:'巷口傳奇',d:'完成全部熟客的第二章',r:8000,ok:()=>REG_ORDER.every(id=>(S.reg[id].ch2||0)>=3)},
  {id:'laball',t:'研發狂人',d:'自由實驗圖鑑全開',r:3000,ok:()=>Object.keys(LAB).every(k=>S.rec[k])},
@@ -2129,6 +2413,17 @@ const ACH=[
  {id:'night30',t:'夜生活達人',d:'下班玩樂 30 次',r:1000,ok:()=>(S.nights||0)>=30},
  {id:'login30',t:'全勤獎',d:'累積簽到 30 天',r:2000,ok:()=>(S.login&&S.login.total||0)>=30},
  {id:'year1',t:'年度好店',d:'達成一次年度挑戰',r:1000,ok:()=>(S.trophies||[]).length>=1},
+ {id:'world',t:'世界冠軍咖啡師',d:'拿下咖啡師大賽世界冠軍',r:10000,ok:()=>(S.worldCups||0)>=1},
+ {id:'rival',t:'巷口霸主',d:'讓對手撤店',r:3000,ok:()=>(S.rivalBeat||0)>=1},
+ {id:'fans50',t:'人氣王',d:'累積 50 位鐵粉',r:2000,ok:()=>(S.fans||0)>=50},
+ {id:'heir',t:'傳承之路',d:'達成結局「傳承之路」',r:5000,ok:()=>S.me&&S.me.end==='heir'},
+ {id:'family',t:'家人的笑容',d:'達成結局「家人的笑容」',r:5000,ok:()=>S.me&&S.me.end==='family'},
+ {id:'free',t:'自由的咖啡人',d:'達成結局「自由的咖啡人」',r:5000,ok:()=>S.me&&S.me.end==='free'},
+ {id:'trip5',t:'環遊世界的店長',d:'去過全部旅行地點',r:5000,ok:()=>Object.keys(S.trips||{}).length>=TRIPS.length},
+ {id:'arcall',t:'牽線人',d:'完成全部熟客故事線',r:3000,ok:()=>ARCS.every(a=>(S.arc||{})[a.id]>=3)},
+ {id:'boss',t:'考驗終結者',d:'完美通過一次季節考驗',r:2000,ok:()=>(S.bossWins||0)>=1},
+ {id:'regnew',t:'新朋友',d:'認識 10 位熟客',r:1500,ok:()=>REG_ORDER.every(id=>S.reg[id].met)},
+ {id:'seaall',t:'四季職人',d:'研發全部季節限定飲品',r:3000,ok:()=>Object.keys(SEALAB).every(k=>S.seaRec[k])},
  {id:'gen2',t:'二代傳人',d:'完成一次傳承',r:3000,ok:()=>(S.legacy&&S.legacy.gen||1)>=2},
  {id:'gen4',t:'連鎖傳奇',d:'傳承到第 4 代',r:10000,ok:()=>(S.legacy&&S.legacy.gen||1)>=4}];
 function checkAch(live){const got=[];for(const a of ACH)if(!S.ach[a.id]&&a.ok()){S.ach[a.id]=S.day;S.money+=a.r;got.push(a)}
@@ -2209,14 +2504,15 @@ function clawDrop(){if(!CLAW||CLAW.busy)return;CLAW.busy=true;S.today.claw--;con
 
 /* ---------- 生活頁 ---------- */
 let lifeTab='下班';
-function lifeView(){const segs=['下班','房車','成就','傳承'];if(!segs.includes(lifeTab))lifeTab='下班';
+function lifeView(){const segs=['下班','旅行','房車','成就','傳承'].filter(t=>t!=='旅行'||feat('trip'));if(!segs.includes(lifeTab))lifeTab='下班';
  const h=house(),car=CARS[carT()],tt=titleOf();
  const top=`<div class="card"><div class="kicker">${S.name}${S.legacy&&S.legacy.gen>1?` · 第 ${S.legacy.gen} 代 · ${city().n}`:''}</div><h2 class="px" style="margin:2px 0 6px;font-size:26px;font-weight:400">生活</h2>
  <div class="lifebar"><div><span>${h.ic}</span><small>${h.n}</small></div><div><span>${car.ic}</span><small>${car.n}</small></div><div><span>🏆</span><small>${Object.keys(S.ach).length}/${ACH.length}</small></div><div><span>🌙</span><small>玩樂 ${S.nights||0} 次</small></div></div>
  ${tt?`<div class="hint" style="margin-top:6px">目前稱號：<span class="ttl">${tt}</span></div>`:''}${lifeUp()?`<div class="hint">房車每日開銷 ${fm(lifeUp())}（打烊時扣除）</div>`:''}
  <div class="seg" style="margin-top:8px">${segs.map(t=>`<button class="${lifeTab===t?'on':''}" onclick="lifeTab='${t}';render()">${t}</button>`).join('')}</div></div>`;
  let b='';
- if(lifeTab==='下班'){const night=S.phase==='night',done=S.today.night;
+ if(lifeTab==='旅行')b=tripView();
+ else if(lifeTab==='下班'){const night=S.phase==='night',done=S.today.night;
   b=`<div class="card"><div class="kicker">🌃 下班去哪？</div><div class="hint">${night?(done?`今晚已經去過「${VENUES.find(v=>v.id===done).n}」了，明天再來吧！`:'打烊了！每晚可以選一個地方放鬆，效果會帶到明天。'):'打烊後才能出去玩。先把今天的店顧好！'}</div>
   ${S.today.claw>0?`<button class="btn big pink" style="margin:8px 0" onclick="clawGame()">🧸 玩夾娃娃機（剩 ${S.today.claw} 次）</button>`:''}
   ${VENUES.map(v=>{const c=vCost(v),lock=v.car&&carT()<v.car,rq=v.req&&!v.req(),dis=!night||done||S.money<c||lock||rq;
@@ -2239,13 +2535,229 @@ function lifeView(){const segs=['下班','房車','成就','傳承'];if(!segs.in
   ${l>=LEGMAX?'<span class="tag g">滿級</span>':`<button class="btn sm ${L.lp>=c?'dark':''}" ${L.lp<c?'disabled':''} onclick="buyLeg('${x.id}')">${c} 點</button>`}</div>`}).join('')}</div>`}
  return top+b}
 
+
+const RIVN=['星辰連鎖咖啡','藍鯨咖啡','黑金咖啡工廠','皇冠咖啡集團','Moonbucks'];
+function rivalTick(T){const r=S.rival;if(!r){if(S.day>=10){S.rival={n:RIVN[0],lv:1,pow:35,wins:0,losses:0,acted:0,camp:null};T.rivalNew=1}return}
+ r.pow=clamp(r.pow+1+.5*r.lv,0,100);if(r.camp&&r.camp.until<S.day)r.camp=null;
+ if((S.day%7)===0&&R()<.5){const c=pickA([['買一送一週',8],['開幕集點加倍',6],['網紅聯名杯',10]]);r.camp={n:c[0],until:S.day+3};r.pow=clamp(r.pow+c[1],0,100);T.rivalCamp=c[0]}
+ if(cal().d===14){const win=r.pow<50;if(win){const rw=1500*r.lv;S.money+=rw;r.wins++;r.pow=Math.max(15,r.pow-20);T.rivalRes=`🏁 本季對決勝利！${r.n}的客人被你搶回來了，獎金 ${fm(rw)}`}else{S.rep=clamp(S.rep-3,0,100);r.losses++;T.rivalRes=`🏁 本季對決落敗…${r.n}聲勢壓過你，口碑 -3`}}
+ if(r.pow<=0){const rw=5000*r.lv;S.money+=rw;S.rivalBeat=(S.rivalBeat||0)+1;T.rivalRes=`🎉 ${r.n}撐不下去，撤店了！獎金 ${fm(rw)}。不過聽說有更強的對手要來…`;const lv=r.lv+1;S.rival={n:RIVN[(lv-1)%RIVN.length],lv,pow:40+lv*5,wins:0,losses:0,acted:0,camp:null}}}
+const rivalHit=()=>{const r=S.rival;return r?r.pow/700+(r.camp?.06:0):0};
+const RACT=[
+ {id:'promo',n:'限時優惠反擊',c:300,d:'對手勢力 -6，今天來客 +8%',ok:()=>true,f:()=>{S.rival.pow-=6;addMod('traffic',1.08,1,'反擊優惠')}},
+ {id:'collab',n:'與老王麵包店聯名',c:600,d:'對手勢力 -12',ok:()=>regLv('wang')>=3,req:'老王好感 Lv3',f:()=>{S.rival.pow-=12}},
+ {id:'quality',n:'品質宣傳活動',c:250,d:'對手勢力 -7',ok:()=>S.rep>=70,req:'口碑 70',f:()=>{S.rival.pow-=7}},
+ {id:'spy',n:'派人去試喝',c:80,d:'了解對手：對手勢力 -3、店長經驗 +40',ok:()=>true,f:()=>{S.rival.pow-=3;ownXp(40)}}];
+function rivalAct(id){const a=RACT.find(x=>x.id===id),r=S.rival;if(!r||r.acted===S.day||S.phase!=='prep'||S.money<a.c||!a.ok())return;S.money-=a.c;S.today.mkt+=a.c;r.acted=S.day;a.f();r.pow=clamp(r.pow,0,100);sfx('level',1);save();render();toast(`⚔️ ${a.n}！對手勢力降到 ${Math.round(r.pow)}`)}
+function rivalView(){const r=S.rival;if(!r)return `<div class="card"><div class="kicker">⚔️ 對手</div><div class="hint" style="margin-top:6px">目前巷子裡只有你一家咖啡店。第 10 天起會有連鎖咖啡店進駐…</div></div>`;
+ const left=14-cal().d;return `<div class="card"><div class="kicker">⚔️ 對手 · Lv${r.lv}</div><h2 class="px" style="margin:4px 0 4px;font-weight:400;font-size:22px">${r.n}</h2>
+ <div class="hint">對手勢力（越高搶走越多客人，目前來客 -${Math.round(rivalHit()*100)}%）</div><div class="bar" style="height:12px"><i style="width:${r.pow}%;background:linear-gradient(90deg,#E2A93B,#C4553D)"></i></div><div class="px" style="margin-top:2px">${Math.round(r.pow)} / 100</div>
+ ${r.camp?`<div class="tip warn">📢 對手正在辦「${r.camp.n}」，到第 ${r.camp.until} 天</div>`:''}
+ <div class="tip">🏁 季末對決：${left>0?`再 ${left} 天`:'今天打烊'}。勢力低於 50 就獲勝，打到 0 對手會撤店。戰績 ${r.wins} 勝 ${r.losses} 敗</div></div>
+ <div class="card"><div class="kicker">反擊行動（開店前，每天一次）</div>${RACT.map(a=>{const ok=a.ok(),dis=!ok||r.acted===S.day||S.phase!=='prep'||S.money<a.c;return `<div class="line"><div class="grow"><div class="name">${a.n}</div><div class="meta">${ok?a.d:'🔒 需要'+a.req}</div></div><button class="btn sm ${dis?'':'dark'}" ${dis?'disabled':''} onclick="rivalAct('${a.id}')">${fm(a.c)}</button></div>`}).join('')}
+ <div class="hint">${r.acted===S.day?'今天已經行動過了。':S.phase!=='prep'?'營業中無法行動，明天開店前再來。':'對手每天都會變強一點，記得定期反擊。'}</div></div>`}
+
+
+/* ================================================================
+   經營策略：營業時段、咖啡車、自家烘豆
+================================================================ */
+const HOURS={std:{n:'標準 8:00–18:00',d:'一般營業時間'},early:{n:'早鳥 7:00–18:00',d:'提早一小時接通勤客：上班族多，員工加班費 +15%'},night:{n:'延長 8:00–21:00',d:'晚上變身咖啡酒吧：售價 +15%、週末更旺，員工加班費 +30%、隔天體力 -10',req:()=>lv('nightlic')>0},both:{n:'全時段 7:00–21:00',d:'早鳥＋夜間全開，最賺也最累',req:()=>lv('nightlic')>0}};
+function setHours(h){if(HOURS[h].req&&!HOURS[h].req())return;S.hours=h;sfx('click');save();render()}
+function extraSession(T,kind){const early=kind==='early',dem=Math.round(T.cups*(early?.12:.32)*(early?(isWeekend()?.5:1):(isWeekend()?1.35:1))*(.6+S.rep/250)),cap=Math.round(capacity()*(early?1:3)*.9);let n=0,rev=0;
+ const W=choiceWeights(early?'office':'student').filter(([k])=>!MENU[k].food);
+ for(let i=0;i<Math.min(dem,cap);i++){const ok=W.filter(([k])=>hasStock(k));if(!ok.length)break;const k=wpick(ok);sell(k);const prem=early?0:S.price[k]*.15;S.money+=prem;T.rev+=prem;rev+=S.price[k]+prem;n++}
+ const ot=Math.round(T.wages*(early?.15:.3))+(early?5:12);S.money-=ot;workStaff().forEach(s=>s.fat=Math.min(100,s.fat+(early?3:7)));if(!early){S.nb=S.nb||{};S.nb.sta=(S.nb.sta||0)-10}
+ return {n,rev:Math.round(rev),ot}}
+const MARKETS=[
+ {id:'farm',n:'週末農夫市集',d:'家庭客多，穩定',m:1,fee:100},
+ {id:'craft',n:'文創市集',d:'遊客與文青，願付較高',m:1.25,fee:200},
+ {id:'campus',n:'大學園遊會',d:'學生超多，價格敏感',m:1.1,fee:80,cheap:1},
+ {id:'music',n:'草地音樂祭',d:'人潮爆炸！只在夏季或節日舉辦',m:1.9,fee:500,ok:()=>cal().s===3||!!S.today.fest}];
+function truckDlg(){if(!lv('truck')||S.phase!=='prep'||!isWeekend()||S.today.truck)return;const av=S.staff.filter(s=>!s.leave&&!s.train);
+ openModal(`<div class="kicker">🚐 咖啡車出攤</div><h2 class="px" style="margin:4px 0 6px;font-weight:400">今天去哪擺攤？</h2><div class="hint">派一位員工開咖啡車出去，會用掉店裡打烊後剩下的庫存。被派出去的員工今天不在店裡。</div>
+ ${MARKETS.map(m=>{const lock=m.ok&&!m.ok();return `<div class="line"><div class="grow"><div class="name">${m.n}<span class="tag">攤位費 ${fm(m.fee)}</span></div><div class="meta">${lock?'🔒 '+m.d:m.d}</div></div></div>
+ ${lock?'':`<div class="row" style="gap:4px;flex-wrap:wrap;margin:-4px 0 8px">${av.length?av.map(s=>`<button class="btn sm" ${S.money<m.fee?'disabled':''} onclick="sendTruck('${m.id}','${s.id}')">派 ${s.n}</button>`).join(''):'<span class="hint">需要至少一位員工</span>'}</div>`}`}).join('')}
+ <button class="btn" onclick="closeModal()">今天不出攤</button>`)}
+function sendTruck(mid,sid){const m=MARKETS.find(x=>x.id===mid),st=S.staff.find(x=>x.id===sid);if(!m||!st||S.money<m.fee)return;S.money-=m.fee;S.today.mkt+=m.fee;S.today.truck={m:mid,sid};st.truckDay=S.day;resetCleaners();closeModal();sfx('level',1);save();render();toast(`🚐 ${st.n} 開著咖啡車出發去「${m.n}」了！`)}
+function truckResult(T){const tr=T.truck;if(!tr)return null;const m=MARKETS.find(x=>x.id===tr.m),st=S.staff.find(x=>x.id===tr.sid);
+ const dem=Math.round((60+S.rep*.8)*m.m*(.8+R()*.4)*(1+.1*(st?st.lv-1:0))),W=choiceWeights(m.cheap?'student':'tourist').filter(([k])=>!MENU[k].food);let n=0,rev=0;
+ for(let i=0;i<dem;i++){const ok=W.filter(([k])=>hasStock(k));if(!ok.length)break;const k=wpick(ok);sell(k);const adj=S.price[k]*(m.cheap?-.1:m.m>1.2?.1:0);S.money+=adj;T.rev+=adj;rev+=S.price[k]+adj;n++}
+ const fans=Math.round(n/40);addFan(fans);S.rep=clamp(S.rep+Math.min(2,n/80),0,100);if(st){st.fat=Math.min(100,st.fat+12);st.xp++}
+ return {n,rev:Math.round(rev),fans,mn:m.n,sn:st?st.n:'員工',short:n<dem}}
+const ROAST={light:{n:'淺焙',d:'花果酸香：手沖、冰飲類願付 +10%，遊客 +5%',fit:['pourover','iced','colddrip','lemoncof','icedlatte','lemonfrap','nitro']},medium:{n:'中焙',d:'均衡順口：全品項願付 +2%',fit:[]},dark:{n:'深焙',d:'濃郁焦糖：奶咖、摩卡類願付 +10%，上班族 +5%',fit:['latte','mocha','americano','dirty','vienna','caramac','aulait']}};
+function setRoast(r){S.roast=r;sfx('click');save();render()}
+const roastFit=k=>lv('roaster')&&S.roast&&ROAST[S.roast].fit.includes(k);
+let RST=null;
+function roastGame(){if(!lv('roaster')||S.phase!=='prep'||S.today.roastQ!==undefined)return;RST={pos:0,v:1,c:.55+R()*.25,timer:null};
+ openModal(`<div class="kicker">🔥 自家烘豆 · ${ROAST[S.roast||'medium'].n}</div><h2 class="px" style="margin:4px 0 6px;font-weight:400">聽到「一爆」就下豆！</h2>
+ <div class="bwbar"><div class="bwz" style="left:${(RST.c-.09)*100}%;width:18%"></div><div class="bwg" style="left:${(RST.c-.03)*100}%;width:6%;background:#6b3e22"></div><div class="bwn" id="rsN"></div></div>
+ <div class="hint">豆子溫度慢慢上升，指針到深色區域時按下去。烘得越準，今天顧客願付越高（最多 +4%）。</div><button class="btn big dark" style="margin-top:10px" onclick="roastTap()">下豆！</button>`);
+ RST.timer=setInterval(()=>{const n=document.getElementById('rsN');if(!n||!RST){clearInterval(RST&&RST.timer);RST=null;return}RST.pos+=.012*RST.v;if(RST.pos>1){RST.pos=1;RST.v=-1}if(RST.pos<0){RST.pos=0;RST.v=1}n.style.left=RST.pos*100+'%'},16)}
+function roastTap(){if(!RST)return;clearInterval(RST.timer);const d=Math.abs(RST.pos-RST.c),sc=Math.round(clamp(100*(1-Math.max(0,d-.03)/.12),0,100));RST=null;S.today.roastQ=sc;ownXp(10+Math.round(sc/10));sfx(sc>=80?'spark':sc>=50?'clink':'sad',1);closeModal();save();render();toast(`🔥 烘豆完成：${sc} 分，今天顧客願付 +${(sc*.04).toFixed(1)}%`)}
+function stratCard(){const H=S.hours||'std';
+ return `<h3 class="sec">營業時段</h3><div class="hint">延長營業能多賺，但員工要付加班費、也更累。夜間時段需要「夜間營業執照」。</div>
+ ${Object.keys(HOURS).map(h=>{const x=HOURS[h],lock=x.req&&!x.req();return `<div class="line"><div class="grow"><div class="name">${x.n}${H===h?'<span class="tag g">目前</span>':''}</div><div class="meta">${lock?'🔒 需要夜間營業執照':x.d}</div></div>${H===h||lock?'':`<button class="btn sm" onclick="setHours('${h}')">切換</button>`}</div>`}).join('')}
+ ${lv('roaster')?`<h3 class="sec">自家烘豆 · 烘焙度</h3><div class="hint">自己烘豆，咖啡豆成本 -15%。開店前到進貨頁「烘一爐」，烘得好今天願付更高。</div>
+ <div class="mini">${Object.keys(ROAST).map(r=>`<button class="${(S.roast||'medium')===r?'on':''}" onclick="setRoast('${r}')">${ROAST[r].n}</button>`).join('')}</div><div class="hint">${ROAST[S.roast||'medium'].d}</div>`:''}`}
+
+/* ================================================================
+   熟客之間的故事線
+================================================================ */
+const ARCS=[
+ {id:'master',a:'xiaoqing',b:'xiaoyu',t:'設計系師徒',eps:[
+  [['xiaoqing','學姊……可以看一下我的作品集嗎？'],['xiaoyu','當然！哇，妳的構圖很大膽耶。'],['xiaoqing','真的嗎！可是老師說太亂了……'],['xiaoyu','亂是因為妳想說的太多。我教妳「留白」。']],
+  [['xiaoyu','小晴，這週的練習畫了嗎？'],['xiaoqing','畫了！我畫了這間店的十種角度！'],['xiaoyu','……老闆，你的店要變成設計系的教材了。']],
+  [['xiaoqing','學姊！我考上了！'],['xiaoyu','我就知道！今天的飲料學姊請！'],['xiaoqing','以後換我教學妹，就約在這裡。'],['sys','這張桌子，成了設計系學生的傳承之位']]]},
+ {id:'oldfriends',a:'zhou',b:'grandma',t:'老朋友的時光',eps:[
+  [['zhou','陳老師？您是……北一女的陳老師？'],['grandma','你是……當年在校門口吹小號的那個男孩？'],['zhou','五十年了，您一點都沒變。'],['grandma','嘴還是一樣甜。']],
+  [['grandma','周先生，那首歌……你還記得嗎？'],['zhou','〈月亮代表我的心〉。我一直記得。'],['sys','老周輕輕吹起小號，陳奶奶跟著哼唱，店裡的客人都安靜了']],
+  [['grandma','我們這些老人，每週六在這裡聚會吧。'],['zhou','我吹琴，您讀詩。'],['grandma','就叫「巷口青春會」。'],['sys','👵🎺 每週六，店裡多了一群可愛的老朋友']]]},
+ {id:'love',a:'azhe',b:'mika',t:'工程師與插畫家',eps:[
+  [['azhe','那個……你的速寫本掉了。'],['mika','啊，謝謝！……你有看到裡面嗎？'],['azhe','有一頁畫的是一個在敲鍵盤的人……'],['mika','……那、那是隨便畫的！']],
+  [['azhe','我幫你做了一個作品集網站。'],['mika','真的嗎？！……你熬夜做的？'],['azhe','反正我本來就睡不著。'],['mika','（小聲）……笨蛋。']],
+  [['mika','老闆，那個……我們在一起了。'],['azhe','是在這間店認識的，所以第一個跟你說。'],['sys','💕 角落的雙人座，從此成了他們的專屬位子']]]},
+ {id:'bakery',a:'wang',b:'claire',t:'麵包與甜點',eps:[
+  [['wang','妳的可頌，層次真漂亮。'],['claire','你的吐司，是我在台灣吃過最溫暖的味道。'],['wang','溫暖？那是因為我加了很多奶油啦，哈哈。']],
+  [['claire','王先生，我們合作做一款早午餐吧？'],['wang','法式和台式……能搭嗎？'],['claire','就像這間店的咖啡，什麼都能搭。']],
+  [['wang','「巷口早午餐」上市第一天就賣光了！'],['claire','老闆的咖啡、你的麵包、我的甜點。'],['wang','這條巷子，越來越有味道了。'],['sys','🥐 早午餐聯名讓三家店的生意都更好了']]]},
+ {id:'night',a:'anan',b:'azhe',t:'深夜加班族',eps:[
+  [['azhe','護理師也這麼晚？'],['anan','大夜班。你呢？'],['azhe','系統當機，回來修。'],['anan','……那我們都是被時間追著跑的人。']],
+  [['anan','你臉色好差，有在睡覺嗎？'],['azhe','……三小時。'],['anan','以專業的角度，我命令你今天早點睡。'],['azhe','是，護理師。']],
+  [['azhe','謝謝妳上次的提醒，我去看醫生了。'],['anan','沒事就好。'],['azhe','以後我加班，也會記得替妳點一杯熱的。'],['sys','🌙 深夜的店裡，多了兩個互相照顧的朋友']]]}];
+const ARCLV=[3,4,5];
+function arcTick(){S.arc=S.arc||{};if(R()>.4)return;for(const a of ARCS){const d=S.arc[a.id]||0;if(d>=3)continue;if(!S.reg[a.a].met||!S.reg[a.b].met)continue;if(Math.min(regLv(a.a),regLv(a.b))<ARCLV[d])continue;
+  S.arc[a.id]=d+1;S.reg[a.a].aff=clamp(S.reg[a.a].aff+3,0,100);S.reg[a.b].aff=clamp(S.reg[a.b].aff+3,0,100);S.rep=clamp(S.rep+1,0,100);
+  S.stories.push({txt:[['sys',`📖 熟客故事線「${a.t}」（${d+1}/3）`]].concat(a.eps[d]).concat([['sys',`💗 ${REGS[a.a].n}、${REGS[a.b].n} 好感 +3、口碑 +1`]])});return}}
+function arcCard(){S.arc=S.arc||{};return `<div class="card"><div class="kicker">🔗 熟客之間的故事線</div><div class="hint">兩位熟客好感都夠高時，他們之間會發生故事（Lv3、Lv4、Lv5 各一幕）。</div>
+ ${ARCS.map(a=>{const d=S.arc[a.id]||0,met=S.reg[a.a].met&&S.reg[a.b].met;return `<div class="line"><div class="grow"><div class="name">${a.t}<span class="tag ${d>=3?'g':''}">${d}/3</span></div><div class="meta">${met?`${REGS[a.a].n} × ${REGS[a.b].n}${d<3?`　需雙方好感 Lv${ARCLV[d]}`:''}`:'？？？ × ？？？（還沒認識）'}</div></div>${d?`<button class="btn sm" onclick="replayArc('${a.id}')">回顧</button>`:''}</div>`}).join('')}</div>`}
+function replayArc(id){const a=ARCS.find(x=>x.id===id),d=S.arc[id]||0;let L=[];for(let i=0;i<d;i++)L=L.concat([['sys',`第 ${i+1} 幕`]]).concat(a.eps[i]);showVN(L)}
+
+/* ================================================================
+   店長自己的故事
+================================================================ */
+const MEST=[
+ {ok:()=>S.day>=3,t:'開店的理由',l:[['sys','📔 店長的故事 · 第一章「開店的理由」'],['me','打烊後，我從抽屜拿出一本泛黃的筆記本。'],['me','爺爺以前在鄉下開過一間小咖啡館，這是他留下的配方筆記。'],['me','最後一頁寫著：「好的咖啡，是讓人想再回來的地方。」'],['me','……爺爺，我會做到的。']]},
+ {ok:()=>S.day>=15,t:'媽媽的電話',l:[['sys','📔 第二章「媽媽的電話」'],['sys','📱 媽媽來電'],['sys','媽媽：「你表姊考上公務員了。你那間店……還要撐多久？」'],['me','……']],
+  q:'要怎麼回答媽媽？',opts:[['「我會證明給妳看的。」','stay',[['me','媽，再給我一點時間，我會證明這是對的路。'],['sys','媽媽沉默了一下：「……自己照顧好身體。」']]],['「我……再想想。」','doubt',[['me','我知道了，我會好好想想。'],['sys','掛掉電話後，你看著空蕩蕩的店，心裡有點亂。']]]]},
+ {ok:()=>S.ch>=2,t:'老同學的邀請',l:[['sys','📔 第三章「老同學的邀請」'],['sys','大學同學阿傑走進店裡，西裝筆挺。'],['sys','阿傑：「我們公司在找品牌經理，年薪是你現在的三倍。你要不要考慮？」']],
+  q:'你的決定是？',opts:[['婉拒，這裡就是我的品牌','refuse',[['me','謝謝你，但我已經有想經營的品牌了。'],['sys','阿傑笑了：「我就知道。那幫我做一杯你最自豪的咖啡吧。」']]],['收下名片，說會考慮','card',[['me','我……會考慮看看。'],['sys','名片被你夾在爺爺的筆記本裡。']]]]},
+ {ok:()=>S.day>=60,t:'筆記本的最後一頁',l:[['sys','📔 第四章「筆記本的最後一頁」'],['me','整理筆記本時，發現最後一頁的背面黏著另一張紙。'],['me','是爺爺的招牌配方——「古早味黑糖咖啡」。'],['me','原來他把最重要的東西，藏在最後。'],['sys','🎁 解鎖隱藏飲品「爺爺的古早味咖啡」！']],f:()=>{S.spRec.grandpa=true;if(S.price.grandpa===undefined)S.price.grandpa=MENU.grandpa.ref;S.hype.grandpa=4}},
+ {ok:()=>S.ch>=5||S.day>=100,t:'媽媽來店裡',l:[['sys','📔 第五章「媽媽來店裡」'],['sys','門鈴響了。是媽媽。'],['sys','媽媽：「……我來看看，你到底在忙什麼。」']],dyn:()=>S.me.f.stay?[['sys','媽媽看著滿店的客人，眼眶有點紅。'],['sys','媽媽：「你爺爺要是看到，一定很驕傲。」'],['me','媽……謝謝妳。']]:[['sys','媽媽喝了一口咖啡，沉默了很久。'],['sys','媽媽：「……跟你爺爺的味道一樣。」'],['sys','媽媽：「我以前反對，是怕你吃苦。現在我懂了。」']]},
+ {ok:()=>(S.legacy&&S.legacy.gen>=2)||S.day>=150,t:'結局',l:[['sys','📔 終章']],dyn:()=>{const f=S.me.f;let e,L;if(f.stay&&f.refuse){e='heir';L=[['me','爺爺的咖啡館，在我手上重生了。'],['me','而且，不只一間。'],['sys','🏆 結局「傳承之路」：你把爺爺的夢想，延續成了一個品牌。']]}else if(f.stay||f.refuse){e='family';L=[['me','週末，媽媽會來店裡幫忙收銀。'],['me','她說，這是她退休後最開心的工作。'],['sys','🏆 結局「家人的笑容」：這間店，成了一家人的歸處。']]}else{e='free';L=[['me','名片還夾在筆記本裡，但我從沒打過那支電話。'],['me','迷惘過、猶豫過，但我還是選擇了每天早上第一杯咖啡的香氣。'],['sys','🏆 結局「自由的咖啡人」：沒有標準答案的人生，也很美好。']]}S.me.end=e;return L}}];
+function meTick(){S.me=S.me||{ep:0,f:{}};const i=S.me.ep;if(i>=MEST.length||!MEST[i].ok())return;S.me.ep++;S.stories.push({me:i})}
+function playMe(i,next){const st=MEST[i];if(st.f)st.f();let L=st.l.concat(st.dyn?st.dyn():[]);
+ showVN(L,()=>{if(!st.q){checkAch(false);next();return}openModal(`<div class="kicker">📔 ${st.t}</div><h2 class="px" style="margin:4px 0 10px;font-weight:400">${st.q}</h2>${st.opts.map((o,j)=>`<button class="btn big ${j?'':'dark'}" style="margin-top:6px" onclick="meChoose(${i},${j})">${o[0]}</button>`).join('')}`);ME_NEXT=next})}
+let ME_NEXT=null;
+function meChoose(i,j){const o=MEST[i].opts[j];S.me.f[o[1]]=true;save();closeModal();showVN(o[2],()=>{const n=ME_NEXT;ME_NEXT=null;n&&n()})}
+function meCard(){S.me=S.me||{ep:0,f:{}};return `<div class="card"><div class="kicker">📔 店長的故事 · ${S.me.ep}/${MEST.length}</div><div class="hint">隨著經營進度解鎖。你的選擇會影響結局。</div>
+ ${MEST.map((m,i)=>`<div class="line"><div class="grow"><div class="name">${i<S.me.ep?m.t:'？？？'}</div></div>${i<S.me.ep?`<button class="btn sm" onclick="showVN(MEST[${i}].l)">回顧</button>`:''}</div>`).join('')}${S.me.end?`<div class="tip">已達成結局：${{heir:'傳承之路',family:'家人的笑容',free:'自由的咖啡人'}[S.me.end]}</div>`:''}</div>`}
+
+/* ================================================================
+   出國旅行
+================================================================ */
+const TRIPS=[
+ {id:'kyoto',n:'日本・京都',ic:'⛩',c:8000,days:3,d:'抹茶、寺廟與職人精神',rec:'genmai',deco:'lantern',story:[['sys','⛩ 京都・第一天'],['me','清晨的伏見稻荷，千本鳥居一路延伸到山上。'],['me','在一間百年茶屋裡，老闆用了三分鐘點一碗抹茶。'],['me','「慢，才是最快的路。」他說。'],['sys','🍵 學到「玄米抹茶拿鐵」的配方，買了和風燈籠當紀念品']]},
+ {id:'seattle',n:'美國・西雅圖',ic:'🗽',c:15000,days:4,d:'精品咖啡的第三波發源地',rec:'nitro',deco:'pikesign',story:[['sys','🗽 西雅圖'],['me','派克市場的魚販把鮭魚丟來丟去，觀光客尖叫連連。'],['me','巷子裡的小烘豆廠，讓我喝到人生第一杯氮氣冷萃。'],['me','綿密得像啤酒，卻是純粹的咖啡。'],['sys','🧊 學到「氮氣冷萃」的配方，帶回魚市場招牌']]},
+ {id:'paris',n:'法國・巴黎',ic:'🗼',c:18000,days:4,d:'咖啡館文化與甜點',rec:'aulait',deco:'eiffel',story:[['sys','🗼 巴黎'],['me','左岸的咖啡館，海明威曾經坐過的位子。'],['me','法國人可以用一杯歐蕾，坐一整個下午。'],['me','原來咖啡館，賣的是時間。'],['sys','🥛 學到「法式歐蕾」的配方，帶回鐵塔模型']]},
+ {id:'rome',n:'義大利・羅馬',ic:'🏛',c:16000,days:4,d:'濃縮咖啡的故鄉',rec:'romano',deco:'moka',story:[['sys','🏛 羅馬'],['me','義大利人站在吧台前，十秒喝完一杯濃縮就走。'],['me','咖啡師說：「Espresso 是一種生活態度。」'],['me','老奶奶教我在咖啡裡加一片檸檬皮。'],['sys','🍋 學到「羅馬諾咖啡」的配方，帶回一組摩卡壺']]},
+ {id:'ethiopia',n:'衣索比亞',ic:'🌍',c:20000,days:5,d:'咖啡的起源之地',origin:'ethiopia',deco:'jebena',story:[['sys','🌍 衣索比亞・耶加雪菲'],['me','在海拔兩千公尺的咖啡園，農夫們用手一顆顆摘下紅色的咖啡櫻桃。'],['me','村裡的婦人為我舉行了咖啡儀式：烘豆、研磨、煮三次，整整三個小時。'],['me','「第三杯叫 Baraka，是祝福。」'],['sys','☕ 簽下耶加雪菲產地合約、全品項熟練度提升，帶回傳統陶壺 Jebena']]}];
+function tripDlg(id){const t=TRIPS.find(x=>x.id===id),run=S.staff.filter(s=>!s.leave).length>=2,been=(S.trips||{})[id];
+ openModal(`<div class="kicker">✈️ ${t.ic} ${t.n}</div><h2 class="px" style="margin:4px 0 6px;font-weight:400">${t.d}</h2>
+ <div class="tip">費用 ${fm(t.c)}・離開 ${t.days} 天<br>${run?'🧑‍🍳 有 2 位以上員工，店會由員工代班（營收約平常一半）':'🔒 員工不足 2 人，旅行期間店休，但房租照付'}<br>旅行中容易壞的食材會過期。</div>
+ <div class="hint">${been?'再訪：好好休息，店長體力與員工疲勞都會恢復，還能帶點紀念品。':'首次造訪：學到當地限定配方、帶回限定擺設，回來後全員精神飽滿！'}</div>
+ <div class="row" style="margin-top:10px"><button class="btn big dark" ${S.money<t.c||S.phase!=='prep'?'disabled':''} onclick="doTrip('${id}')">出發！</button><button class="btn" onclick="closeModal()">再想想</button></div>${S.phase!=='prep'?'<div class="hint">要在開店前出發。</div>':''}`)}
+function doTrip(id){const t=TRIPS.find(x=>x.id===id);if(S.money<t.c||S.phase!=='prep')return;S.money-=t.c;closeModal();S.trips=S.trips||{};const first=!S.trips[id];S.trips[id]=(S.trips[id]||0)+1;
+ const run=S.staff.filter(s=>!s.leave).length>=2,H=S.history.slice(-7),avg=H.length?H.reduce((a,h)=>a+(h.rev||0),0)/H.length:0,w0=Math.floor((S.day-1)/7);let net=0;
+ for(let i=0;i<t.days;i++){const fixed=dailyRent()+UTIL+(S.staff||[]).reduce((a,s)=>a+wageOf(s),0)+lifeUp(),sales=run?Math.round(avg*.5):0;S.money+=sales-fixed;net+=sales-fixed;
+  for(const k in ING)S.inv[k]=S.inv[k].filter(l=>l.exp>S.day);S.mods.forEach(m=>m.days--);S.mods=S.mods.filter(m=>m.days>0);if(S.rival)S.rival.pow=clamp(S.rival.pow+1,0,100);
+  S.history.push({day:S.day,rev:sales,profit:sales-fixed,cups:0,rep:S.rep,dine:0,food:0});S.totalRev+=sales;S.yearRev=(S.yearRev||0)+sales;S.day++}
+ if(Math.floor((S.day-1)/7)!==w0)S.week=null;S.hype={};
+ S.staff.forEach(s=>s.fat=0);ownXp(first?300:120);S.nb=S.nb||{};S.nb.sta=(S.nb.sta||0)+30;S.nights=(S.nights||0)+1;
+ let gift=[];if(first){if(t.rec){S.spRec[t.rec]=true;if(S.price[t.rec]===undefined)S.price[t.rec]=MENU[t.rec].ref;gift.push(`配方「${MENU[t.rec].n}」`)}if(t.deco&&!S.decoOwn.includes(t.deco)){S.decoOwn.push(t.deco);gift.push(`擺設「${DECOS[t.deco].n}」`)}
+  if(t.origin&&!S.origins.includes(t.origin)){S.origins.push(t.origin);gift.push('產地合約')}if(id==='ethiopia')for(const k in MENU)if(unlocked(k))S.mast[k]=(S.mast[k]||0)+30;if(id==='paris'&&S.reg.claire&&S.reg.claire.met)addAff('claire',8)}
+ else{S.money+=300;gift.push('伴手禮（送給熟客）');REG_ORDER.filter(r=>S.reg[r].met).forEach(r=>S.reg[r].aff=clamp(S.reg[r].aff+2,0,100))}
+ startDay();checkAch(true);save();tab='shop';render();
+ showVN((first?t.story:[['sys',`${t.ic} 再訪${t.n}`],['me','熟悉的街道，這次放慢腳步，好好休息。']]).concat([['sys',`🏠 回到店裡（離開 ${t.days} 天，期間${run?'員工代班':'店休'}，收支 ${net>=0?'+':''}${fm(net)}）`],['sys',`🎁 ${gift.join('、')}・全員疲勞歸零、明天體力 +30`]]))}
+function tripView(){S.trips=S.trips||{};const n=Object.keys(S.trips).length;return `<div class="card"><div class="kicker">✈️ 出國旅行 · 去過 ${n}/${TRIPS.length}</div><div class="hint">存夠錢就出國走走！首次造訪能學到當地限定配方、帶回限定擺設。開店前才能出發。${S.day<20?'<br>🔒 第 20 天後才能請長假。':''}</div>
+ ${TRIPS.map(t=>`<div class="line"><div class="vic">${t.ic}</div><div class="grow"><div class="name">${t.n}${S.trips[t.id]?`<span class="tag g">去過 ${S.trips[t.id]} 次</span>`:''}</div><div class="meta">${t.d}・${t.days} 天</div><div class="meta">${t.rec?`🍹 ${MENU[t.rec].n}　`:''}${t.origin?'🌍 產地合約　':''}🪴 ${DECOS[t.deco].n}</div></div>
+ <button class="btn sm ${S.money>=t.c&&S.day>=20?'dark':''}" ${S.money<t.c||S.day<20?'disabled':''} onclick="tripDlg('${t.id}')">${fm(t.c)}</button></div>`).join('')}</div>`}
+const SPMENU={grandpa:{n:'爺爺的古早味咖啡',need:{beans:1,milk:1,honey:1},ref:6.6,w:1},genmai:{n:'玄米抹茶拿鐵',need:{milk:1,matcha:1,honey:1},ref:5.8,w:.85},nitro:{n:'氮氣冷萃',need:{beans:2,ice:1},ref:6.2,w:.85,cold:1},aulait:{n:'法式歐蕾',need:{beans:1,milk:2},ref:5.2,w:.9},romano:{n:'羅馬諾咖啡',need:{beans:1,lemon:1},ref:4.8,w:.75}};
+for(const k in SPMENU)MENU[k]=Object.assign({sp:1},SPMENU[k]);
+Object.assign(DRINK,{grandpa:['mug','#6b3e22','#c89060',{steam:1,dot:'#3a1a0a'}],genmai:['mug','#9ab070','#e8dcb0',{steam:1,dot:'#c8a050'}],nitro:['glass',['#2a160c','#3a2014','#e8d8c0'],{}],aulait:['mug','#c8a070','#f3e3c3',{steam:1}],romano:['mug','#3a2014',null,{steam:1,dot:'#f0d040'}]});
+Object.assign(DECOS,{lantern:{n:'和風燈籠',k:'ceil',c:0,trip:1,e:'願付 +0.5%'},pikesign:{n:'魚市場招牌',k:'wall',c:0,trip:1,e:'來客 +2%'},moka:{n:'摩卡壺收藏',k:'wall',c:0,trip:1,e:'願付 +0.5%'},eiffel:{n:'鐵塔模型',k:'floor',c:0,trip:1,e:'願付 +0.5%'},jebena:{n:'傳統陶壺 Jebena',k:'floor',c:0,trip:1,e:'願付 +0.5%'}});
+
+
+const CARDB=[5,10,15],SUBP=[60,80,100];
+function memSet(k,v){S.mem=S.mem||{card:false,bonus:10,bal:0,cardN:0,sub:false,price:80,subs:[]};S.mem[k]=v;sfx('click');save();render()}
+const memTraffic=()=>{const M=S.mem;if(!M)return 1;return 1+Math.min(.08,(M.card?M.cardN:0)*.0008)+Math.min(.06,(M.sub?M.subs.length:0)*.002)};
+function memberTick(T){const M=S.mem;if(!M)return;const pull=(S.rep/100)*(1+Math.min(1,(S.fans||0)/100));T.mem={};
+ if(M.card){const nj=Math.max(0,Math.round(T.served*.02*pull*(.6+M.bonus/20)*(.7+R()*.6)));const dep=nj*50;M.bal+=dep*(1+M.bonus/100);M.cardN+=nj;S.money+=dep;
+  const red=Math.min(M.bal,T.rev*Math.min(.35,M.cardN*.004));M.bal-=red;S.money-=red;Object.assign(T.mem,{nj,dep,red:Math.round(red)})}
+ if(M.sub){let ren=0,left=0;M.subs=M.subs.filter(x=>{if(x<=S.day){if(R()<.7+S.rep/1000){ren++;return true}left++;return false}return true}).map(x=>x<=S.day?S.day+28:x);
+  const ns=Math.max(0,Math.round(T.served*.012*pull*(80/M.price)*(.7+R()*.6)));for(let i=0;i<ns;i++)M.subs.push(S.day+28);const cash=(ns+ren)*M.price;S.money+=cash;
+  const use=Math.round(M.subs.length*.7);let used=0;for(let i=0;i<use;i++){const k=['latte','americano'].find(hasStock);if(!k)break;for(const g in MENU[k].need)consume(g,MENU[k].need[g]);used++}
+  const up=Math.round(used*.3*(S.price.croissant||3));S.money+=up;T.rev+=up;if(M.subs.length)S.rep=clamp(S.rep+Math.min(.5,M.subs.length*.01),0,100);
+  Object.assign(T.mem,{ns,ren,left,cash,used,up,tot:M.subs.length})}}
+function memCard(){const M=S.mem||{card:false,bonus:10,bal:0,cardN:0,sub:false,price:80,subs:[]};
+ return `<h3 class="sec">會員制度</h3><div class="hint">先收現金、之後用咖啡還。會員越多來客越多，但要穩定供貨。</div>
+ <div class="line"><div class="grow"><div class="name">💳 儲值卡${M.card?'<span class="tag g">開辦中</span>':''}</div><div class="meta">客人儲值 $50，送 ${M.bonus}% 額度。會員 ${M.cardN} 人・未消費餘額 ${fm(Math.round(M.bal))}（之後會用掉營收）</div>
+ <div class="mini" style="margin-top:4px">${CARDB.map(b=>`<button class="${M.bonus===b?'on':''}" onclick="memSet('bonus',${b})">送 ${b}%</button>`).join('')}</div></div><button class="btn sm ${M.card?'':'dark'}" onclick="memSet('card',${!M.card})">${M.card?'停辦':'開辦'}</button></div>
+ <div class="line"><div class="grow"><div class="name">🎫 咖啡月票${M.sub?'<span class="tag g">販售中</span>':''}</div><div class="meta">每 28 天一期，訂閱者每天來喝一杯拿鐵或美式（不另收費、會用掉庫存），常順手買甜點。訂閱 ${M.subs.length} 人</div>
+ <div class="mini" style="margin-top:4px">${SUBP.map(p=>`<button class="${M.price===p?'on':''}" onclick="memSet('price',${p})">${fm(p)}/期</button>`).join('')}</div></div><button class="btn sm ${M.sub?'':'dark'}" onclick="memSet('sub',${!M.sub})">${M.sub?'停售':'開賣'}</button></div>`}
+
+
+const FEAT={
+ board:{d:2,n:'菜單看板與套餐',t:'menu',x:'在「定價」頁可以把品項放上黑板、設定今日推薦，也能組合套餐提高甜點加購率。'},
+ staff:{d:3,n:'雇用員工',t:'store',sub:'員工',x:'一個人忙不過來了吧？到「經營 › 員工」雇用咖啡師或外場，安排崗位和班別。'},
+ owner:{d:4,n:'店長技能',t:'store',sub:'店長',x:'營業會累積店長經驗，升級得到技能點，到「經營 › 店長」學技能。'},
+ pass:{d:5,n:'季節通行證',t:'report',sub:'通行證',x:'營業、完成任務都會累積點數，到「品牌 › 通行證」領獎勵。換季會重置喔！'},
+ lab:{d:5,n:'研發新品',t:'store',sub:'研發',x:'到「經營 › 研發」自由組合素材，研發新飲品和甜點。'},
+ cats:{d:6,n:'店貓',t:'store',sub:'店貓',x:'店裡有隻橘貓！點畫面上的貓可以摸摸牠，之後還能收養更多貓、買貓家具。'},
+ life:{d:7,n:'生活',t:'life',x:'打烊後可以下班去玩，存錢買房買車、收集成就。底部選單多了「生活」。'},
+ rival:{d:10,n:'對手咖啡店',t:'report',sub:'對手',x:'對面開了連鎖咖啡店！到「品牌 › 對手」開店前反擊，別讓他搶走客人。'},
+ member:{d:14,n:'會員制度',t:'store',sub:'升級',x:'到「經營 › 升級」開辦儲值卡和咖啡月票，先收現金、培養忠實客人。'},
+ trip:{d:20,n:'出國旅行',t:'life',sub:'旅行',x:'存夠錢就出國走走！到「生活 › 旅行」學習各國配方、帶回限定擺設。'}};
+const feat=id=>!FEAT[id]||(S.legacy&&S.legacy.gen>1)||S.day>=FEAT[id].d||(S.feat&&S.feat[id]);
+function featTick(){S.feat=S.feat||{};S.featQ=S.featQ||[];for(const id in FEAT){if(!S.feat[id]&&feat(id)){S.feat[id]=1;if(S.day>1&&!(S.legacy&&S.legacy.gen>1))S.featQ.push(id)}}}
+function featCard(){const q=S.featQ||[];if(!q.length)return '';const id=q[0],f=FEAT[id];
+ return `<div class="card unlock"><div class="kicker">🔓 新功能解鎖${q.length>1?` · 還有 ${q.length-1} 項`:''}</div><h2 class="px" style="margin:4px 0;font-weight:400;font-size:22px">${f.n}</h2><div>${f.x}</div>
+ <div class="row" style="margin-top:8px;gap:6px"><button class="btn sm dark" onclick="featGo('${id}')">帶我去看</button><button class="btn sm" onclick="featDone()">知道了</button></div></div>`}
+function featDone(){(S.featQ||[]).shift();save();render()}
+function featGo(id){const f=FEAT[id];featDone();goTo(f.t,f.sub)}
+function goTo(t,sub){if(t==='store'&&sub)subTab=sub;if(t==='report'&&sub)brandTab=sub;if(t==='life'&&sub)lifeTab=sub;if(t==='store'&&sub==='研發')labTab='自由實驗';go(t)}
+
+/* ================= 今天可以做什麼 ================= */
+function todoList(){const L=[],P=S.phase==='prep',T=S.today;
+ if(S.day<=2&&P){const EI=estimate().ing,short=Object.keys(ING).some(k=>ingUnlocked(k)&&stock(k)<(EI[k]||0)*.85&&(EI[k]||0)>2);
+  if(short)L.push(['📦','先進貨：到「進貨」按「依預測填入」再確認','buy']);
+  if(S.day===1)L.push(['💲','看看定價：接受度條越綠，客人越願意買','menu']);
+  L.push(['☕','準備好就按「開門營業」，營業中可以點畫面互動','']);}
+ if(S.owner&&S.owner.sp>0&&feat('owner'))L.push(['⭐',`有 ${S.owner.sp} 點技能點還沒分配`,'store','店長']);
+ if(S.pass&&feat('pass')){const can=PASSRW.some((r,i)=>S.pass.pts>=(i+1)*PASSP&&!S.pass.got.includes(i));if(can)L.push(['🎫','通行證有獎勵可以領取','report','通行證'])}
+ if(S.rival&&P&&S.rival.acted!==S.day&&S.rival.pow>=40)L.push(['⚔️',`對手勢力 ${Math.round(S.rival.pow)}，開店前反擊一下`,'report','對手']);
+ if(P&&feat('board')&&!T.pick&&S.day>=2)L.push(['⭐','還沒設定今日推薦（點單 +35%）','menu']);
+ if(P&&feat('board')&&!(S.board||[]).length)L.push(['🪧','菜單看板是空的','menu']);
+ const tired=S.staff.filter(s=>s.fat>=80&&!s.leave&&s.pos!=='rest');if(P&&tired.length)L.push(['😵',`${tired.map(s=>s.n).join('、')} 太累了，考慮讓他休假`,'store','員工']);
+ if(P&&feat('staff')&&S.staff.length<1&&S.day>=3&&S.money>800)L.push(['🧑‍🍳','還沒有員工，請個幫手能接更多客人','store','員工']);
+ if(P&&S.staff.some(s=>!s.train&&(s.cert||0)<3&&s.lv>=CERTLV[s.cert||0]&&S.money>=CERTC[s.cert||0]*2))L.push(['🎓','有員工可以送去進修','store','員工']);
+ if(feat('lab')&&Object.keys(SEALAB).some(k=>SEALAB[k].sea===cal().s&&!S.seaRec[k])&&S.money>=SEACOST*2)L.push(['🍂','本季限定飲品還沒研發','store','研發']);
+ if(feat('lab')&&(S.wish||[]).length)L.push(['💭','有客人的許願單，研發成功有獎勵','store','研發']);
+ if(P&&lv('roaster')&&T.roastQ===undefined)L.push(['🔥','今天還沒烘豆','buy']);
+ if(P&&lv('truck')&&isWeekend()&&!T.truck&&S.staff.length)L.push(['🚐','週末了，可以派咖啡車出攤','']);
+ if(S.phase==='night'&&!T.night&&feat('life'))L.push(['🌃','打烊了，下班去放鬆一下','life','下班']);
+ if(P){const cheap=UPG.filter(u=>lv(u.id)<u.lv.length).map(u=>[u,u.lv[lv(u.id)].c]).filter(([u,c])=>c<=S.money*.5).sort((a,b)=>a[1]-b[1])[0];if(cheap&&S.day>=2)L.push(['🔧',`可以買升級「${cheap[0].n}」（${fm(cheap[1])}）`,'store','升級'])}
+ return L.filter(x=>!(S.tipHide||{})[x[1]]).slice(0,5)}
+function todoCard(){if(S.phase==='open')return '';const L=todoList();if(!L.length)return '';
+ return `<div class="card todo"><div class="kicker">📋 今天可以做什麼</div>${L.map(x=>`<div class="tdi"><span>${x[0]}</span><div class="grow">${x[1]}</div>${x[2]?`<button class="link" onclick="goTo('${x[2]}',${x[3]?`'${x[3]}'`:'null'})">前往</button>`:''}</div>`).join('')}</div>`}
+
 function brandView(){
- const segs=['目標','通行證','分店','報表'];
- const body=brandTab==='目標'?goalView():brandTab==='通行證'?passView():brandTab==='分店'?branchView():reportView();
+ const segs=['目標','對手','通行證','分店','報表'].filter(t=>t==='對手'?feat('rival'):t==='通行證'?feat('pass'):true);if(!segs.includes(brandTab))brandTab='目標';
+ const body=brandTab==='目標'?goalView():brandTab==='對手'?rivalView():brandTab==='通行證'?passView():brandTab==='分店'?branchView():reportView();
  return `<div class="card"><div class="kicker">${S.name}</div><h2 class="px" style="margin:2px 0 10px;font-size:26px;font-weight:400">品牌</h2>
  <div class="seg" style="margin:0">${segs.map(t=>`<button class="${brandTab===t?'on':''}" onclick="brandTab='${t}';render()">${t}</button>`).join('')}</div></div>${body}`;
 }
-function goalView(){
+function goalView(){return meCard()+bossCard()+goalView0()+patCard()}
+function goalView0(){
  const c=CHAPTERS[S.ch],md=S.medals;
  const cur=c?`<div class="card chap"><div class="kicker">主線 · 第 ${S.ch+1} 章 / ${CHAPTERS.length}</div><h2 class="px" style="margin:4px 0;font-weight:400;font-size:22px">${c.t}</h2><div>${c.d}</div><div class="hint" style="margin-top:4px">${c.prog()}　·　獎勵 ${fm(c.rw)}</div></div>`
   :`<div class="card chap"><div class="kicker">主線</div><h2 class="px" style="margin:4px 0;font-weight:400;font-size:22px">全部完成 🎉</h2><div class="sub">無盡經營中，挑戰更高的品牌營收吧！</div></div>`;
@@ -2255,10 +2767,10 @@ function goalView(){
  <div class="bar" style="height:10px;border:1.5px solid var(--ink)"><i style="width:${clamp((S.yearRev||0)/yearTarget(cal().y)*100,0,100)}%;background:var(--gold)"></i></div>
  <div class="hint">每年 56 天，年底達標可得 $2,000 × 年數獎金。目標逐年提高。已獲得獎盃：${(S.trophies||[]).map(y=>'🏆第'+y+'年').join(' ')||'尚無'}</div></div>
  <div class="card"><div class="kicker">拉花</div><div style="margin-top:6px;font-size:16px">🥇 ${md.gold}　🥈 ${md.silver}　🥉 ${md.bronze}　<span class="hint">最高分 ${S.artBest||0}</span></div>
- <div class="hint">每季第 12 天舉辦季節拉花大賽。下一場：第 ${nextContest()} 天</div><button class="btn sm" style="margin-top:6px" onclick="artGame('practice')">☕ 拉花練習</button></div>
+ <div class="hint">每季第 12 天舉辦咖啡師大賽，金獎可晉級：${CUPN.map((n,i)=>i<cupState().st||cupState().done?`<b>${n}✓</b>`:i===cupState().st?`<b style="color:var(--coffee)">${n}◀</b>`:n).join(' → ')}（每年重新挑戰）。下一場：第 ${nextContest()} 天${S.worldCups?`　🌍 世界冠軍 ×${S.worldCups}`:''}</div><button class="btn sm" style="margin-top:6px" onclick="artGame('practice')">☕ 拉花練習</button></div>
  <div class="card"><div class="kicker">經營紀錄</div><table style="margin-top:6px"><tr><td>經營天數</td><td>${S.day} 天（${calStr()}）</td></tr><tr><td>品牌累計營收</td><td>${fm(S.totalRev)}</td></tr>
  <tr><td>分店</td><td>${Object.keys(S.br).length} / ${BRANCH.length}</td></tr><tr><td>配方圖鑑</td><td>${Object.keys(S.rec).length} / ${Object.keys(RECIPES).length}</td></tr>
- <tr><td>員工</td><td>${S.staff.length} 人</td></tr><tr><td>熟客摯友</td><td>${REG_ORDER.filter(id=>regLv(id)>=4).length} / 6</td></tr></table></div>`;
+ <tr><td>員工</td><td>${S.staff.length} 人</td></tr><tr><td>熟客摯友</td><td>${REG_ORDER.filter(id=>regLv(id)>=4).length} / ${REG_ORDER.length}</td></tr></table></div>`;
 }
 function branchView(){
  const ok=S.ch>=2;
@@ -2305,7 +2817,7 @@ function showSummary(){
  <table style="margin-top:10px"><tr><td>營收${T.deliv?'（外送已扣抽成）':''}</td><td class="pos">+${fm(T.rev)}</td></tr>
  <tr><td>進貨支出</td><td class="neg">-${fm(T.spend)}</td></tr>${T.emerg?`<tr><td>　其中緊急叫貨</td><td class="neg">${fm(T.emerg)}</td></tr>`:''}
  ${T.mkt?`<tr><td>投資與行銷</td><td class="neg">-${fm(T.mkt)}</td></tr>`:''}<tr><td>租金＋水電</td><td class="neg">-${fm(T.rent+T.util)}</td></tr>
- ${T.wages?`<tr><td>薪資</td><td class="neg">-${fm(T.wages)}</td></tr>`:''}${T.life?`<tr><td>房車開銷</td><td class="neg">-${fm(T.life)}</td></tr>`:''}
+ ${T.wages?`<tr><td>薪資</td><td class="neg">-${fm(T.wages)}</td></tr>`:''}${(T.xs||[]).map(x=>`<tr><td>${x.k}（${x.n} 杯，已含在營收）</td><td class="neg">加班費 -${fm(x.ot)}</td></tr>`).join('')}${T.truckR?`<tr><td>🚐 咖啡車＠${T.truckR.mn}（${T.truckR.n} 杯，已含在營收）</td><td class="pos">鐵粉 +${T.truckR.fans}</td></tr>`:''}${T.mem&&T.mem.dep?`<tr><td>💳 新儲值會員 ${T.mem.nj} 人</td><td class="pos">+${fm(T.mem.dep)}</td></tr>`:''}${T.mem&&T.mem.red?`<tr><td>💳 會員用儲值消費（營收抵扣）</td><td class="neg">-${fm(T.mem.red)}</td></tr>`:''}${T.mem&&T.mem.cash?`<tr><td>🎫 月票 新訂 ${T.mem.ns}・續訂 ${T.mem.ren}</td><td class="pos">+${fm(T.mem.cash)}</td></tr>`:''}${T.mem&&T.mem.used?`<tr><td>🎫 月票兌換 ${T.mem.used} 杯（甜點加購 ${fm(T.mem.up)}）</td><td>—</td></tr>`:''}${T.franInc?`<tr><td>弟子店分紅</td><td class="pos">+${fm(T.franInc)}</td></tr>`:''}${T.life?`<tr><td>房車開銷</td><td class="neg">-${fm(T.life)}</td></tr>`:''}
  ${T.catFood?`<tr><td>貓糧（${S.cats.length} 隻）</td><td class="neg">-${fm(T.catFood)}</td></tr>`:''}
  ${T.tips?`<tr><td>小費（已含在現金）</td><td class="pos">${f2(T.tips)}</td></tr>`:''}
  ${T.brInc?`<tr><td>分店收入</td><td class="pos">+${fm(T.brInc)}</td></tr>`:''}
@@ -2420,16 +2932,36 @@ function upBranch(id){const b=BRANCH.find(x=>x.id===id),l=S.br[id],c=Math.round(
 function takeLoan(i){const l=LOANS[i];if(S.loan||(l.req&&!l.req()))return;S.money+=l.amt;S.loan={left:l.days,pay:l.pay};sfx('cash',1);save();render();toast(`🏦 借款 ${fm(l.amt)} 已入帳`)}
 
 /* ---------- 拉花小遊戲 ---------- */
+
+const CUPN=['地區賽','全國賽','亞洲賽','世界大賽'];
+function cupState(){const y=cal().y;if(!S.cup||S.cup.y!==y)S.cup={y,st:0,done:false};return S.cup}
+const cupName=()=>{const c=cupState();return c.done?'世界冠軍衛冕賽':`咖啡師大賽 · ${CUPN[c.st]}`};
+function cupWin(){const c=cupState();if(c.done){S.money+=2000;return '　🏆 衛冕成功！額外 $2,000'}const st=c.st,rw=[500,1500,3500,8000][st];S.money+=rw;
+ if(st>=3){c.done=true;S.worldCups=(S.worldCups||0)+1;S.rep=clamp(S.rep+10,0,100);return `　🌍 世界冠軍！獎金 ${fm(rw)}、口碑 +10`}c.st++;return `　晉級「${CUPN[c.st]}」！晉級獎金 ${fm(rw)}`}
+
+const PATS=[
+ {id:'heart',n:'愛心',z:1,v:1,b:0,w:0,need:null},
+ {id:'tulip',n:'鬱金香',z:.9,v:1.08,b:3,w:.005,need:['heart',75]},
+ {id:'rosetta',n:'葉子',z:.82,v:1.15,b:6,w:.01,need:['tulip',75]},
+ {id:'swan',n:'天鵝',z:.75,v:1.22,b:9,w:.015,need:['rosetta',80]},
+ {id:'bear',n:'立體小熊',z:.68,v:1.3,b:12,w:.02,need:['swan',85]}];
+const patOK=id=>{const p=PATS.find(x=>x.id===id);return !p.need||((S.artP||{})[p.need[0]]||0)>=p.need[1]};
+const curPat=()=>PATS.find(x=>x.id===S.artPat&&patOK(x.id))||PATS[0];
+function setPat(id){if(!patOK(id))return;S.artPat=id;sfx('click');save();render()}
+function patCard(){S.artP=S.artP||{};const cp=curPat();return `<div class="card"><div class="kicker">🎨 拉花圖案 · 店內招牌：${cp.n}</div><div class="hint">圖案越難，判定越嚴格，但大賽有加分，選為店內招牌也能提高願付。用前一個圖案練到指定分數就能解鎖下一個。</div>
+ ${PATS.map(p=>{const ok=patOK(p.id),best=S.artP[p.id]||0;return `<div class="line"><div class="grow"><div class="name">${ok?p.n:'🔒 '+p.n}${cp.id===p.id?'<span class="tag g">使用中</span>':''}</div><div class="meta">${ok?`最佳 ${best} 分・大賽 +${p.b} 分・願付 +${(p.w*100).toFixed(1)}%`:`用「${PATS.find(x=>x.id===p.need[0]).n}」練到 ${p.need[1]} 分解鎖`}</div></div>${ok&&cp.id!==p.id?`<button class="btn sm" onclick="setPat('${p.id}')">使用</button>`:''}</div>`}).join('')}
+ <button class="btn sm" style="margin-top:6px" onclick="artGame('practice')">☕ 用「${cp.n}」練習</button></div>`}
 function artGame(mode){
  if(mode==='contest'&&(S.today.contestDone||!S.today.contest))return;
  audioInit();const w=tcount('art')?.04:0;
- ART={mode,round:0,scores:[],pos:0,dir:1,run:true,last:0,speeds:[0.9,1.3,1.8],zones:[.2+w,.15+w,.11+w]};
- openModal(`<div class="kicker">${mode==='contest'?'🏆 季節拉花大賽':'☕ 拉花練習'}</div><h2 class="px" style="margin:4px 0 0;font-weight:400">指針到正中間時倒奶！</h2>
+ const cst=mode==='contest'?cupState().st:0,hk=1+.15*cst,zk=1-.1*cst;
+ const PT=curPat();ART={mode,p:PT.id,round:0,scores:[],pos:0,dir:1,run:true,last:0,speeds:[0.9*hk*PT.v,1.3*hk*PT.v,1.8*hk*PT.v],zones:[(.2+w)*zk*PT.z,(.15+w)*zk*PT.z,(.11+w)*zk*PT.z]};
+ openModal(`<div class="kicker">${mode==='contest'?'🏆 '+cupName():'☕ 拉花練習'}</div><h2 class="px" style="margin:4px 0 0;font-weight:400">圖案「${PT.n}」：指針到正中間時倒奶！</h2>
  <div class="art"><canvas id="artCup" width="64" height="64" style="width:180px;height:180px"></canvas>
  <canvas id="artBar" width="120" height="10" style="width:100%;height:34px"></canvas>
  <div id="artInfo" class="px" style="font-size:16px">第 1 / 3 杯</div>
  <button class="btn big gold" id="artBtn" onclick="artTap()">倒！🥛</button></div>
- <div class="hint">綠色最準、黃色還行。三杯平均 85 分以上金獎、70 分銀獎、50 分銅獎。${tcount('art')?'拉花達人在班，判定範圍變寬。':''}</div>`);
+ <div class="hint">綠色最準、黃色還行。三杯平均 85 分以上金獎、70 分銀獎、50 分銅獎。${mode==='contest'?'金獎才能晉級下一階段（地區→全國→亞洲→世界），越後面越難。':''}${tcount('art')?'拉花達人在班，判定範圍變寬。':''}</div>`);
  drawCup();requestAnimationFrame(artLoop);
 }
 function artLoop(ts){if(!ART||!ART.run)return;const c=document.getElementById('artBar');if(!c){ART.run=false;return}
@@ -2445,10 +2977,11 @@ function artTap(){if(!ART||!ART.run||ART.round>=3)return;
  ART.scores.push(sc);sfx(sc>=85?'spark':sc>=50?'clink':'sad',1);ART.round++;drawCup();
  const info=document.getElementById('artInfo');
  if(ART.round<3){info.textContent=`第 ${ART.round} 杯：${sc} 分　→　第 ${ART.round+1} / 3 杯`;ART.pos=R()<.5?0:1;ART.dir=ART.pos?-1:1;return}
- ART.run=false;const avg=Math.round(ART.scores.reduce((a,b)=>a+b,0)/3);S.artBest=Math.max(S.artBest||0,avg);
+ ART.run=false;const raw=Math.round(ART.scores.reduce((a,b)=>a+b,0)/3),PB=PATS.find(x=>x.id===ART.p)||PATS[0];S.artP=S.artP||{};const was=PATS.filter(x=>patOK(x.id)).length;S.artP[PB.id]=Math.max(S.artP[PB.id]||0,raw);const nowN=PATS.filter(x=>patOK(x.id)).length;if(nowN>was)setTimeout(()=>toast(`🎨 解鎖新拉花圖案「${PATS[nowN-1].n}」！`),1200);
+ const avg=ART.mode==='contest'?Math.min(100,raw+PB.b):raw;S.artBest=Math.max(S.artBest||0,raw);
  let medal='',txt='';
  if(ART.mode==='contest'){S.today.contestDone=true;
-  if(avg>=85){medal='🥇';S.medals.gold++;S.money+=800;passPts(120);ownXp(300);S.rep=clamp(S.rep+5,0,100);txt='金獎！獎金 $800、口碑 +5'}
+  if(avg>=85){medal='🥇';S.medals.gold++;S.money+=800;passPts(120);ownXp(300);S.rep=clamp(S.rep+5,0,100);txt='金獎！獎金 $800、口碑 +5'+cupWin()}
   else if(avg>=70){medal='🥈';S.medals.silver++;S.money+=400;passPts(80);ownXp(200);S.rep=clamp(S.rep+3,0,100);txt='銀獎！獎金 $400、口碑 +3'}
   else if(avg>=50){medal='🥉';S.medals.bronze++;S.money+=150;passPts(50);ownXp(100);S.rep=clamp(S.rep+1,0,100);txt='銅獎！獎金 $150、口碑 +1'}
   else{medal='🙇';txt='這次沒有得獎，下一季再來！'}
@@ -2462,9 +2995,13 @@ function drawCup(){const c=document.getElementById('artCup');if(!c)return;const 
  for(let y=0;y<64;y++)for(let x=0;x<64;x++){const d=Math.hypot(x-32,y-32);if(d<30)F(x,y,1,1,d>27?'#ffffff':d>25?'#d8d0c4':d>22?'#a8703f':'#6a4630')}
  const disk=(cx,cy,r,col)=>{for(let y=-r;y<=r;y++)for(let x=-r;x<=r;x++)if(x*x+y*y<=r*r)F(Math.round(cx+x),Math.round(cy+y),1,1,col)};
  ART&&ART.scores.forEach((sc,i)=>{const j=(100-sc)/100*6,jx=(R()-.5)*j*2,jy=(R()-.5)*j,col='#f6ecd8';
-  if(i===0){disk(27+jx,30+jy,6,col);disk(37+jx,30+jy,6,col);for(let r=0;r<11;r++)F(Math.round(22+jx+r*.5),Math.round(33+jy+r),Math.max(1,Math.round(20-r)),1,col)}
-  if(i===1){disk(32+jx,19+jy,4,col);disk(32+jx,24+jy,3,'#a8703f');disk(32+jx,24+jy,2,col)}
-  if(i===2){for(let y=12;y<46;y++)F(Math.round(32+jx*(y-12)/34),y,1,1,'#a8703f')}});
+  const pt=ART.p||'heart',BR='#a8703f',DK='#4a2c1c';
+  if(pt==='heart'){if(i===0){disk(27+jx,30+jy,6,col);disk(37+jx,30+jy,6,col);for(let r=0;r<11;r++)F(Math.round(22+jx+r*.5),Math.round(33+jy+r),Math.max(1,Math.round(20-r)),1,col)}
+   if(i===1){disk(32+jx,19+jy,4,col);disk(32+jx,24+jy,3,BR);disk(32+jx,24+jy,2,col)}if(i===2){for(let y=12;y<46;y++)F(Math.round(32+jx*(y-12)/34),y,1,1,BR)}}
+  else if(pt==='tulip'){if(i===0){disk(32+jx,39+jy,7,col)}if(i===1){disk(32+jx,29+jy,6,col);disk(32+jx,33+jy,4,BR);disk(32+jx,32+jy,3,col)}if(i===2){disk(32+jx,20+jy,5,col);for(let y=14;y<48;y++)F(Math.round(32+jx*(y-14)/34),y,1,1,BR)}}
+  else if(pt==='rosetta'){const L=(y0,y1)=>{for(let y=y0;y<y1;y++){const w=Math.round(14*Math.sin((y-12)/34*Math.PI))*(1-((y-12)%4===0?.35:0));F(Math.round(32-w+jx),y+Math.round(jy),Math.max(1,w*2),1,col)}};if(i===0)L(30,46);if(i===1)L(14,30);if(i===2)for(let y=10;y<48;y++)F(Math.round(32+jx*(y-10)/38),y,1,1,BR)}
+  else if(pt==='swan'){if(i===0){disk(27+jx,36+jy,8,col);disk(36+jx,38+jy,6,col);for(let r=0;r<6;r++)F(Math.round(20+jx+r),Math.round(30+jy-r),3,1,col)}if(i===1){for(let t=0;t<16;t++){const x=38-t*.4+Math.sin(t/5)*3,y=33-t;F(Math.round(x+jx),Math.round(y+jy),3,1,col)}}if(i===2){disk(34+jx,15+jy,3,col);F(Math.round(37+jx),Math.round(15+jy),3,1,'#e0a040')}}
+  else{if(i===0)disk(32+jx,33+jy,11,col);if(i===1){disk(22+jx,23+jy,5,col);disk(42+jx,23+jy,5,col);disk(22+jx,23+jy,2,'#e8d8c0');disk(42+jx,23+jy,2,'#e8d8c0')}if(i===2){disk(27+jx,31+jy,1,DK);disk(37+jx,31+jy,1,DK);disk(32+jx,36+jy,2,DK);F(Math.round(30+jx),Math.round(39+jy),5,1,DK)}}});
 }
 
 function renameDlg(){openModal(`<div class="kicker">店名</div><input class="nm" id="nm" maxlength="12" value="${S.name}" style="margin-top:8px"><button class="btn big dark" style="margin-top:12px" onclick="S.name=document.getElementById('nm').value.trim()||S.name;save();closeModal();render()">儲存</button>`)}
