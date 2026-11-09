@@ -237,6 +237,17 @@ canvas.por{border:2px solid var(--line);border-radius:12px}
 .skg{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.skc{border:1px solid var(--line);border-radius:14px;padding:8px;background:#fff}.skc.on{background:#FFF8EC;border-color:#E2C48F}
 .ski{font-size:22px}.skc .btn{margin-top:6px;width:100%;font-size:12px;white-space:normal}
 .line.pass .pt{width:30px;height:30px;border-radius:50%;background:#EFE6D8;display:flex;align-items:center;justify-content:center;color:var(--mute);flex:none}.line.pass.ok .pt{background:linear-gradient(135deg,#E2A93B,#D9748A);color:#fff}
+.lds{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:8px}.ld{border:1px solid var(--line);border-radius:10px;text-align:center;padding:4px 0;font-size:15px;background:#fff}.ld small{display:block;font-size:9.5px;color:var(--mute)}.ld.got{background:#EEF4E6}.ld.now{background:linear-gradient(135deg,#FFE9C2,#F9D3DA);border-color:#E2A93B}
+.lifebar{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}.lifebar div{background:#FBF5EC;border:1px solid var(--line);border-radius:12px;text-align:center;padding:6px 2px}.lifebar span{font-size:22px;display:block}.lifebar small{font-size:10.5px;color:var(--mute)}
+.ttl{display:inline-block;background:linear-gradient(135deg,#E2A93B,#D9748A);color:#fff;border-radius:8px;padding:0 6px;font-size:11px;font-weight:700;letter-spacing:0}
+.vic{font-size:24px;width:34px;text-align:center;flex:none}
+.achg{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.ach{border:1px solid var(--line);border-radius:12px;background:#f4efe8;padding:7px;text-align:left;font:inherit;color:var(--mute);display:flex;flex-direction:column;gap:1px}
+.ach b{font-size:13px}.ach small{font-size:10.5px}.ach i{font-style:normal;font-size:10px;color:var(--gold)}.ach.got{background:#fff;color:var(--ink);cursor:pointer}.ach.on{border:2px solid #D9748A;background:#FFF2F4}
+.claw{position:relative;height:150px;border:2px solid var(--ink);border-radius:14px;background:linear-gradient(#e8f4fb,#fbe9ee);overflow:hidden;margin:8px 0}
+.crane{position:absolute;top:4px;left:0;font-size:26px;transform:translateX(-50%);transition:top .5s}.crane.drop{top:96px}
+.crane:before{content:'';position:absolute;left:50%;bottom:100%;width:2px;height:200px;background:#555}
+.prize{position:absolute;bottom:8px;font-size:30px;transform:translateX(-50%)}
+.btn.pink{background:#D9748A;border-color:#D9748A;color:#fff}
 .link.on{background:var(--pink,#D9748A);color:#fff}
 </style>
 </head>
@@ -328,11 +339,12 @@ const UPG=[
  {id:'wifi',tab:'店裡',n:'Wi-Fi 與插座',lv:[{c:350,d:'學生來客 +15%（但會坐比較久）'}]},
  {id:'cups',tab:'店裡',n:'高級杯具',lv:[{c:800,d:'職人陶杯：顧客願付 +3%'},{c:2000,d:'手作杯盤：顧客願付 +6%'}]},
  {id:'aircon',tab:'店裡',n:'冷暖空調',lv:[{c:900,d:'炎熱、寒流日來客懲罰減半'}]},
+ {id:'app',tab:'街上',n:'手機預點系統',lv:[{c:2500,d:'約 22% 客人用手機先點好，不用排隊直接取餐；取餐區 +2 位'}]},
  {id:'card',tab:'街上',n:'會員集點卡',lv:[{c:700,d:'鄰居熟客來客 +15%，熟客每次來訪好感 +1'}]},
  {id:'awning',tab:'街上',n:'雨棚與傘架',lv:[{c:300,d:'下雨天來客懲罰減半'}]},
  {id:'window',tab:'隔壁',n:'外帶窗口',lv:[{c:1500,d:'上班族來客 +10%，上班族排隊耐心 +3 分鐘'}]},
  {id:'storage',tab:'隔壁',n:'倉庫擴建',lv:[{c:1000,d:'食材保存 +1 天（現烤與冰塊除外），批發價 -5%'}]},
- {id:'bar2',tab:'店裡',n:'第二工作台',lv:[{c:1800,d:'多一組吧台與收銀機：吧台、收銀名額各 +1'}]},
+ {id:'bar2',tab:'店裡',n:'第二工作台',lv:[{c:1800,d:'多一組吧台與收銀機：吧台、收銀名額各 +1，多開一個點餐窗口，出杯 +10 杯/時，取餐區 +3 位'}]},
  {id:'staffroom',tab:'隔壁',n:'員工休息室',lv:[{c:900,d:'員工名冊上限 +2；休息室員工每天恢復疲勞 +10'},{c:2400,d:'名冊上限再 +2，外場名額 +1，休息恢復再 +10'}]},
  {id:'expand',tab:'隔壁',n:'打通隔壁',lv:[{c:5000,d:'店面加大：來客 +35%、多 4 張桌子、咖啡師與外場名額各 +1，租金 +$80/天'}]}];
 const WAGE=110, CLEANER_WAGE=75, RENT=170, UTIL=25, GOAL=8000, GOAL_DAY=30, MSM=380;
@@ -491,7 +503,7 @@ function genCand(role){const tr=pickA(Object.keys(TRAITS).filter(t=>TRAITS[t].r=
  return {id:Math.random().toString(36).slice(2,8),n:pickA(NAMES),role,trait:tr,lv:1+(R()<.3?1:0)+(R()<.08?1:0),xp:0,fat:0,leave:false,
   shirt:pickA(role==='barista'?['#7a5236','#5e8a45','#4e78a6','#8e6bb0','#c4553d']:['#4e78a6','#2f5d62','#c9a24a']),
   hair:pickA(['#2b2622','#4a3020','#7a4a22','#c9a24a']),skin:pickA(['#f1c7a0','#e3b088','#c98e66','#f6d8bc']),long:R()<.45}}
-const wageOf=s=>Math.round((s.role==='barista'?100:70)*(1+.1*(s.lv-1))*(['fast','art'].includes(s.trait)?1.1:1)*(s.shift&&s.shift!=='all'&&s.pos!=='rest'?.6:1)*(1-.03*sk('manage')));
+const wageOf=s=>Math.round((s.role==='barista'?100:70)*(1+.1*(s.lv-1))*(['fast','art'].includes(s.trait)?1.1:1)*(s.shift&&s.shift!=='all'&&s.pos!=='rest'?.6:1)*(1-.03*sk('manage'))*(1-.04*lg('wage')));
 
 /* ---------------- 研發配方 ---------------- */
 const RECIPES={
@@ -563,6 +575,9 @@ const brandMult=()=>1+Object.keys(S.br||{}).length*.04+(S.br&&S.br.river?.06:0);
 const LOANS=[{amt:3000,days:30,pay:115},{amt:10000,days:40,pay:300,req:()=>S.ch>=2,reqT:'第二章後'}];
 
 /* ---------------- 每週限時挑戰 ---------------- */
+function trendCheck(){const w=Math.floor((S.day-1)/7);if(S.trend&&S.trend.w===w&&MENU[S.trend.k]&&unlocked(S.trend.k))return;
+ const ks=Object.keys(MENU).filter(k=>unlocked(k)&&k!=='seasonal'&&(!S.trend||k!==S.trend.k));S.trend=ks.length?{w,k:ks[Math.floor(Math.random()*ks.length)]}:null}
+const isTrend=k=>S.trend&&S.trend.k===k;
 function genWeek(){
  const H=S.history.slice(-7),avg=k=>H.length?H.reduce((a,h)=>a+(h[k]||0),0)/H.length:0;
  const o=[
@@ -793,6 +808,7 @@ function iconCanvas(k){k=ING_ICON[k]||k;if(ICACHE[k])return ICACHE[k];if(typeof 
   case'nav_menu':F(3,1,10,14,O);F(4,2,8,12,'#fbf2de');F(4,2,8,2,'#e0574a');F(5,5,6,1,'#a8784a');F(5,7,4,1,'#a8784a');F(5,9,6,1,'#a8784a');F(5,11,3,1,'#a8784a');F(10,10,3,4,'#f6c040');F(10,10,3,1,O);break;
   case'nav_store':for(let r=0;r<5;r++)F(8-r-2,2+r,(r+2)*2,1,r===0?O:'#d05a4a');F(1,6,14,1,O);F(2,7,12,8,O);F(3,7,10,7,'#f2dcb8');F(7,10,3,5,'#8a5a32');F(4,9,2,2,'#9ad0ee');F(11,3,2,3,'#8a8a8a');F(2,14,12,1,O);break;
   case'nav_regs':F(2,4,5,1,O);F(9,4,5,1,O);F(1,5,7,4,O);F(8,5,7,4,O);F(2,5,5,3,'#f07090');F(9,5,5,3,'#f07090');F(2,9,12,1,O);F(3,10,10,1,O);F(3,9,10,1,'#e04a70');F(4,10,8,1,'#e04a70');F(5,11,6,1,O);F(6,12,4,1,O);F(5,11,6,1,'#d03a60');F(7,12,2,1,'#d03a60');F(7,13,2,1,O);F(3,5,2,1,'#ffc0d0');break;
+  case'nav_life':F(2,7,12,8,O);F(3,8,10,6,'#f2dcb8');for(let r=0;r<6;r++)F(8-r-1,1+r,(r+1)*2,1,r===0?O:'#4f7ca8');F(1,7,14,1,O);F(6,10,4,5,O);F(7,11,2,4,'#c87a3c');F(4,9,2,2,'#9ad0ee');F(11,9,2,2,'#9ad0ee');F(12,2,2,3,O);break;
   case'nav_brand':F(1,5,14,9,O);F(2,6,12,7,'#f6c040');F(1,3,2,3,O);F(7,1,2,4,O);F(13,3,2,3,O);F(2,4,1,2,'#f6c040');F(7,2,2,3,'#f6c040');F(13,4,1,2,'#f6c040');F(2,11,12,2,'#d89a20');D(5,9,1,'#e04a4a');D(8,8,1,'#5a8ae0');D(11,9,1,'#5ab05a');F(3,6,4,1,'#fff0a0');break;
   case'cf_tree':F(2,13,12,3,O);F(3,13,10,2,'#c89060');F(7,2,3,11,'#e8d0a0');F(6,2,1,11,O);F(10,2,1,11,O);F(1,5,8,3,O);F(2,5,6,2,'#a8c8a0');F(8,1,7,3,O);F(9,1,5,2,'#a8c8a0');F(2,8,6,5,O);F(3,9,4,3,'#d8b080');F(4,10,2,2,'#6a4a2a');break;
   case'cf_cbed':E(8,10,7,4,O);E(8,9,6,3,'#c86a80');E(8,9,4,2,'#f6c0d0');F(5,7,6,3,'#e08b3a');F(10,6,3,2,'#e08b3a');F(10,5,1,1,'#e08b3a');F(12,5,1,1,'#e08b3a');break;
@@ -905,7 +921,7 @@ const EVDEF=[
   btn:[['準備好了',()=>{S.today.critic='pending'}]]})},
  {id:'wallet',w:2,mk:()=>({ic:'👛',t:'客人忘了錢包',d:'座位上有一個錢包，要怎麼處理？',btn:[['好好保管',()=>{S.rep=clamp(S.rep+1,0,repCap());toast('👛 失主回來道謝，還在網路上大推')}],['送去派出所（體力 -10）',()=>{S.today.sta=Math.max(0,(S.today.sta??100)-10);S.rep=clamp(S.rep+.6,0,repCap())}]]})},
  {id:'low',w:4,ok:()=>lowIng(),mk:()=>{const k=lowIng();return {ic:'📦',t:`${ING[k].n}快用完了`,d:`照這個速度，${ING[k].n}撐不到打烊。要緊急叫一箱嗎？（價格 ×1.5，30 分鐘到）`,
-  btn:[[`叫一箱 ${f2(mktPrice(k)*1.5)}`,()=>{const c=mktPrice(k)*1.5;S.money-=c;S.today.spend+=c;S.today.emerg+=c;S.pending.push({k,q:ING[k].pack,c:c/ING[k].pack,at:S.t+30});toast(`📦 已叫貨：${ING[k].n}`)}],['先不用',()=>{}]]}}},
+  btn:[[`叫一箱 ${f2(mktPrice(k)*1.5)}`,()=>{const c=mktPrice(k)*1.5;S.money-=c;S.today.spend+=c;S.today.emerg+=c;S.pending.push({k,q:ING[k].pack,c:c/ING[k].pack,at:S.t+(carT()>=1?15:30)});toast(`📦 已叫貨：${ING[k].n}`)}],['先不用',()=>{}]]}}},
  {id:'busker',w:2,mk:()=>({ic:'🎸',t:'街頭藝人',d:'有位街頭藝人想在門口表演，給他 $40 的話，接下來 2 小時路人會變多。',btn:[['好啊',()=>{S.money-=40;S.today.boostUntil=S.t+120;toast('🎸 門口熱鬧起來了！')}],['不用了',()=>{}]]})},
  {id:'photo',w:2,mk:()=>({ic:'📸',t:'客人想拍照上傳',d:'有客人想拍店內和飲料上傳 IG，可以嗎？',btn:[['歡迎！',()=>{S.today.boostUntil=Math.max(S.today.boostUntil||0,S.t)+60;S.rep=clamp(S.rep+.3,0,repCap())}],['婉拒',()=>{}]]})},
  {id:'stray',w:3,ok:()=>S.day>=3&&!S.today.stray&&CATDEF.some(d=>!catOwn(d.id)),mk:()=>{const d=pickA(CATDEF.filter(d=>!catOwn(d.id)));S.today.stray=1;const price=Math.round(d.cost*.5);return {ic:'🐱',t:'門口有隻流浪貓',d:`一隻小貓在門口徘徊，好像想進來…（${d.trait.split('：')[0]}）收留牠的話只要 ${fm(price)} 健康檢查費。`,
@@ -969,14 +985,14 @@ function doImport(){const v=(document.getElementById('svi').value||'').trim();le
  backupSave();try{localStorage.setItem(SAVE_KEY,JSON.stringify(o))}catch(e){toast('儲存空間不足');return}
  toast('✅ 匯入成功，重新載入中…');setTimeout(()=>location.reload(),600)}
 function normalize(){
- const d={owner:{lv:1,xp:0,sp:1,sk:{}},mast:{},sig:[],guide:null,pass:null,cfurn:[],cats:['mikan'],catAff:{mikan:1},catPet:{},sets:[],labLog:[],weekWins:0,themes:['wood'],theme:'wood',yearRev:0,trophies:[],staff:[],cands:[],rec:{},lab:null,hype:{},br:{},ch:0,medals:{gold:0,silver:0,bronze:0},totalRev:0,loan:null,beanGrade:0,maxRep:S.rep||30,artBest:0,stories:[],reviews:[],reg:{},mods:[],pending:[]};
+ const d={houses:['room'],house:'room',cars:['bike'],car:'bike',origins:['brazil'],origin:'brazil',ach:{},title:'',nights:0,nb:{},city:'alley',legacy:{lp:0,pk:{},gen:1,cities:['alley']},wish:[],trend:null,login:null,owner:{lv:1,xp:0,sp:1,sk:{}},mast:{},sig:[],guide:null,pass:null,cfurn:[],cats:['mikan'],catAff:{mikan:1},catPet:{},sets:[],labLog:[],weekWins:0,themes:['wood'],theme:'wood',yearRev:0,trophies:[],staff:[],cands:[],rec:{},lab:null,hype:{},br:{},ch:0,medals:{gold:0,silver:0,bronze:0},totalRev:0,loan:null,beanGrade:0,maxRep:S.rep||30,artBest:0,stories:[],reviews:[],reg:{},mods:[],pending:[]};
  for(const k in d)if(S[k]===undefined||S[k]===null&&k!=='lab'&&k!=='loan')S[k]=d[k];
  for(const id of REG_ORDER)if(!S.reg[id])S.reg[id]={aff:0,met:false,visits:0,seen:0};
  for(const k in ING)if(!S.inv[k])S.inv[k]=[];
  for(const k in MENU)if(S.price[k]===undefined)S.price[k]=MENU[k].ref;
  if(S.baristas){for(let i=0;i<S.baristas;i++)S.staff.push(genCand('barista'));S.baristas=0}
  if(S.cleaner){S.staff.push(genCand('floor'));S.cleaner=0}
- applySeason();passCheck();
+ applySeason();passCheck();trendCheck();
  if(!S.week)S.week=genWeek();
 }
 
@@ -1006,8 +1022,8 @@ const SKILLS=[
  {id:'tips',n:'親和',ic:'🫙',max:3,d:l=>`小費機率 +${25*l}%`}];
 const sk=id=>(S.owner&&S.owner.sk&&S.owner.sk[id])||0;
 const ownXpNeed=l=>200+l*180;
-const staMax=()=>100+20*sk('stamina');
-function ownXp(n){const o=S.owner;if(!o)return;o.xp+=n;let up=0;while(o.xp>=ownXpNeed(o.lv)&&o.lv<40){o.xp-=ownXpNeed(o.lv);o.lv++;o.sp++;up++}
+const staMax=()=>100+20*sk('stamina')+(S.house?house().sta:0);
+function ownXp(n){const o=S.owner;if(!o)return;o.xp+=n*(1+(S.house?house().xp:0));let up=0;while(o.xp>=ownXpNeed(o.lv)&&o.lv<40){o.xp-=ownXpNeed(o.lv);o.lv++;o.sp++;up++}
  if(up){S.today.ownUp=(S.today.ownUp||0)+up;if(!S.skipping&&typeof document!=='undefined'){sfx('level',1);toast(`⭐ 店長升到 Lv${o.lv}！獲得技能點`)}}}
 function learnSk(id){const o=S.owner,k=SKILLS.find(x=>x.id===id);if(!k||o.sp<1||sk(id)>=k.max)return;o.sp--;o.sk[id]=sk(id)+1;sfx('level',1);save();render();toast(`${k.ic} 學會「${k.n}」Lv${o.sk[id]}`)}
 /* 菜單熟練度 */
@@ -1032,6 +1048,23 @@ const PASSRW=[
 function passPts(n,why){const P=S.pass;if(!P)return;P.pts+=n;if(S.today)S.today.passG=(S.today.passG||0)+n}
 function passCheck(){const k=passKey();if(!S.pass||S.pass.key!==k)S.pass={key:k,season:cal().s,pts:0,got:[]}}
 function claimPass(i){const P=S.pass;if(P.got.includes(i)||P.pts<(i+1)*PASSP)return;P.got.push(i);PASSRW[i].f();sfx('level',1);save();render();toast(`🎁 領取：${PASSRW[i].d}`)}
+/* 每日簽到 */
+const LOGINRW=[
+ {d:'現金 $200',f:m=>{S.money+=Math.round(200*m)}},
+ {d:'咖啡豆＋鮮奶補給',f:()=>{addLot('beans',ING.beans.pack*2,0);addLot('milk',ING.milk.pack*2,0)}},
+ {d:'現金 $400',f:m=>{S.money+=Math.round(400*m)}},
+ {d:'店長經驗 +200',f:()=>ownXp(200)},
+ {d:'通行證 +40 點',f:()=>passPts(40)},
+ {d:'現金 $800',f:m=>{S.money+=Math.round(800*m)}},
+ {d:'技能點 +1、全員疲勞 -30',f:()=>{S.owner.sp++;S.staff.forEach(s=>s.fat=Math.max(0,s.fat-30))}}];
+const dstr=d=>`${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`;
+function checkLogin(){const now=new Date(),td=dstr(now),yd=dstr(new Date(now.getTime()-864e5));const L=S.login||(S.login={last:'',streak:0,total:0});
+ if(L.last===td)return;L.streak=L.last===yd?L.streak+1:1;L.total++;L.last=td;const i=(L.streak-1)%7,mult=Math.min(3,1+Math.floor((L.streak-1)/7)*.5),rw=LOGINRW[i];rw.f(mult);save();
+ const dots=LOGINRW.map((x,j)=>`<div class="ld ${j<i?'got':j===i?'now':''}"><small>第${j+1}天</small>${j<i?'✓':j===i?'🎁':'·'}</div>`).join('');
+ setTimeout(()=>{if(document.querySelector('#modal .modal'))return toast(`🎁 每日簽到：${rw.d}`);
+  openModal(`<div class="kicker">每日簽到 · 連續 ${L.streak} 天</div><h2 class="px" style="margin:4px 0 8px;font-weight:400">歡迎回來，店長！</h2><div class="lds">${dots}</div>
+  <div class="tip">今天的禮物：<b>${rw.d}${mult>1&&rw.d.includes('現金')?`（×${mult}）`:''}</b><br><span class="hint">每天回來看看店裡，連續 7 天一輪，連續越久現金獎勵越多（最高 ×3）。中斷會從第 1 天重新開始。</span></div>
+  <button class="btn big dark" style="margin-top:10px" onclick="closeModal()">收下</button>`)},700)}
 /* 咖啡指南 */
 const guideCups=()=>(S.guide&&S.guide.cups)||0;
 const posOf=s=>s.pos||(s.role==='floor'?'floor':'bar');
@@ -1044,13 +1077,14 @@ const cashierCount=()=>workStaff('cashier').length?Math.min(4,workStaff('cashier
 const cashierSpeed=()=>(lv('kiosk')?2:1)*(1+.6*workStaff('cashier').reduce((a,s)=>a+effOf(s),0));
 const tcount=t=>workStaff().filter(s=>s.trait===t).length;
 const staffSpeed=s=>effOf(s)*14*(1+.12*(s.lv-1))*(s.trait==='fast'?1.3:1)*(s.fat>=80?.7:1);
-const capacity=()=>Math.round((16+4*sk('hand')+[0,10,20][lv('machine')]+[0,6,12][lv('grinder')]+workStaff('barista').reduce((a,s)=>a+staffSpeed(s),0))*(rushOn()?1.5:1));
+const capacity=()=>Math.round((16+4*sk('hand')+(lv('bar2')?10:0)+[0,10,20][lv('machine')]+[0,6,12][lv('grinder')]+workStaff('barista').reduce((a,s)=>a+staffSpeed(s),0))*(rushOn()?1.5:1));
 const quality=()=>GRADES[(S.inv.beans[0]&&S.inv.beans[0].g)||0].q;
-const dailyRent=()=>Math.round((RENT+(lv('expand')?80:0))*(1+.15*(cal().y-1)));
+const dailyRent=()=>Math.round((RENT+(lv('expand')?80:0))*(1+.15*(cal().y-1))*city().r);
 const dailyFixed=()=>dailyRent()+UTIL+(S.staff||[]).reduce((a,s)=>a+wageOf(s),0);
 const tableCount=()=>[2,4,6][lv('seats')]+(lv('expand')?4:0);
 function modMult(kind){return S.mods.filter(m=>m.kind===kind).reduce((a,m)=>a*m.mult,1)}
-function segMult(seg){
+function segMult(seg){const cm=((city().seg||{})[seg]||1)*(seg==='tourist'&&S.origin&&origin().tour?origin().tour:1);return cm*segMult0(seg)}
+function segMult0(seg){
  if(seg==='office')return (perk('azhe',4)?1.12:1)*(lv('window')?1.1:1);
  if(seg==='student')return (perk('xiaoyu',2)?1.1:1)*(lv('wifi')?1.15:1);
  if(seg==='regular')return lv('card')?1.15:1;
@@ -1058,18 +1092,18 @@ function segMult(seg){
 function segPk(seg){return SEG[seg].pk+(seg==='student'&&perk('xiaoyu',4)?.08:0)}
 function trafficMult(){
  const w=WEATHER[S.weather];let wt=w.t;if(lv('aircon')&&(S.weather==='hot'||S.weather==='cold'))wt=1-(1-wt)/2;if(lv('awning')&&S.weather==='rainy')wt=1-(1-wt)/2;
- let m=wt*WDF[(S.day-1)%7]*(1+[0,.12,.25][lv('sign')])*(lv('expand')?1.35:1)*(0.5+S.rep/100)*modMult('traffic')*(perk('leo',4)?1.08:1)*brandMult()*(Object.keys(S.hype||{}).length?1.06:1)*(S.today&&S.today.boostUntil>S.t?1.2:1)*(cfOwn('hammock')?1.04:1)*(1+.05*guideCups())*(1+.02*(S.sig||[]).length);
+ let m=wt*WDF[(S.day-1)%7]*(1+[0,.12,.25][lv('sign')])*(lv('expand')?1.35:1)*(0.5+S.rep/100)*modMult('traffic')*(perk('leo',4)?1.08:1)*brandMult()*(Object.keys(S.hype||{}).length?1.06:1)*(S.today&&S.today.boostUntil>S.t?1.2:1)*(cfOwn('hammock')?1.04:1)*(1+.05*guideCups())*(1+.02*(S.sig||[]).length)*city().t*(1+.04*lg('traffic'))*(carT()>=4?1.05:1)*(city().sun?(S.weather==='sunny'||S.weather==='hot'?1.2:WEATHER[S.weather].rain?.8:1):1);
  if(lv('outdoor'))m*=(S.weather==='sunny'||S.weather==='hot')?1.15:1.05;return m}
 function curve(m){const we=isWeekend();return 0.22+(we?0.6:1)*gauss(m,525,45)+1.1*gauss(m,750,55)+(we?0.9:0.55)*modMult('afternoon')*gauss(m,930,70)}
 const arrRate=m=>0.3*curve(m)*trafficMult();
-const willK=()=>[0,.03,.06][lv('cups')]+(cfOwn('tree')?.02:0)+0.75+S.rep/200+[0,.06,.12][lv('decor')]+(perk('mika',2)?.04:0)+.03*Math.min(2,tcount('art'))+quality()+themeBonus()+.02*sk('art');
-function accept(k,p,pk=1){const x=p/(MENU[k].ref*willK()*pk*(1+.03*star(k)));return clamp((1.45-x)/0.6,0,1)}
-const mktPrice=k=>(1-.04*sk('deal'))*(lv('storage')?.95:1)*(S.prices[k]||ING[k].base)*(k==='beans'?GRADES[S.beanGrade||0].m:1)*((k==='beans'||k==='milk')&&tcount('thrifty')?.94:1);
+const willK=()=>[0,.03,.06][lv('cups')]+(cfOwn('tree')?.02:0)+0.75+S.rep/200+[0,.06,.12][lv('decor')]+(perk('mika',2)?.04:0)+.03*Math.min(2,tcount('art'))+quality()+themeBonus()+.02*sk('art')+city().w+.02*lg('will')+(S.house?house().will:0)+.005*Math.max(0,(S.origins||[]).length-1)+((S.today&&S.today.willB)||0);
+function accept(k,p,pk=1){const x=p/(MENU[k].ref*willK()*pk*(1+.03*star(k))*(isTrend(k)?1.1:1)*(S.origin&&originFit(k)?1.08:1));return clamp((1.45-x)/0.6,0,1)}
+const mktPrice=k=>(1-.04*sk('deal'))*(1-.03*lg('cost'))*(carT()>=2?.95:1)*(k==='beans'&&S.origin?origin().m:1)*(lv('storage')?.95:1)*(S.prices[k]||ING[k].base)*(k==='beans'?GRADES[S.beanGrade||0].m:1)*((k==='beans'||k==='milk')&&tcount('thrifty')?.94:1);
 const unitCost=k=>mktPrice(k)/ING[k].pack;
 function itemCost(k){let c=0;for(const i in MENU[k].need)c+=unitCost(i)*MENU[k].need[i];return c}
 function bestPrice(k){const c=itemCost(k);let bp=c,bv=-1;for(let p=Math.max(1,c);p<=MENU[k].ref*2.2;p+=0.1){const v=accept(k,p)*(p-c);if(v>bv){bv=v;bp=p}}return Math.round(bp*10)/10}
 function choiceWeights(seg){const c=WEATHER[S.weather].c,pf=seg?SEG[seg].pref:{};
- return Object.keys(MENU).filter(unlocked).map(k=>[k,MENU[k].w*(MENU[k].cold?c*(lv('icemaker')?1.1:1):1)*(MENU[k].warm?clamp(1.6-c*.6,.2,1.6):1)*(pf[k]||1)*(S.hype&&S.hype[k]?1.8:1)*(isSig(k)?1.5:1)])}
+ return Object.keys(MENU).filter(unlocked).map(k=>[k,MENU[k].w*(MENU[k].cold?c*(lv('icemaker')?1.1:1):1)*(MENU[k].warm?clamp(1.6-c*.6,.2,1.6):1)*(pf[k]||1)*(S.hype&&S.hype[k]?1.8:1)*(isSig(k)?1.5:1)*(isTrend(k)?1.7:1)*(S.origin&&originFit(k)?1.25:1)])}
 const stock=k=>S.inv[k].reduce((a,l)=>a+l.q,0);
 function hasStock(item){for(const i in MENU[item].need)if(stock(i)<MENU[item].need[i])return false;return true}
 function shelfOf(k){return (k==='ice'&&lv('icemaker')?1:0)+(lv('storage')&&ING[k].shelf>1?1:0)+ING[k].shelf+(ING[k].fridge&&lv('fridge')?3:0)+(k==='croissant'&&lv('oven')?1:0)+(k==='croissant'&&perk('wang',4)?1:0)}
@@ -1149,7 +1183,7 @@ function startDay(first){
  const wd=(S.day-1)%7,wx=S.weather==='typhoon'?.15:WEATHER[S.weather].rain?.7:1;
  for(const id of REG_ORDER){const r=REGS[id];if(!r.req()||!r.days.includes(wd))continue;
   if(R()<r.p*wx*(1+S.reg[id].aff/250))S.today.regPlan.push({id,at:Math.floor(rr(r.win[0],r.win[1]))})}
- passCheck();S.today.sta=staMax();S.t=480;S.acc=0;S.regT=0;S.phase='prep';S.prog=0;S.cart={};S.feed=[];
+ passCheck();trendCheck();S.today.sta=staMax();applyNB();S.t=480;S.acc=0;S.regT=0;S.phase='prep';S.prog=0;S.cart={};S.feed=[];
  resetScene();save();
 }
 function resetScene(){ENT=[];LINE=[];PICK=[];SPARK=[];SEATS=[];SPILLS=[];CUREV=null;HEARTS.forEach(h=>h.el.remove());HEARTS=[];clearBubbles();buildSeats();resetCleaners();resetCats()}
@@ -1167,7 +1201,9 @@ function skip(){S.skipping=true;while(S.t<1080){simMinute(true);moveAll(1,true)}
 /* ---------- 位置 ---------- */
 const DOOR={x:16,y:104},REG={x:178,y:104},LANE=122;
 const lineSlot=i=>({x:i<15?REG.x-10*i:Math.max(20,REG.x-10*14-4*(i-14)),y:104});
-const pickSlot=i=>({x:202+(i%5)*10,y:108+Math.floor(i/5)*7});
+const pickSlot=i=>({x:202+(i%5)*10,y:108+Math.floor(i/5)*6});
+const pickMax=()=>10+(lv('bar2')?3:0)+(lv('app')?2:0);
+const orderLanes=()=>1+Math.min(2,workStaff('cashier').length)+(lv('bar2')?1:0);
 const hourIdx=()=>Math.min(9,Math.max(0,Math.floor((S.t-480)/60)));
 
 /* ---------- 每分鐘模擬 ---------- */
@@ -1185,7 +1221,7 @@ function simMinute(quiet){
  if(black&&m===840)pushFeed('⚡ 停電中，暫停出杯…');
  if(!black){
   const n=poisson(arrRate(m));for(let i=0;i<n;i++)arrive(quiet);
-  if(lv('delivery')){const d=poisson(arrRate(m)*0.2);for(let i=0;i<d;i++)rider(quiet)}
+  if(lv('delivery')){const d=poisson(arrRate(m)*0.2*(carT()>=2?1.15:1));for(let i=0;i<d;i++)rider(quiet)}
   // 吧台出杯
   if(PICK.some(e=>!e.ready)){S.prog+=capacity()/60;
    for(const e of PICK){if(e.ready)continue;if(S.prog>=e.work){S.prog-=e.work;e.ready=true;if(!quiet&&R()<.5)sfx('steam')}else break}}
@@ -1219,6 +1255,7 @@ function arrive(quiet){
  if(S.today.critic==='pending'){S.today.critic='here';e.critic=1;e.cap='#2b2622'}
  if(waitEst()>e.pat*1.4){T.lostWait++;T.hL[h]++;e.st='out';e.wp=[{x:rr(26,48),y:104},{x:-14,y:LANE}];e.icon='angry';e.icT=4;ENT.push(e);
   fl('隊伍太長了','#C4553D',{x:40,y:104},quiet);if(R()<.15)pushFeed(`😤 一位${sg.n}看到長長的隊伍就走了`);return}
+ if(lv('app')&&!e.critic&&R()<.22){e.app=1;e.qs=S.t;e.wp=[{...DOOR},{x:DOOR.x+20,y:LANE},{x:200,y:LANE}];ENT.push(e);decide(e,quiet);if(e.st==='pick'){e.icon='phone';e.icT=3}return}
  joinLine(e,quiet);
  if(!quiet&&R()<.1)say(e,WEATHER[S.weather].rain&&R()<.5?pickA(['外面雨好大','進來躲個雨～']):S.weather==='hot'&&R()<.5?'熱死了，要冰的！':S.weather==='cold'&&R()<.5?'好冷，來杯熱的':pickA(sg.chat));
 }
@@ -1278,6 +1315,7 @@ function decide(e,quiet){
   const food=r&&r.food&&hasStock(r.food)?r.food:foodPick(e.seg);
   const ch=r&&r.food?1:(0.22+(lv('oven')?.1:0)+(S.t<660?.08:0)+(dine?.15:0)+(e.seg==='tourist'?.1:0)+(foodCount()>2?.06:0));
   if(food&&R()<ch&&hasStock(food)&&R()<accept(food,S.price[food],segPk(e.seg)*(r?1.3:1))){sell(food);txt+='＋'+MENU[food].n;tot+=S.price[food]}}
+ if(!r&&R()<.02&&(S.wish||[]).length<3){const ks=Object.keys(LAB).filter(k=>!S.rec[k]&&!(S.wish||[]).some(w=>w.k===k));if(ks.length){const k=ks[Math.floor(R()*ks.length)];(S.wish=S.wish||[]).push({k,seg:e.seg,day:S.day});if(!quiet)say(e,`要是有${LAB[k].n}就好了～`);pushFeed(`💭 有位${sg.n}許願想喝「${LAB[k].n}」（到研發查看）`)}}
  T.hS[h]++;e.item=item;e.work=MENU[item].work||1;e.st='pick';e.order=txt;e.dine=dine;PICK.push(e);
  if(!quiet){sfx('cash');fl('+'+f2(tot),'#5E8A45',{x:REG.x,y:REG.y-6},quiet)}
  if(!quiet&&R()<.06&&!r)pushFeed(`☕ ${sg.n}點了${txt}${dine?'（內用）':'（外帶）'}`);
@@ -1296,8 +1334,8 @@ function leave(e,icon,quiet){const i=LINE.indexOf(e);if(i>=0)LINE.splice(i,1);
 function depart(e,quiet){
  const i=PICK.indexOf(e);if(i>=0)PICK.splice(i,1);
  S.today.served++;e.cup=1;if(!quiet)sfx('clink');ownXp(1);if((S.today.passC||0)<40){S.today.passC=(S.today.passC||0)+.3;passPts(.3)}
- if(e.rid){const w=S.t-e.qs;addAff(e.rid,(lv('card')?1:0)+(w<10?3:w<20?1:-1)+(catOwn('purin')&&w<20&&R()<.5+catH('purin')*.1?1:0))}
- if(!e.rider&&R()<.12*(1+.25*sk('tips'))*(catOwn('mike')?1.5+catH('mike')*.05:1)*(S.rep/100+.5))S.today.jar=Math.min(40,(S.today.jar||0)+rr(.5,2));
+ if(e.rid&&regLv(e.rid)>=5)bondUp(e.rid);if(e.rid){const w=S.t-e.qs;addAff(e.rid,(lv('card')?1:0)+(w<10?3:w<20?1:-1)+(catOwn('purin')&&w<20&&R()<.5+catH('purin')*.1?1:0))}
+ if(!e.rider&&R()<.12*(1+.25*sk('tips'))*((S.today&&S.today.tipX)||1)*(catOwn('mike')?1.5+catH('mike')*.05:1)*(S.rep/100+.5))S.today.jar=Math.min(40,(S.today.jar||0)+rr(.5,2));
  if(e.critic){const w=S.t-e.qs;if(w<=12){S.rep=clamp(S.rep+4,0,repCap());S.money+=50;toast('🎩 評論家：「出杯又快又好喝！」口碑 +4、獎金 $50');pushFeed('🎩 評論家大讚！')}else{S.rep=clamp(S.rep-2,0,100);toast('🎩 評論家：「等太久了…」口碑 -2');pushFeed('🎩 評論家不太滿意')}S.today.critic='done'}
  if(e.seat){e.st='toSeat';const s=e.seat;e.wp=[{x:e.x,y:LANE},{x:s.aisle,y:LANE},{x:s.aisle,y:s.y},{x:s.x,y:s.y}];S.today.dine++}
  else{e.st='out';e.wp=[{x:e.x,y:LANE},{x:-14,y:LANE}]}
@@ -1306,7 +1344,7 @@ function leaveSeat(e){const s=e.seat;s.occ=null;s.dirty=true;e.seat=null;e.st='o
  e.wp=[{x:s.aisle,y:s.y},{x:s.aisle,y:LANE},{x:-14,y:LANE}]}
 function cleanTable(tx,ty,auto){let n=0;SEATS.forEach(s=>{if(s.tx===tx&&s.ty===ty&&s.dirty){s.dirty=false;n++}});
  if(n){SPARK.push({x:tx,y:ty-6,t:1.2});if(!auto){sfx('spark',1);fl('✨ 清潔完成','#4E78A6',{x:tx,y:ty-10},false)}}return n}
-function repCap(){return 2*sk('charm')+(lv('sound')?3:0)+[85,92,100][lv('decor')]+(perk('grandma',4)?5:0)}
+function repCap(){return (carT()>=4?2:0)+2*sk('charm')+(lv('sound')?3:0)+[85,92,100][lv('decor')]+(perk('grandma',4)?5:0)}
 
 /* ---------- 熟客好感度 ---------- */
 function addAff(id,d){const st=S.reg[id],before=regLv(id);st.aff=clamp(st.aff+d,0,100);
@@ -1319,15 +1357,19 @@ function moveAll(dm,quiet){
  catsTick(dm);
  // 櫃檯點餐：隊首走到櫃檯才開始點
  const f=LINE[0];
- if(f&&S.phase==='open'&&PICK.length<10&&!(S.today.blackout&&S.t>=840&&S.t<900)&&Math.hypot(f.x-REG.x,f.y-REG.y)<1.5){
-  S.regT+=dm*cashierSpeed();f.ordering=true;if(S.regT>=0.5){S.regT=0;LINE.shift();f.ordering=false;decide(f,quiet)}}
+ if(f&&S.phase==='open'&&PICK.length<pickMax()&&!(S.today.blackout&&S.t>=840&&S.t<900)&&Math.hypot(f.x-REG.x,f.y-REG.y)<4){
+  f.ordT=(f.ordT||0)+dm*cashierSpeed();f.ordering=true;if(f.ordT>=0.5){LINE.shift();f.ordering=false;decide(f,quiet)}}
+ // 收銀員拿平板，替後面排隊的客人先點餐
+ if(S.phase==='open'&&PICK.length<pickMax()&&!(S.today.blackout&&S.t>=840&&S.t<900)){const ln=orderLanes(),done=[];
+  for(let i=1;i<Math.min(ln,LINE.length);i++){const e=LINE[i],sl=lineSlot(i);if(Math.hypot(e.x-sl.x,e.y-sl.y)<3){e.ordT=(e.ordT||0)+dm*cashierSpeed()*.8;e.tab=1;if(e.ordT>=0.5)done.push(e)}}
+  for(const e of done){const j=LINE.indexOf(e);if(j>0)LINE.splice(j,1);e.tab=0;decide(e,quiet)}}
  for(let i=ENT.length-1;i>=0;i--){const e=ENT[i];
   if(e.icT>0)e.icT-=dm;
   let tg=e.wp[0];
   if(!tg&&e.st==='line'){const qi=LINE.indexOf(e);tg=lineSlot(qi<0?0:qi)}
   if(!tg&&e.st==='pick'){const pi=PICK.indexOf(e);tg=pickSlot(pi<0?0:pi);
    if(e.ready&&Math.hypot(e.x-tg.x,e.y-tg.y)<1.5){depart(e,quiet);continue}}
-  if(tg){const dx=tg.x-e.x,dy=tg.y-e.y,d=Math.hypot(dx,dy),st=SPD*dm;
+  if(tg){const dx=tg.x-e.x,dy=tg.y-e.y,d=Math.hypot(dx,dy),st=SPD*dm*(e.st==='line'?2.4:e.st==='pick'?1.6:1);
    if(d<=st){e.x=tg.x;e.y=tg.y;if(e.wp.length)e.wp.shift();if(!e.wp.length)arriveAt(e,i)}
    else{e.x+=dx/d*st;e.y+=dy/d*st;e.f+=dm*7;if(Math.abs(dx)>0.3)e.dir=dx>0?1:-1}}
   else if(e.st==='line'||e.st==='pick')e.dir=1;
@@ -1361,7 +1403,7 @@ function closeShop(){
  T.catFood=(S.cats||[]).length*6*(cfOwn('bowl')?.5:1);S.money-=T.catFood;
  if(T.jar>0){T.tips=(T.tips||0);T.jarLost=T.jar;T.jar=0}
  T.wages=S.staff.reduce((a,s)=>a+wageOf(s),0);T.rent=dailyRent();T.util=UTIL;
- S.money-=T.wages+T.rent+T.util;
+ T.life=lifeUp();S.money-=T.wages+T.rent+T.util+T.life;if(S.house&&house().rep)S.rep=clamp(S.rep+house().rep,0,100);
  T.brInc=0;for(const id in S.br){const b=BRANCH.find(x=>x.id===id);T.brInc+=Math.round(branchInc(b,S.br[id]))}S.money+=T.brInc;
  if(S.loan){T.loanPay=S.loan.pay;S.money-=S.loan.pay;S.loan.left--;if(S.loan.left<=0){S.loan=null;T.loanDone=1}}
  T.staffUp=[];T.tired=[];
@@ -1393,7 +1435,7 @@ function closeShop(){
  S.mods.forEach(m=>m.days--);S.mods=S.mods.filter(m=>m.days>0);
  if(S.money<0)S.broke++;else S.broke=0;if(S.broke>=3)S.over=true;
  T.newMs=[];MILESTONES.forEach(m=>{if(!S.ms[m.id]&&m.f()){S.ms[m.id]=S.day;T.newMs.push(m.t)}});
- T.reviews=makeReviews();
+ T.reviews=makeReviews();checkAch(false);
  ENT.forEach(e=>{if(e.st==='sit')leaveSeat(e)});
  save();render();
  const st=S.stories.splice(0).concat(extra);save();
@@ -1451,8 +1493,8 @@ const OL='#5a2e14',WD1='#e8a860',WD2='#c47a3c',WD3='#8a4a22';
 function RR(x,y,w,h,c,ol){if(ol){P(x+1,y,w-2,1,ol);P(x+1,y+h-1,w-2,1,ol);P(x,y+1,1,h-2,ol);P(x+w-1,y+1,1,h-2,ol);P(x+1,y+1,w-2,h-2,c)}else{P(x+1,y,w-2,h,c);P(x,y+1,w,h-2,c)}}
 function EL(x0,y0,rx,ry,c){for(let y=-ry;y<=ry;y++){const hw=Math.round(rx*Math.sqrt(Math.max(0,1-(y*y)/((ry+.5)*(ry+.5)))));P(x0-hw,y0+y,hw*2+1,1,c)}}
 const ICONS={heart:['.x.x.','xxxxx','xxxxx','.xxx.','..x..'],angry:['x...x','.x.x.','..x..','.x.x.','x...x'],
- '$':['.xxx.','xx...','.xxx.','...xx','.xxx.'],seat:['x....','x....','xxxx.','x..x.','x..x.'],q:['.xxx.','x...x','..xx.','.....','..x..'],dots:['.....','.....','x.x.x','.....','.....']};
-const ICOL={heart:'#d9475a',angry:'#c4553d','$':'#c98a1a',seat:'#7a5236',q:'#c4553d',dots:'#2b2622'};
+ '$':['.xxx.','xx...','.xxx.','...xx','.xxx.'],seat:['x....','x....','xxxx.','x..x.','x..x.'],q:['.xxx.','x...x','..xx.','.....','..x..'],dots:['.....','.....','x.x.x','.....','.....'],phone:['.xxx.','.x.x.','.x.x.','.xxx.','.xxx.']};
+const ICOL={heart:'#d9475a',angry:'#c4553d','$':'#c98a1a',seat:'#7a5236',q:'#c4553d',dots:'#2b2622',phone:'#4f7ca8'};
 function icon(x,y,k){P(x-5,y-5,11,9,'#2b2622');P(x-4,y-4,9,7,'#fff');P(x-1,y+3,3,2,'#2b2622');P(x,y+3,1,1,'#fff');
  const m=ICONS[k];for(let r=0;r<5;r++)for(let c=0;c<5;c++)if(m[r][c]==='x')P(x-2+c,y-3+r,1,1,ICOL[k])}
 function person(e,sit){
@@ -1601,7 +1643,7 @@ function drawScene(ts){
  items.sort((a,b)=>a.y-b.y).forEach(i=>i.d());
  if(lv('outdoor')){P(34,46,10,3,'#c4553d');P(46,46,10,3,'#fff');P(58,46,10,3,'#c4553d')}
  // 點餐中提示
- if(LINE[0]&&LINE[0].ordering)icon(REG.x,REG.y-26,'dots');
+ if(LINE[0]&&LINE[0].ordering)icon(REG.x,REG.y-26,'dots');for(const e of LINE)if(e.tab)icon(e.x,e.y-26,'dots');
  ENT.forEach(e=>{if(e.icT>0&&e.icon)icon(Math.round(e.x),Math.round(e.y-26),e.icon)});
  SPARK.forEach(s=>{const a=s.t;for(let k=0;k<4;k++){const ang=k*1.57+ts/200;P(s.x+Math.cos(ang)*6*(1.4-a),s.y+Math.sin(ang)*4,2,2,'#ffe38a')}});
  if(prog>0.7&&open){cx.fillStyle=`rgba(255,140,60,${(prog-0.7)*0.25})`;cx.fillRect(0,0,CW,CH)}
@@ -1692,7 +1734,7 @@ function drawArtCanvases(){}
 function headerHTML(){
  const w=WEATHER[S.weather],status=S.phase==='prep'?'準備中':S.phase==='open'?'營業中':'打烊';
  const ctrl2=S.phase==='open'?`<div class="spd"><button class="${S.paused?'on':''}" onclick="togglePause()">${S.paused?'▶':'❚❚'}</button>${[1,2,4,8,16].map(s=>`<button class="${S.speed===s&&!S.paused?'on':''}" onclick="setSpeed(${s})">${s}×</button>`).join('')}</div>`:'';
- return `<div class="row between"><div><div class="kicker">${S.name} · <span class="${S.phase==='open'?'live':''}">${status}</span></div>
+ return `<div class="row between"><div><div class="kicker">${titleOf()?`<span class="ttl">${titleOf()}</span> `:''}${S.name} · <span class="${S.phase==='open'?'live':''}">${status}</span></div>
   <div class="sub" style="margin-top:2px">${calStr()} · 星期${WD[(S.day-1)%7]} · ${w.n}${S.today.fest?`<span class="cal fest">${S.today.fest.ic}${S.today.fest.n}</span>`:''}${S.today.contest?'<span class="cal">🏆拉花大賽</span>':''}</div></div>
   <div class="row" style="gap:4px"><button class="ico ${AU.m?'':'off'}" onclick="toggleAudio('m')" title="背景音樂">🎵</button><button class="ico ${AU.s?'':'off'}" onclick="toggleAudio('s')" title="音效">🔊</button></div></div>${ctrl2}`;
 }
@@ -1731,9 +1773,9 @@ function presentHTML(){
 function render(){
  if(typeof document==='undefined')return;
  const app=document.getElementById('app');clearBubbles();const tbe=document.getElementById('tb');if(tbe)tbe.innerHTML=tbHTML();
- app.innerHTML=tab==='shop'?shopView():tab==='buy'?buyView():tab==='menu'?menuView():tab==='store'?storeView():tab==='regs'?regsView():brandView();
+ app.innerHTML=tab==='shop'?shopView():tab==='buy'?buyView():tab==='menu'?menuView():tab==='store'?storeView():tab==='regs'?regsView():tab==='life'?lifeView():brandView();
  const newMet=REG_ORDER.some(id=>S.reg[id].met&&S.reg[id].seen===0);
- const tabs=[['shop','nav_shop','營業'],['buy','nav_buy',S.phase==='open'?'叫貨':'進貨'],['menu','nav_menu','定價'],['store','nav_store','經營'],['regs','nav_regs','熟客'],['report','nav_brand','品牌']];
+ const tabs=[['shop','nav_shop','營業'],['buy','nav_buy',S.phase==='open'?'叫貨':'進貨'],['menu','nav_menu','定價'],['store','nav_store','經營'],['regs','nav_regs','熟客'],['life','nav_life','生活'],['report','nav_brand','品牌']];
  document.getElementById('nav').innerHTML=tabs.map(t=>`<button class="${tab===t[0]?'on':''}" onclick="go('${t[0]}')"><span class="i">${pimg(t[1],28)}</span><span class="nl">${t[2]}</span>${t[0]==='regs'&&newMet?'<span class="dot"></span>':''}</button>`).join('');
  cv=document.getElementById('cv');cx=cv?cv.getContext('2d'):null;
  if(cv)cv.onclick=ev=>guard('tap',()=>onSceneTap(ev));
@@ -1773,14 +1815,15 @@ function shopView(){
   const fe=S.today.fest?`<div class="tip"><b>${S.today.fest.ic} 今天是${S.today.fest.n}！</b><br>${S.today.fest.d}</div>`:'';
   const tired=S.staff.filter(s=>s.fat>=80&&!s.leave);
   const lab=S.lab?`<div class="hint" style="margin-top:6px">🧪 研發中：${RECIPES[S.lab.k].n}（剩 ${S.lab.left} 天）</div>`:'';
+  const trd=S.trend?`<div class="tip">🔥 <b>本週流行：${MENU[S.trend.k].n}</b>　點單 ×1.7、願付 +10%，記得多備料！</div>`:'';
   pre=`<div class="card"><div class="kicker">開店前簡報 · ${calStr()}</div>
   <div style="margin-top:6px;line-height:1.7">預估來客 <b class="px">${Math.round(est.cust)}</b> 人　產能 <b class="px">${est.cap}</b> 杯　座位 <b class="px">${SEATS.length}</b> 席<br>
-  明日預報：${WEATHER[S.forecast].ic} ${WEATHER[S.forecast].n}<span class="hint">（準確率約 75%）</span></div>${fe}${ev}${mods}${lab}
+  明日預報：${WEATHER[S.forecast].ic} ${WEATHER[S.forecast].n}<span class="hint">（準確率約 75%）</span></div>${trd}${fe}${ev}${mods}${lab}
   ${tired.length?`<div class="tip warn">😵 ${tired.map(s=>s.n).join('、')} 太累了，效率下降。可到「經營 › 員工」讓他今天休假。</div>`:''}
   ${regs.length?`<div class="tip love">💗 今天可能會來的熟客：${regs.map(r=>r.n).join('、')}${favNeed.length?`<br><span class="hint">他們愛點：${favNeed.map(k=>MENU[k].n).join('、')}，記得備料</span>`:''}</div>`:''}
   ${short.length?`<div class="tip warn">⚠️ 庫存可能不夠：${short.map(k=>ING[k].n).join('、')}　<button class="btn sm" onclick="go('buy')">去進貨</button></div>`:''}
   <button class="btn big dark" style="margin-top:12px" onclick="openShop()">開門營業 ☕</button></div>`}
- if(S.phase==='night')pre=`<div class="card"><button class="btn big dark" onclick="showSummary()">查看今日結算 🌙</button></div>`;
+ if(S.phase==='night')pre=`<div class="card"><button class="btn big dark" onclick="showSummary()">查看今日結算 🌙</button>${S.today.night?'':`<button class="btn big pink" style="margin-top:8px" onclick="go('life')">🌃 下班去玩</button>`}</div>`;
  const L=(x,y,t)=>`<div class="lbl" style="left:${x/CW*100}%;top:${y/CH*100}%">${t}</div>`;
  return `${pre}<div class="card shopcard"><div id="hdr" data-k="${S.speed}${S.paused}${S.phase}${AU.m}${AU.s}">${headerHTML()}</div>
  <div class="scene" id="scene"><canvas id="cv" class="sc" width="${CW}" height="${CH}"></canvas>${L(178,75,'點餐')}${L(222,75,'取餐')}${L(138,97,'排隊 ←')}
@@ -1793,7 +1836,8 @@ function shopView(){
  <div class="card"><div class="row between"><div class="kicker">庫存</div><div class="hint">少＝今天可能不夠　期＝今晚到期</div></div><div class="inv" id="inv">${invHTML()}</div></div>
  <div class="card"><div class="kicker">店內動態</div><div class="feed" id="feed" style="margin-top:6px">${S.feed.map(f=>`<div>${f}</div>`).join('')||'<div>開店後會顯示顧客動態</div>'}</div></div>`;
 }
-function buyView(){
+function buyView(){return buyView0()+(S.phase==='prep'?originCard():'')}
+function buyView0(){
  const em=S.phase==='open',mult=em?1.5:1;
  if(S.phase==='night')return `<div class="card"><div class="kicker">進貨</div><p class="sub">已打烊，明早再進貨。</p></div>`;
  const est=estimate();let total=0;
@@ -1817,7 +1861,7 @@ function priceRow(k){
  const p=S.price[k],c=itemCost(k),a=accept(k,p),bp=bestPrice(k),mg=(p-c)/p,col=a>.7?'var(--matcha)':a>.4?'var(--gold)':'var(--red)';
  const fans=Object.keys(SEG).filter(s=>(SEG[s].pref[k]||1)>1.25).map(s=>SEG[s].n);
  const regFans=REG_ORDER.filter(id=>S.reg[id].met&&REGS[id].fav.includes(k)).map(id=>REGS[id].n);
- return `<div class="line"><div class="icbox">${pimg(k,32)}</div><div class="grow"><div class="name">${MENU[k].n}${S.hype&&S.hype[k]?'<span class="tag p">話題</span>':''}${MENU[k].cold?'<span class="tag">冰</span>':''}${MENU[k].work?'<span class="tag">製作×2</span>':''}${isSig(k)?'<span class="tag p">招牌</span>':''}${fans.map(f=>`<span class="tag y">${f}</span>`).join('')}${regFans.map(f=>`<span class="tag p">♥${f}</span>`).join('')}</div>
+ return `<div class="line"><div class="icbox">${pimg(k,32)}</div><div class="grow"><div class="name">${MENU[k].n}${S.hype&&S.hype[k]?'<span class="tag p">話題</span>':''}${MENU[k].cold?'<span class="tag">冰</span>':''}${MENU[k].work?'<span class="tag">製作×2</span>':''}${isSig(k)?'<span class="tag p">招牌</span>':''}${isTrend(k)?'<span class="tag y">🔥本週流行</span>':''}${fans.map(f=>`<span class="tag y">${f}</span>`).join('')}${regFans.map(f=>`<span class="tag p">♥${f}</span>`).join('')}</div>
   <div class="meta">${'★'.repeat(star(k))}${'☆'.repeat(5-star(k))} <span class="hint">熟練 ${(S.mast&&S.mast[k])||0}${star(k)<5?'/'+MAST[star(k)]:''}</span> <button class="link ${isSig(k)?'on':''}" onclick="toggleSig('${k}')">${isSig(k)?'🏷 招牌中':'設為招牌'}</button></div>
   <div class="meta">成本 ${f2(c)}　毛利 <b style="color:${mg<.5?'var(--red)':'var(--ink)'}">${Math.round(mg*100)}%</b>　接受度 ${Math.round(a*100)}%　<button class="link" onclick="setP('${k}',${bp})">建議 ${f2(bp)}</button></div>
   <div class="bar"><i style="width:${a*100}%;background:${col}"></i></div></div>
@@ -1912,7 +1956,9 @@ function labView(){return `<div class="seg" style="margin-top:4px">${['自由實
 function expView(){
  const pool=LABING.map(k=>{const lk=ING[k].lock&&lv(ING[k].lock)===0;return `<button class="ingb ${EXP.includes(k)?'sel':''}" ${lk?'disabled':''} onclick="expPick('${k}')"><span>${pimg(k,26)}</span>${ING[k].n}${lk?'🔒':''}</button>`}).join('');
  const found=Object.keys(LAB).filter(k=>S.rec[k]).length;
- return `<div class="hint">挑 2～3 種素材組合看看，每次實驗 $100。完全對上就研發成功；方向對了會得到提示，寫在實驗筆記裡。</div>
+ const wishes=(S.wish||[]).filter(w=>!S.rec[w.k]);
+ const wh=wishes.length?`<div class="tip love" style="margin-bottom:8px"><b>💭 客人許願單</b>（研發成功可得 $400、口碑 +2）${wishes.map(w=>{const ks=Object.keys(LAB[w.k].need).filter(i=>i!=='beans'&&i!=='milk'),clue=ks[0]?ING[ks[0]].n:Object.keys(LAB[w.k].need).map(i=>ING[i].n)[0];return `<div style="margin-top:4px">${SEG[w.seg].n}想喝「<b>${LAB[w.k].n}</b>」　<span class="hint">線索：會用到${clue}</span></div>`}).join('')}</div>`:'';
+ return wh+`<div class="hint">挑 2～3 種素材組合看看，每次實驗 $100。完全對上就研發成功；方向對了會得到提示，寫在實驗筆記裡。</div>
  <div class="ingg">${pool}</div>
  <div class="mix">${EXP.length?EXP.map(k=>`<span>${pimg(k,22)} ${ING[k].n}</span>`).join('<i>＋</i>'):'<span class="hint">點上面的素材放進調理台…</span>'}</div>
  <div class="row" style="gap:8px"><button class="btn" style="flex:1" ${EXP.length?'':'disabled'} onclick="EXP=[];render()">清空</button><button class="btn dark" style="flex:2" ${EXP.length<2||S.money<100?'disabled':''} onclick="experiment()">🧪 開始實驗 $100</button></div>
@@ -1923,7 +1969,7 @@ function expPick(k){const i=EXP.indexOf(k);if(i>=0)EXP.splice(i,1);else{if(EXP.l
 function experiment(){if(EXP.length<2||S.money<100)return;S.money-=100;S.today.mkt+=100;S.labLog=S.labLog||[];
  const key=EXP.slice().sort().join('+'),names=EXP.map(k=>ING[k].n).join('＋');
  const hit=Object.keys(LAB).find(k=>Object.keys(LAB[k].need).sort().join('+')===key);
- if(hit&&!S.rec[hit]){S.rec[hit]=true;S.hype[hit]=4;if(S.price[hit]===undefined)S.price[hit]=MENU[hit].ref;S.labLog.push(`✅ ${names} → <b>${LAB[hit].n}</b>`);EXP=[];sfx('level',1);save();
+ if(hit&&!S.rec[hit]){S.rec[hit]=true;S.hype[hit]=4;const wi=(S.wish||[]).findIndex(w=>w.k===hit);if(wi>=0){S.wish.splice(wi,1);S.money+=400;S.rep=clamp(S.rep+2,0,100);passPts(30);ownXp(120);setTimeout(()=>toast(`💭 實現客人的願望！獎勵 $400、口碑 +2`),900)}if(S.price[hit]===undefined)S.price[hit]=MENU[hit].ref;S.labLog.push(`✅ ${names} → <b>${LAB[hit].n}</b>`);EXP=[];sfx('level',1);save();
   showVN([['sys',`🧪 實驗成功！研發出「${LAB[hit].n}」`],['sys',LAB[hit].d],['sys','已經上架了！記得到「進貨」準備素材，到「定價」調整價格，也可以排進套餐。']],()=>render());return}
  if(hit){S.labLog.push(`🔁 ${names} → 已經會做「${LAB[hit].n}」`);EXP=[];toast('這個配方已經研發過了');save();render();return}
  const near=Object.keys(LAB).filter(k=>!S.rec[k]).map(k=>{const n=Object.keys(LAB[k].need);return [k,EXP.filter(i=>n.includes(i)).length,n.length]}).sort((a,b)=>b[1]-a[1]||a[2]-b[2])[0];
@@ -1941,7 +1987,8 @@ function recipeView(){
  return `<div class="hint">研發要花幾天，同時只能進行一項，每天打烊時推進。新品上架後有 3 天話題期：點的人變多、來客 +6%。含可可的配方會解鎖「可可粉」進貨。</div>${cards}
  <div class="hint" style="margin-top:8px">配方圖鑑 ${Object.keys(S.rec).length} / ${Object.keys(RECIPES).length}</div>`;
 }
-function regsView(){
+function regsView(){return regsView0()+ch2Card()}
+function regsView0(){
  REG_ORDER.forEach(id=>{if(S.reg[id].met)S.reg[id].seen=1});save();
  const cards=REG_ORDER.map(id=>{const r=REGS[id],st=S.reg[id],l=regLv(id);
   if(!st.met)return `<div class="line"><canvas class="por sm" data-id="${id}" data-hide="1"></canvas><div class="grow"><div class="name">？？？</div><div class="meta">${r.req()?'條件已達成，等他上門吧':'出現條件：'+r.reqT}</div></div></div>`;
@@ -1974,6 +2021,224 @@ function passView(){passCheck();const P=S.pass,se=SEASONS[P.season],th=THEMES.fi
  <div class="card">${rows}</div>
  <div class="card"><div class="kicker">📘 巷弄咖啡指南</div><div style="margin-top:4px;font-size:18px">${guideCups()?'☕'.repeat(guideCups()):'尚未上榜'}</div>
  <div class="hint">每 28 天評鑑一次（下次：第 ${Math.ceil((S.day)/28)*28||28} 天打烊）。依口碑、滿意度、菜單廣度、★2 以上品項數、豆子等級、招牌數評分。每杯評等來客 +5%，首度晉級有獎金。${S.guide?`上次評分 ${S.guide.sc} 分。`:''}</div></div>`}
+
+/* ================================================================
+   生活：房產、座車、下班玩樂、成就稱號、產地、傳承
+================================================================ */
+const HOUSES=[
+ {id:'room',n:'分租雅房',ic:'🛏',c:0,up:0,sta:0,xp:0,rep:0,will:0,d:'剛創業，先將就一下'},
+ {id:'studio',n:'小套房',ic:'🏢',c:12000,up:8,sta:10,xp:0,rep:0,will:0,d:'體力上限 +10'},
+ {id:'apt',n:'電梯公寓',ic:'🏬',c:45000,up:20,sta:20,xp:.1,rep:0,will:0,d:'體力上限 +20、店長經驗 +10%'},
+ {id:'town',n:'透天厝',ic:'🏡',c:120000,up:40,sta:30,xp:.15,rep:.2,will:0,d:'體力上限 +30、經驗 +15%、每天口碑 +0.2'},
+ {id:'villa',n:'海景別墅',ic:'🏖',c:350000,up:90,sta:40,xp:.2,rep:.3,will:.02,d:'體力上限 +40、經驗 +20%、每天口碑 +0.3、顧客願付 +2%'}];
+const CARS=[
+ {id:'bike',n:'腳踏車',ic:'🚲',c:0,up:0,d:'環保又健康'},
+ {id:'scooter',n:'二手機車',ic:'🛵',c:2500,up:3,d:'緊急叫貨 15 分鐘到、運費便宜'},
+ {id:'van',n:'小貨車',ic:'🚚',c:22000,up:12,d:'含機車效果＋批發進貨 -5%、外送單 +15%'},
+ {id:'suv',n:'休旅車',ic:'🚙',c:60000,up:20,d:'含以上效果＋解鎖郊外玩樂（溫泉、海邊）、玩樂花費 -10%'},
+ {id:'sport',n:'跑車',ic:'🏎',c:220000,up:60,d:'含以上效果＋來客 +5%（話題性）、口碑上限 +2'}];
+const house=()=>HOUSES.find(h=>h.id===S.house)||HOUSES[0];
+const carT=()=>Math.max(0,CARS.findIndex(c=>c.id===S.car));
+const lifeUp=()=>house().up+CARS[carT()].up;
+function buyHouse(id){const h=HOUSES.find(x=>x.id===id);if(S.houses.includes(id)||S.money<h.c)return;S.money-=h.c;S.houses.push(id);S.house=id;sfx('level',1);checkAch(true);save();render();toast(`🔑 入住「${h.n}」！`)}
+function useHouse(id){if(S.houses.includes(id)){S.house=id;sfx('click');save();render()}}
+function buyCar(id){const c=CARS.find(x=>x.id===id);if(S.cars.includes(id)||S.money<c.c)return;S.money-=c.c;S.cars.push(id);S.car=id;sfx('level',1);checkAch(true);save();render();toast(`🔑 牽到新車「${c.n}」！`)}
+function useCar(id){if(S.cars.includes(id)){S.car=id;sfx('click');save();render()}}
+
+/* ---------- 咖啡豆產地 ---------- */
+const ORIGINS=[
+ {id:'brazil',n:'巴西 喜拉朵',c:0,m:1,fit:['latte','mocha','dirty'],d:'堅果、可可調性，適合奶咖'},
+ {id:'colombia',n:'哥倫比亞 薇拉',c:1500,m:1.05,fit:['americano','latte','icedlatte'],d:'焦糖甜感，平衡好入口'},
+ {id:'ethiopia',n:'衣索比亞 耶加雪菲',c:2500,m:1.15,fit:['pourover','iced','lemoncof'],d:'花香柑橘，冰飲手沖都迷人'},
+ {id:'kenya',n:'肯亞 AA',c:3000,m:1.15,fit:['iced','americano','seasaltcof'],d:'莓果酸質明亮'},
+ {id:'guatemala',n:'瓜地馬拉 安提瓜',c:3500,m:1.1,fit:['mocha','caramac','vienna'],d:'煙燻巧克力，甜點系咖啡'},
+ {id:'mandheling',n:'印尼 曼特寧',c:4000,m:1.1,fit:['latte','dirty','affogato'],d:'厚實草本，加奶更香'},
+ {id:'alishan',n:'台灣 阿里山',c:6000,m:1.3,fit:['pourover','latte','honeylatte'],d:'在地精品，遊客特別捧場',tour:1.15},
+ {id:'bluemtn',n:'牙買加 藍山',c:12000,m:1.6,fit:['pourover','americano','vienna'],d:'傳奇名豆，乾淨柔順'},
+ {id:'geisha',n:'巴拿馬 藝伎',c:20000,m:2,fit:['pourover','iced','icedlatte'],d:'頂級茉莉花香，咖啡迷朝聖'}];
+const origin=()=>ORIGINS.find(o=>o.id===S.origin)||ORIGINS[0];
+const originFit=k=>origin().fit.includes(k);
+function buyOrigin(id){const o=ORIGINS.find(x=>x.id===id);if(S.origins.includes(id)||S.money<o.c)return;S.money-=o.c;S.today.mkt+=o.c;S.origins.push(id);S.origin=id;sfx('level',1);checkAch(true);save();render();toast(`🌍 取得「${o.n}」生豆合約`)}
+function useOrigin(id){if(S.origins.includes(id)){S.origin=id;sfx('click');save();render()}}
+function originCard(){
+ return `<div class="card"><div class="kicker">🌍 咖啡豆產地 · 收藏 ${S.origins.length}/${ORIGINS.length}</div>
+ <div class="hint">選一支主力豆：搭配的飲品點單 ×1.25、願付 +8%。每收藏一個產地，全店願付 +0.5%。豆價依產地不同。</div>
+ ${ORIGINS.map(o=>{const own=S.origins.includes(o.id),on=S.origin===o.id||(!S.origin&&o.id==='brazil');const fit=o.fit.filter(k=>MENU[k]).map(k=>MENU[k].n).join('、');
+ return `<div class="line"><div class="grow"><div class="name">${o.n}${on?'<span class="tag g">使用中</span>':''}<span class="tag">豆價 ×${o.m}</span></div><div class="meta">${o.d}${o.tour?'・遊客 +15%':''}</div><div class="meta">適合：${fit}</div></div>
+ ${own?(on?'':`<button class="btn sm" onclick="useOrigin('${o.id}')">換豆</button>`):`<button class="btn sm ${S.money>=o.c?'dark':''}" ${S.money<o.c?'disabled':''} onclick="buyOrigin('${o.id}')">${fm(o.c)}</button>`}</div>`}).join('')}</div>`}
+
+/* ---------- 熟客第二章 ---------- */
+const BONDN=[3,10,20];
+const REG2={
+ azhe:[[['azhe','老闆…我想辭職了。'],['azhe','我想做一個 App，讓小店也能有自己的點餐系統。'],['azhe','如果失敗了，可以讓我在這裡打工嗎？哈哈。']],
+  [['azhe','App 上線了！第一個合作店家，我只想找你。'],['azhe','這間店陪我寫完了每一行程式。'],['sys','阿哲的新創公司成為合作夥伴']],
+  [['azhe','我……要在這裡求婚。就在我們第一次見面的那個位子。'],['azhe','她說好了！！'],['sys','💍 店裡的這一天，被很多人記住了']]],
+ grandma:[[['grandma','我孫女要來台北念書了。'],['grandma','我跟她說，想家的時候就來這間店。'],['grandma','這裡有奶奶的味道。']],
+  [['grandma','我把這幾年寫成了一本小書。'],['grandma','裡面有一章，就叫〈巷口的拿鐵〉。'],['sys','陳奶奶的回憶錄出版了']],
+  [['grandma','以後每個星期六，讓我們在這裡辦讀書會好嗎？'],['grandma','年輕人和老人家，一起讀書、一起喝咖啡。'],['sys','📚 巷口讀書會成立了']]],
+ xiaoyu:[[['xiaoyu','我的畢業製作……可以拿這間店當題目嗎？'],['xiaoyu','我想重新設計你的杯套和菜單！']],
+  [['xiaoyu','畢業展我得獎了！'],['xiaoyu','評審說，作品裡看得到「人的溫度」。'],['xiaoyu','那個溫度是你給的。']],
+  [['xiaoyu','我錄取設計公司了。'],['xiaoyu','但我答應你，每年的季節菜單，我都會回來畫。'],['sys','🎨 小雨成為店裡的特約設計師']]],
+ wang:[[['wang','唉，最近麵包店生意不太好。'],['wang','附近開了連鎖店，大家都去那邊了。'],['wang','……兄弟，你覺得我還撐得下去嗎？']],
+  [['wang','我們來聯名吧！你的咖啡配我的麵包。'],['wang','我已經想好名字了：「巷口早餐組」！'],['sys','老王麵包店的生意回來了']],
+  [['wang','我決定把店交給兒子了。'],['wang','以後我就天天來你這裡坐著，當個退休老頭。'],['wang','記得幫我留老位子啊。']]],
+ mika:[[['mika','我想畫一本繪本。'],['mika','主角是一隻住在咖啡店裡的貓。'],['mika','你猜牠住在哪一家？']],
+  [['mika','繪本出版了！'],['mika','書店把它擺在最前面，還有讀者問這間店在哪裡。']],
+  [['mika','簽書會……可以在這裡辦嗎？'],['mika','我想讓大家看看，故事真正發生的地方。'],['sys','✍️ Mika 的簽書會擠滿了人']]],
+ leo:[[['leo','我要出發環遊世界了，大概一年。'],['leo','每到一個國家，我都會寄明信片給你。']],
+  [['sys','📮 收到一張來自衣索比亞的明信片'],['leo','這裡的咖啡儀式要三個小時！我想到你一定會喜歡。']],
+  [['leo','我回來了！還帶了一個禮物——'],['leo','我在產地認識的農場主人，願意直接賣豆子給你。'],['sys','🌍 Leo 幫你牽線了一份產地直送合約']]]};
+const BONDRW=[[500,1,20],[1000,2,40],[2000,3,60]];
+function bondUp(id){const st=S.reg[id];st.bond=(st.bond||0)+1;const i=st.ch2||0;if(i>=3||st.bond<BONDN[i])return;
+ st.ch2=i+1;const [m,rp,pp]=BONDRW[i];S.money+=m;S.rep=clamp(S.rep+rp,0,100);passPts(pp);ownXp(100*(i+1));
+ let extra='';if(id==='leo'&&i===2){const lock=ORIGINS.filter(o=>!S.origins.includes(o.id));if(lock.length){const o=lock[lock.length-1];S.origins.push(o.id);extra=`、取得「${o.n}」`}}
+ S.stories.push({txt:[['sys',`📖 ${REGS[id].n} · 第二章（${i+1}/3）`]].concat(REG2[id][i]).concat([['sys',`🎁 獎勵 ${fm(m)}、口碑 +${rp}${extra}`]])})}
+function ch2Card(){const L=REG_ORDER.filter(id=>S.reg[id].met);if(!L.length)return '';
+ return `<div class="card"><div class="kicker">📖 熟客第二章</div><div class="hint">好感度達到 Lv5「家人」後，熟客每次來店都會累積羈絆，解鎖他們的人生故事（3 幕）。</div>
+ ${L.map(id=>{const st=S.reg[id],lv5=regLv(id)>=5,i=st.ch2||0;return `<div class="line"><div class="grow"><div class="name">${REGS[id].n}<span class="tag ${i>=3?'g':''}">${i>=3?'已完結':`第 ${i}/3 幕`}</span></div>
+ <div class="meta">${!lv5?`好感 Lv${regLv(id)}，到 Lv5 後開始`:i>=3?'謝謝你陪他走過這段人生':`羈絆 ${st.bond||0}/${BONDN[i]}`}</div></div>
+ ${i>0?`<button class="btn sm" onclick="replayCh2('${id}')">回顧</button>`:''}</div>`}).join('')}</div>`}
+function replayCh2(id){const n=S.reg[id].ch2||0;let L=[];for(let i=0;i<n;i++)L=L.concat([['sys',`第 ${i+1} 幕`]]).concat(REG2[id][i]);showVN(L)}
+
+/* ---------- 成就與稱號 ---------- */
+const maxCups=()=>Math.max(0,...(S.history||[]).map(h=>h.cups||0));
+const ACH=[
+ {id:'c100',t:'人氣小店',d:'單日賣出 100 杯',r:300,ok:()=>maxCups()>=100},
+ {id:'c300',t:'排隊名店',d:'單日賣出 300 杯',r:1000,ok:()=>maxCups()>=300},
+ {id:'c500',t:'咖啡工廠',d:'單日賣出 500 杯',r:3000,ok:()=>maxCups()>=500},
+ {id:'m10k',t:'小有積蓄',d:'存款達 $10,000',r:300,ok:()=>S.money>=10000},
+ {id:'m100k',t:'十萬店長',d:'存款達 $100,000',r:2000,ok:()=>S.money>=100000},
+ {id:'m1m',t:'咖啡大亨',d:'存款達 $1,000,000',r:10000,ok:()=>S.money>=1e6},
+ {id:'rep95',t:'口碑之王',d:'口碑達 95',r:800,ok:()=>(S.maxRep||0)>=95},
+ {id:'regall',t:'巷口的家人',d:'6 位熟客好感都達 Lv5',r:3000,ok:()=>REG_ORDER.every(id=>regLv(id)>=5)},
+ {id:'ch2one',t:'人生見證者',d:'完成一位熟客的第二章',r:1500,ok:()=>REG_ORDER.some(id=>(S.reg[id].ch2||0)>=3)},
+ {id:'ch2all',t:'巷口傳奇',d:'完成全部熟客的第二章',r:8000,ok:()=>REG_ORDER.every(id=>(S.reg[id].ch2||0)>=3)},
+ {id:'laball',t:'研發狂人',d:'自由實驗圖鑑全開',r:3000,ok:()=>Object.keys(LAB).every(k=>S.rec[k])},
+ {id:'cat3',t:'貓奴',d:'收養 3 隻店貓',r:500,ok:()=>(S.cats||[]).length>=3},
+ {id:'catall',t:'貓咪城堡',d:'收養全部店貓',r:3000,ok:()=>(S.cats||[]).length>=CATDEF.length},
+ {id:'gold3',t:'拉花大師',d:'拉花大賽金獎 3 次',r:2000,ok:()=>(S.medals.gold||0)>=3},
+ {id:'br3',t:'連鎖品牌',d:'經營 3 家分店',r:3000,ok:()=>Object.keys(S.br||{}).length>=3},
+ {id:'guide3',t:'三杯名店',d:'咖啡指南 ☕☕☕',r:3000,ok:()=>guideCups()>=3},
+ {id:'mast5',t:'職人',d:'任一品項熟練度 ★5',r:1500,ok:()=>Object.keys(MENU).some(k=>star(k)>=5)},
+ {id:'own20',t:'資深店長',d:'店長等級 20',r:2000,ok:()=>S.owner.lv>=20},
+ {id:'ori5',t:'尋豆師',d:'收藏 5 個產地',r:1500,ok:()=>S.origins.length>=5},
+ {id:'oriall',t:'世界豆單',d:'收藏全部產地',r:6000,ok:()=>S.origins.length>=ORIGINS.length},
+ {id:'home',t:'有殼一族',d:'買下第一間房子',r:1000,ok:()=>S.houses.length>=2},
+ {id:'villa',t:'海景人生',d:'入住海景別墅',r:10000,ok:()=>S.houses.includes('villa')},
+ {id:'sport',t:'飆速店長',d:'擁有跑車',r:5000,ok:()=>S.cars.includes('sport')},
+ {id:'night30',t:'夜生活達人',d:'下班玩樂 30 次',r:1000,ok:()=>(S.nights||0)>=30},
+ {id:'login30',t:'全勤獎',d:'累積簽到 30 天',r:2000,ok:()=>(S.login&&S.login.total||0)>=30},
+ {id:'year1',t:'年度好店',d:'達成一次年度挑戰',r:1000,ok:()=>(S.trophies||[]).length>=1},
+ {id:'gen2',t:'二代傳人',d:'完成一次傳承',r:3000,ok:()=>(S.legacy&&S.legacy.gen||1)>=2},
+ {id:'gen4',t:'連鎖傳奇',d:'傳承到第 4 代',r:10000,ok:()=>(S.legacy&&S.legacy.gen||1)>=4}];
+function checkAch(live){const got=[];for(const a of ACH)if(!S.ach[a.id]&&a.ok()){S.ach[a.id]=S.day;S.money+=a.r;got.push(a)}
+ if(got.length){if(S.today)S.today.achNew=(S.today.achNew||[]).concat(got.map(a=>a.id));if(live&&typeof document!=='undefined')setTimeout(()=>toast(`🏆 成就解鎖：${got.map(a=>a.t).join('、')}`),400)}return got}
+const titleOf=()=>{const a=ACH.find(x=>x.id===S.title);return a?a.t:''};
+function setTitle(id){S.title=S.title===id?'':id;sfx('click');save();render()}
+
+/* ---------- 傳承（二週目） ---------- */
+const CITIES=[
+ {id:'alley',n:'台北・巷口',d:'一切的起點',t:1,r:1,w:0},
+ {id:'taichung',n:'台中・審計新村',d:'文創聚落：學生 ×1.3、遊客 ×1.3、來客 +10%，租金 ×1.1',t:1.1,r:1.1,w:0,seg:{student:1.3,tourist:1.3}},
+ {id:'tainan',n:'台南・老城區',d:'在地人懂吃：願付 +6%、租金 ×0.85，來客 -5%',t:.95,r:.85,w:.06,seg:{tourist:1.2}},
+ {id:'hualien',n:'花蓮・海岸線',d:'觀光為主：遊客 ×1.8、晴天來客 +20%、雨天 -20%，租金 ×0.8',t:1,r:.8,w:.03,seg:{tourist:1.8},sun:1},
+ {id:'xinyi',n:'台北・信義區',d:'商辦林立：上班族 ×1.4、願付 +10%、來客 +15%，但租金 ×1.6',t:1.15,r:1.6,w:.1,seg:{office:1.4}}];
+const city=()=>CITIES.find(c=>c.id===S.city)||CITIES[0];
+const LEGP=[
+ {id:'cash',n:'創業基金',ic:'💰',d:l=>`開新店起始資金 +$${l*1500}`},
+ {id:'traffic',n:'品牌名聲',ic:'📣',d:l=>`來客 +${l*4}%`},
+ {id:'will',n:'職人手藝',ic:'☕',d:l=>`顧客願付 +${l*2}%`},
+ {id:'cost',n:'供應鏈',ic:'📦',d:l=>`進貨價 -${l*3}%`},
+ {id:'wage',n:'人脈',ic:'🤝',d:l=>`員工薪資 -${l*4}%`},
+ {id:'rep',n:'老店招牌',ic:'⭐',d:l=>`開新店起始口碑 +${l*8}`}];
+const LEGMAX=5,legCost=l=>2+l*2;
+const lg=id=>(S.legacy&&S.legacy.pk&&S.legacy.pk[id])||0;
+const canRebirth=()=>S.ch>=5||S.day>=112;
+const lpGain=()=>Math.floor(Math.sqrt((S.totalRev||0)/2500))+S.ch*2+(S.medals.gold||0)*2+Object.keys(S.br||{}).length*2+Math.floor(Object.keys(S.ach||{}).length/2)+(S.trophies||[]).length*3;
+function buyLeg(id){const L=S.legacy,l=lg(id),c=legCost(l);if(l>=LEGMAX||L.lp<c)return;L.lp-=c;L.pk[id]=l+1;sfx('level',1);save();render()}
+function rebirthDlg(){if(!canRebirth())return;const g=lpGain(),used=(S.legacy.cities||[]);
+ openModal(`<div class="kicker">🌱 傳承 · 第 ${S.legacy.gen+1} 代</div><h2 class="px" style="margin:4px 0 6px;font-weight:400">到新城市開一間店</h2>
+ <p class="sub">把這間店交給信任的人，帶著經驗到新城市重新出發。可獲得 <b>${g} 傳承點</b>，用來購買永久加成。</p>
+ <div class="tip"><b>會保留：</b>店長等級與技能、配方與熟練度、成就稱號、房子車子、產地收藏、店貓與貓家具、主題裝潢、傳承點<br><b>會重置：</b>現金、店面升級、員工、分店、口碑、主線章節（熟客好感減半，他們會來新店找你）</div>
+ <h3 class="sec">選擇城市</h3>${CITIES.map(c=>`<div class="line"><div class="grow"><div class="name">${c.n}${used.includes(c.id)?'<span class="tag">去過</span>':''}</div><div class="meta">${c.d}</div></div><button class="btn sm dark" onclick="rebirth('${c.id}')">在這裡開店</button></div>`).join('')}
+ <button class="btn" style="margin-top:10px" onclick="closeModal()">再想想</button>`)}
+const KEEP=['owner','rec','labLog','mast','ach','title','houses','house','cars','car','origins','origin','legacy','login','cats','catAff','cfurn','themes','theme','artBest','nights','name','pass'];
+function rebirth(cid){if(!canRebirth())return;const g=lpGain(),K={};for(const k of KEEP)K[k]=S[k];
+ K.legacy.lp+=g;K.legacy.gen++;K.legacy.cities=(K.legacy.cities||[]).concat([cid]);K.legacy.best=Math.max(K.legacy.best||0,S.totalRev||0);K.legacy.total=(K.legacy.total||0)+(S.totalRev||0);
+ const reg=JSON.parse(JSON.stringify(S.reg));newGame(K.name);Object.assign(S,K);S.city=cid;S.sig=[];
+ for(const id in reg)S.reg[id]=Object.assign(reg[id],{aff:Math.floor(reg[id].aff/2)});
+ S.money=600+1500*lg('cash');S.rep=30+8*lg('rep');S.maxRep=S.rep;normalize();resetScene();S.today.sta=staMax();checkAch(false);save();closeModal();tab='shop';render();
+ showVN([['sys',`🌱 第 ${S.legacy.gen} 代 · ${city().n}`],['grandma','聽說你要去新的地方開店了？'],['grandma','去吧。好的咖啡，到哪裡都會有人懂。'],['sys',`獲得 ${g} 傳承點，到「生活 › 傳承」使用`]])}
+
+/* ---------- 下班玩樂 ---------- */
+const VENUES=[
+ {id:'home',ic:'🛏',n:'早點回家休息',c:0,d:'明天開店體力 +25',f:()=>{S.nb.sta=(S.nb.sta||0)+25;return '洗個熱水澡早早睡，明天精神飽滿！'}},
+ {id:'market',ic:'🏮',n:'逛夜市',c:40,d:'明天體力 +10，還能玩 3 次夾娃娃機',f:()=>{S.nb.sta=(S.nb.sta||0)+10;S.today.claw=3;return pickA(['大腸包小腸配珍奶，人生圓滿。','蚵仔煎好好吃！順便研究了一下攤販怎麼排隊動線。','臭豆腐、雞排、地瓜球……吃到走不動。'])},claw:1},
+ {id:'gym',ic:'🏋️',n:'健身房',c:60,d:'明天體力 +20、店長經驗 +80',f:()=>{S.nb.sta=(S.nb.sta||0)+20;ownXp(80);return '流了一身汗，手臂更有力了（拉花更穩）。'}},
+ {id:'ktv',ic:'🎤',n:'帶員工唱 KTV',c:()=>50+40*S.staff.length,req:()=>S.staff.length>0,reqT:'需要有員工',d:'全員疲勞 -20、員工經驗 +1',f:()=>{S.staff.forEach(s=>{s.fat=Math.max(0,s.fat-20);s.xp++});return `${S.staff[Math.floor(R()*S.staff.length)].n}唱到破音，大家笑成一團。團隊感情更好了！`}},
+ {id:'bar',ic:'🍸',n:'爵士酒吧',c:120,d:'可能遇到熟客（好感 +6），或聽到商機',f:()=>{const m=REG_ORDER.filter(id=>S.reg[id].met);if(m.length&&R()<.7){const id=m[Math.floor(R()*m.length)];addAff(id,6);return `在吧台遇到了${REGS[id].n}，聊到深夜。（好感 +6）`}S.nb.traffic=1.08;return '鄰座的老闆聊到最近的消費趨勢，你記下了幾個點子。明天來客 +8%。'}},
+ {id:'cinema',ic:'🎬',n:'電影院',c:70,d:'靈感爆發：得到一款未研發飲品的配方線索',f:()=>{const ks=Object.keys(LAB).filter(k=>!S.rec[k]);if(!ks.length){ownXp(60);return '看了一部好電影，心情很好。（店長經驗 +60）'}const k=ks[Math.floor(R()*ks.length)],ig=Object.keys(LAB[k].need).map(i=>ING[i].n);S.labLog.push(`🎬 電影靈感：「${LAB[k].n}」好像會用到 ${ig.slice(0,2).join('＋')}…`);return `電影裡的咖啡館場景給了你靈感：「${LAB[k].n}」也許可以用 ${ig.slice(0,2).join('＋')} 做做看！（已寫進實驗筆記）`}},
+ {id:'arcade',ic:'🕹',n:'電子遊樂場',c:50,d:'手感發燙：明天小費機率 ×2',f:()=>{S.nb.tip=2;return '太鼓達人連續全連段！明天感覺會很幸運。'}},
+ {id:'spring',ic:'♨️',n:'北投溫泉',c:250,car:3,d:'明天體力 +40、全員疲勞 -40、口碑 +1',f:()=>{S.nb.sta=(S.nb.sta||0)+40;S.staff.forEach(s=>s.fat=Math.max(0,s.fat-40));S.rep=clamp(S.rep+1,0,100);return '泡完溫泉全身都鬆了，順便帶了溫泉蛋給大家。'}},
+ {id:'beach',ic:'🏖',n:'海邊夜遊',c:150,car:3,d:'明天顧客願付 +5%、通行證 +30',f:()=>{S.nb.will=.05;passPts(30);return '吹著海風放空，想到好多新菜單的點子。'}},
+ {id:'club',ic:'🥂',n:'會員制俱樂部',c:800,car:4,d:'結識名流：明天來客 +15%、口碑 +2',f:()=>{S.nb.traffic=1.15;S.rep=clamp(S.rep+2,0,100);return '一位投資人對你的店很有興趣，說會帶朋友來捧場。'}}];
+const vCost=v=>Math.round((typeof v.c==='function'?v.c():v.c)*(carT()>=3?.9:1));
+function goVenue(id){const v=VENUES.find(x=>x.id===id),c=vCost(v);if(S.phase!=='night'||S.today.night||S.money<c||(v.car&&carT()<v.car)||(v.req&&!v.req()))return;
+ S.money-=c;S.today.night=id;S.nights=(S.nights||0)+1;S.nb=S.nb||{};const txt=v.f();sfx('level',1);checkAch(true);save();render();
+ showVN([['sys',`${v.ic} ${v.n}${c?`（花費 ${fm(c)}）`:''}`],['sys',txt]].concat(v.claw?[['sys','🧸 夜市有夾娃娃機！可以在「生活」頁玩 3 次。']]:[]))}
+function applyNB(){const b=S.nb||{};if(b.sta)S.today.sta=staMax()+b.sta;if(b.traffic)addMod('traffic',b.traffic,1,'昨晚的人脈');if(b.will)S.today.willB=b.will;if(b.tip)S.today.tipX=b.tip;S.nb={}}
+
+/* 夾娃娃機 */
+let CLAW=null;
+const CLAWP=[['🧸','貓咪玩偶','cat'],['☕','咖啡豆一包','beans'],['💵','$80','cash'],['🎟','通行證 +20','pass'],['🌟','產地樣品（稀有）','origin']];
+function clawGame(){if(!(S.today.claw>0))return;const items=[0,1,2].map(()=>{const r=R();const t=r<.06?4:r<.3?0:r<.55?1:r<.8?2:3;return {x:15+Math.floor(R()*70),t}});
+ CLAW={x:0,v:1,items,busy:false};
+ openModal(`<div class="kicker">🧸 夜市夾娃娃機 · 剩 ${S.today.claw} 次</div><div class="claw" id="claw"><div class="crane" id="crane">🪝</div>${items.map((it,i)=>`<div class="prize" style="left:${it.x}%">${CLAWP[it.t][0]}</div>`).join('')}</div>
+ <div class="hint">夾子會左右移動，對準獎品按下去！</div><div class="row" style="margin-top:8px"><button class="btn big dark" id="clawbtn" onclick="clawDrop()">放下夾子</button></div><button class="btn" style="margin-top:6px" onclick="clawStop()">不玩了</button>`);
+ CLAW.timer=setInterval(()=>{if(!CLAW||CLAW.busy)return;CLAW.x+=CLAW.v*1.6;if(CLAW.x>=95||CLAW.x<=0)CLAW.v*=-1;const c=document.getElementById('crane');if(c)c.style.left=CLAW.x+'%';else clawStop()},30)}
+function clawStop(){if(CLAW)clearInterval(CLAW.timer);CLAW=null;closeModal();render()}
+function clawDrop(){if(!CLAW||CLAW.busy)return;CLAW.busy=true;S.today.claw--;const hit=CLAW.items.find(it=>Math.abs(it.x-CLAW.x)<5.5),win=hit&&R()<.75;
+ const c=document.getElementById('crane');if(c)c.classList.add('drop');sfx('click',1);
+ setTimeout(()=>{let msg='差一點點！夾子滑掉了…';if(win){const k=CLAWP[hit.t][2];
+  if(k==='cat'){(S.cats||[]).forEach(id=>S.catAff[id]=Math.min(5,(S.catAff[id]||1)+.5));msg='🧸 夾到貓咪玩偶！店貓們都很喜歡（親密度提升）'}
+  else if(k==='beans'){addLot('beans',ING.beans.pack,0);msg='☕ 夾到一包咖啡豆！'}
+  else if(k==='cash'){S.money+=80;msg='💵 夾到 $80 紅包！'}
+  else if(k==='pass'){passPts(20);msg='🎟 通行證 +20 點！'}
+  else{const lock=ORIGINS.filter(o=>!S.origins.includes(o.id));if(lock.length){const o=lock[Math.floor(R()*lock.length)];S.origins.push(o.id);msg=`🌟 稀有！夾到「${o.n}」產地樣品，已加入收藏！`}else{S.money+=500;msg='🌟 稀有獎品！換成 $500'}}
+  sfx('level',1)}else sfx('sad');save();toast(msg);clearInterval(CLAW.timer);CLAW=null;if(S.today.claw>0)clawGame();else{closeModal();render()}},700)}
+
+/* ---------- 生活頁 ---------- */
+let lifeTab='下班';
+function lifeView(){const segs=['下班','房車','成就','傳承'];if(!segs.includes(lifeTab))lifeTab='下班';
+ const h=house(),car=CARS[carT()],tt=titleOf();
+ const top=`<div class="card"><div class="kicker">${S.name}${S.legacy&&S.legacy.gen>1?` · 第 ${S.legacy.gen} 代 · ${city().n}`:''}</div><h2 class="px" style="margin:2px 0 6px;font-size:26px;font-weight:400">生活</h2>
+ <div class="lifebar"><div><span>${h.ic}</span><small>${h.n}</small></div><div><span>${car.ic}</span><small>${car.n}</small></div><div><span>🏆</span><small>${Object.keys(S.ach).length}/${ACH.length}</small></div><div><span>🌙</span><small>玩樂 ${S.nights||0} 次</small></div></div>
+ ${tt?`<div class="hint" style="margin-top:6px">目前稱號：<span class="ttl">${tt}</span></div>`:''}${lifeUp()?`<div class="hint">房車每日開銷 ${fm(lifeUp())}（打烊時扣除）</div>`:''}
+ <div class="seg" style="margin-top:8px">${segs.map(t=>`<button class="${lifeTab===t?'on':''}" onclick="lifeTab='${t}';render()">${t}</button>`).join('')}</div></div>`;
+ let b='';
+ if(lifeTab==='下班'){const night=S.phase==='night',done=S.today.night;
+  b=`<div class="card"><div class="kicker">🌃 下班去哪？</div><div class="hint">${night?(done?`今晚已經去過「${VENUES.find(v=>v.id===done).n}」了，明天再來吧！`:'打烊了！每晚可以選一個地方放鬆，效果會帶到明天。'):'打烊後才能出去玩。先把今天的店顧好！'}</div>
+  ${S.today.claw>0?`<button class="btn big pink" style="margin:8px 0" onclick="clawGame()">🧸 玩夾娃娃機（剩 ${S.today.claw} 次）</button>`:''}
+  ${VENUES.map(v=>{const c=vCost(v),lock=v.car&&carT()<v.car,rq=v.req&&!v.req(),dis=!night||done||S.money<c||lock||rq;
+  return `<div class="line"><div class="vic">${v.ic}</div><div class="grow"><div class="name">${v.n}${c?`<span class="tag">${fm(c)}</span>`:'<span class="tag g">免費</span>'}</div><div class="meta">${lock?`🔒 需要${CARS[v.car].n}以上`:rq?'🔒 '+v.reqT:v.d}</div></div>
+  <button class="btn sm ${dis?'':'dark'}" ${dis?'disabled':''} onclick="goVenue('${v.id}')">去</button></div>`}).join('')}</div>`}
+ else if(lifeTab==='房車'){
+  b=`<div class="card"><div class="kicker">🏠 房子</div>${HOUSES.map(x=>{const own=S.houses.includes(x.id),on=S.house===x.id;return `<div class="line"><div class="vic">${x.ic}</div><div class="grow"><div class="name">${x.n}${on?'<span class="tag g">住這裡</span>':''}</div><div class="meta">${x.d}${x.up?`・管理費 ${fm(x.up)}/天`:''}</div></div>
+  ${own?(on?'':`<button class="btn sm" onclick="useHouse('${x.id}')">搬過去</button>`):`<button class="btn sm ${S.money>=x.c?'dark':''}" ${S.money<x.c?'disabled':''} onclick="buyHouse('${x.id}')">${fm(x.c)}</button>`}</div>`}).join('')}</div>
+  <div class="card"><div class="kicker">🚗 座車</div><div class="hint">越高級的車包含前面車款的所有效果。</div>${CARS.map(x=>{const own=S.cars.includes(x.id),on=S.car===x.id;return `<div class="line"><div class="vic">${x.ic}</div><div class="grow"><div class="name">${x.n}${on?'<span class="tag g">開這台</span>':''}</div><div class="meta">${x.d}${x.up?`・油錢保養 ${fm(x.up)}/天`:''}</div></div>
+  ${own?(on?'':`<button class="btn sm" onclick="useCar('${x.id}')">開這台</button>`):`<button class="btn sm ${S.money>=x.c?'dark':''}" ${S.money<x.c?'disabled':''} onclick="buyCar('${x.id}')">${fm(x.c)}</button>`}</div>`}).join('')}</div>`}
+ else if(lifeTab==='成就'){
+  b=`<div class="card"><div class="kicker">🏆 成就與稱號 · ${Object.keys(S.ach).length}/${ACH.length}</div><div class="hint">解鎖成就可得獎金與稱號。點已解鎖的稱號，就會顯示在店名旁邊。</div>
+  <div class="achg">${ACH.map(a=>{const got=S.ach[a.id];return `<button class="ach ${got?'got':''} ${S.title===a.id?'on':''}" ${got?`onclick="setTitle('${a.id}')"`:'disabled'}><b>${got?a.t:'？？？'}</b><small>${a.d}</small><i>${got?(S.title===a.id?'✓ 配戴中':'第 '+got+' 天'):'$'+a.r.toLocaleString()}</i></button>`}).join('')}</div></div>`}
+ else{const L=S.legacy,ok=canRebirth();
+  b=`<div class="card"><div class="kicker">🌱 傳承 · 第 ${L.gen} 代</div><div class="hint">店經營成熟後，可以把店交棒、帶著經驗到新城市重新開店。每個城市的客群和租金都不一樣，傳承點能買永久加成，讓每一代都比上一代更強。</div>
+  <div class="tip">${ok?`可以傳承了！這次可得 <b>${lpGain()}</b> 傳承點。`:`解鎖條件：完成主線第 5 章，或經營滿 112 天（目前第 ${S.day} 天、第 ${S.ch} 章）`}</div>
+  ${ok?`<button class="btn big dark" style="margin-top:8px" onclick="rebirthDlg()">🌱 選擇新城市</button>`:''}
+  ${L.gen>1?`<div class="hint" style="margin-top:6px">足跡：${L.cities.map(c=>CITIES.find(x=>x.id===c).n).join(' → ')}　歷代最高營收 ${fm(L.best||0)}</div>`:''}</div>
+  <div class="card"><div class="kicker">永久加成 · 傳承點 <b style="color:var(--coffee)">${L.lp}</b></div>${LEGP.map(x=>{const l=lg(x.id),c=legCost(l);return `<div class="line"><div class="vic">${x.ic}</div><div class="grow"><div class="name">${x.n}<span class="tag y">${l}/${LEGMAX}</span></div><div class="meta">${l?x.d(l):x.d(1)}${l<LEGMAX&&l?`　→ ${x.d(l+1)}`:''}</div></div>
+  ${l>=LEGMAX?'<span class="tag g">滿級</span>':`<button class="btn sm ${L.lp>=c?'dark':''}" ${L.lp<c?'disabled':''} onclick="buyLeg('${x.id}')">${c} 點</button>`}</div>`}).join('')}</div>`}
+ return top+b}
+
 function brandView(){
  const segs=['目標','通行證','分店','報表'];
  const body=brandTab==='目標'?goalView():brandTab==='通行證'?passView():brandTab==='分店'?branchView():reportView();
@@ -2040,7 +2305,7 @@ function showSummary(){
  <table style="margin-top:10px"><tr><td>營收${T.deliv?'（外送已扣抽成）':''}</td><td class="pos">+${fm(T.rev)}</td></tr>
  <tr><td>進貨支出</td><td class="neg">-${fm(T.spend)}</td></tr>${T.emerg?`<tr><td>　其中緊急叫貨</td><td class="neg">${fm(T.emerg)}</td></tr>`:''}
  ${T.mkt?`<tr><td>投資與行銷</td><td class="neg">-${fm(T.mkt)}</td></tr>`:''}<tr><td>租金＋水電</td><td class="neg">-${fm(T.rent+T.util)}</td></tr>
- ${T.wages?`<tr><td>薪資</td><td class="neg">-${fm(T.wages)}</td></tr>`:''}
+ ${T.wages?`<tr><td>薪資</td><td class="neg">-${fm(T.wages)}</td></tr>`:''}${T.life?`<tr><td>房車開銷</td><td class="neg">-${fm(T.life)}</td></tr>`:''}
  ${T.catFood?`<tr><td>貓糧（${S.cats.length} 隻）</td><td class="neg">-${fm(T.catFood)}</td></tr>`:''}
  ${T.tips?`<tr><td>小費（已含在現金）</td><td class="pos">${f2(T.tips)}</td></tr>`:''}
  ${T.brInc?`<tr><td>分店收入</td><td class="pos">+${fm(T.brInc)}</td></tr>`:''}
@@ -2049,7 +2314,7 @@ function showSummary(){
  <tr class="total"><td>今日現金變化</td><td class="${T.profit>=0?'pos':'neg'}">${T.profit>=0?'+':''}${fm(T.profit)}</td></tr></table>
  ${hourChart(T)}
  <div class="hint" style="margin-top:4px">滿意度 ${Math.round(T.sat*100)}%　流失：缺貨 ${T.lostStock}　排隊 ${T.lostWait}　沒座位 ${T.lostSeat}　嫌貴 ${T.lostPrice}${ws?`<br>報廢：${ws}（${fm(T.wasteV)}）`:''}</div>
- ${aff?`<div class="tip love">💗 今日好感度：${aff}</div>`:''}${T.ownUp?`<div class="tip">⭐ 店長升級了！到「經營 › 店長」分配技能點</div>`:''}${T.mastUp&&T.mastUp.length?`<div class="tip">🏅 熟練度提升：${T.mastUp.map(k=>MENU[k].n+' ★'+star(k)).join('、')}</div>`:''}${T.passG?`<div class="tip">🎫 通行證 +${Math.floor(T.passG)} 點（共 ${Math.floor(S.pass.pts)}）</div>`:''}
+ ${aff?`<div class="tip love">💗 今日好感度：${aff}</div>`:''}${T.achNew&&T.achNew.length?`<div class="tip">🏆 成就解鎖：${T.achNew.map(id=>ACH.find(a=>a.id===id).t).join('、')}（到「生活 › 成就」配戴稱號）</div>`:''}${T.ownUp?`<div class="tip">⭐ 店長升級了！到「經營 › 店長」分配技能點</div>`:''}${T.mastUp&&T.mastUp.length?`<div class="tip">🏅 熟練度提升：${T.mastUp.map(k=>MENU[k].n+' ★'+star(k)).join('、')}</div>`:''}${T.passG?`<div class="tip">🎫 通行證 +${Math.floor(T.passG)} 點（共 ${Math.floor(S.pass.pts)}）</div>`:''}
  ${T.regMet.length?`<div class="tip love">✨ 認識了新熟客：${T.regMet.map(id=>REGS[id].n).join('、')}（到「熟客」查看）</div>`:''}
  ${S.quest?`<div class="tip">${S.quest.done?'📜 委託完成！':'📜 委託未完成：'}${S.quest.t}</div>`:''}
  ${T.blogger?`<div class="tip">${T.bloggerOK?'📸 部落客大推！口碑 +8':'📸 部落客體驗普通，口碑 -4'}</div>`:''}
@@ -2072,7 +2337,7 @@ function showSummary(){
  if(S.over)h+=`<div class="tip warn"><b>連續 3 天現金為負，咖啡店撐不下去了。</b><br>你經營了 ${S.day} 天。</div><button class="btn big dark" style="margin-top:12px" onclick="restartDlg()">重新開店</button>`;
  else{if(S.money<0)h+=`<div class="tip warn">⚠️ 現金為負（連續 ${S.broke} 天），連續 3 天就會倒閉。</div>`;
   if(S.day===GOAL_DAY)h+=`<div class="tip">${S.money>=GOAL?`🎉 目標達成！30 天內存到 ${fm(GOAL)}，可以繼續無盡經營。`:`⏳ 30 天到了，還沒存到 ${fm(GOAL)}，不過店還在，繼續撐下去！`}</div>`;
-  h+=`<button class="btn big dark" style="margin-top:14px" onclick="nextDay()">迎接第 ${S.day+1} 天 →</button>`}
+  h+=`${S.today.night?'':`<button class="btn big pink" style="margin-top:14px" onclick="closeModal();tab='life';lifeTab='下班';render();window.scrollTo(0,0)">🌃 下班去玩</button>`}<button class="btn big dark" style="margin-top:8px" onclick="nextDay()">迎接第 ${S.day+1} 天 →</button>`}
  openModal(h);
 }
 function openModal(h){document.getElementById('modal').innerHTML=`<div class="modal" onclick="if(event.target===this&&!S.over&&S.phase!=='night')closeModal()"><div class="sheet">${h}</div></div>`;drawPortraits()}
@@ -2132,7 +2397,7 @@ function checkout(){
  const em=S.phase==='open',mult=em?1.5:1;let total=0;for(const k in S.cart)total+=S.cart[k]*mktPrice(k)*mult;
  if(total<=0)return;if(total>S.money+300){toast('現金不足（最多可透支 $300）');return}
  for(const k in S.cart){const n=S.cart[k];if(!n)continue;const q=n*ING[k].pack,c=mktPrice(k)*mult/ING[k].pack;
-  if(em)S.pending.push({k,q,c,at:S.t+30});else addLot(k,q,c)}
+  if(em)S.pending.push({k,q,c,at:S.t+(carT()>=1?15:30)});else addLot(k,q,c)}
  S.money-=total;S.today.spend+=total;if(em)S.today.emerg+=total;S.cart={};sfx('cash',1);save();render();toast(em?'已下單，30 分鐘後到貨':'進貨完成')}
 function adjP(k,d){S.price[k]=Math.max(0.5,Math.round((S.price[k]+d)*10)/10);save();render()}
 function setP(k,v){S.price[k]=v;save();render()}
@@ -2221,7 +2486,7 @@ function showIntro(){openModal(`<div class="kicker">玩法說明</div><h2 class=
    啟動
 ================================================================ */
 if(typeof document!=='undefined'&&document.getElementById('app')&&document.getElementById('app').isConnected!==undefined){
- if(load()&&S.today&&S.today.regPlan){normalize();resetScene();if(S.phase==='open')S.paused=true;render();if(S.phase==='night')showSummary()}
+ if(load()&&S.today&&S.today.regPlan){normalize();resetScene();if(S.phase==='open')S.paused=true;render();if(S.phase==='night')showSummary();else try{checkLogin()}catch(e){}}
  else{newGame();render();showVN(PROLOGUE,showIntro)}
  requestAnimationFrame(frame);
 }else{newGame()}
