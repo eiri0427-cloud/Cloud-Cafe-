@@ -933,7 +933,7 @@ function actHTML(){const T=S.today,sta=Math.round(T.sta??100),on=rushOn(),gcd=(T
 ================================================================ */
 let S, tab='shop', subTab='升級', brandTab='目標', lastFloat=0, ART=null;
 let ENT=[], LINE=[], PICK=[], SEATS=[], CLEANERS=[], SPARK=[], BUB=[];
-function newGame(name){
+function newGame(name){backupSave();
  S={name:name||'巷口咖啡',day:1,money:600,rep:30,phase:'prep',t:480,acc:0,speed:1,regT:0,
   lv:{},staff:[],cands:[],rec:{},lab:null,hype:{},br:{},ch:0,medals:{gold:0,silver:0,bronze:0},totalRev:0,loan:null,beanGrade:0,maxRep:30,artBest:0,inv:{},prices:{},mods:[],history:[],ms:{},broke:0,questDone:0,reg:{},
   price:{americano:3.0,iced:3.3,latte:4.0,oatlatte:4.6,matcha:4.5,seasonal:5.6,pourover:6.0,croissant:3.2,cake:4.8},
@@ -947,8 +947,27 @@ function newGame(name){
 function resetToday(){S.today={cups:0,rev:0,spend:0,emerg:0,served:0,lostStock:0,lostWait:0,lostPrice:0,lostSeat:0,
  dine:0,deliv:0,sold:{},miss:{},wasteV:0,blackout:false,blogger:false,mkt:0,walk:0,peakSeat:0,waitSum:0,waitN:0,
  hW:Array(10).fill(0),hS:Array(10).fill(0),hL:Array(10).fill(0),repStart:S.rep,moneyStart:S.money,regPlan:[],regMet:[],affD:{}}}
-function save(){try{localStorage.setItem('cafeLog_v4',JSON.stringify(S))}catch(e){}}
-function load(){try{const j=localStorage.getItem('cafeLog_v4')||localStorage.getItem('cafeLog_v3');if(j){S=JSON.parse(j);return true}}catch(e){}return false}
+const SAVE_KEY='cafeLog_v4',SAVE_BAK='cafeLog_bak',SAVE_VER=13;
+function save(){try{S.saveVer=SAVE_VER;S.savedAt=Date.now();localStorage.setItem(SAVE_KEY,JSON.stringify(S))}catch(e){}}
+function backupSave(){try{const j=localStorage.getItem(SAVE_KEY);if(j)localStorage.setItem(SAVE_BAK,j)}catch(e){}}
+function okSave(o){return o&&typeof o==='object'&&o.day>0&&o.inv&&o.price}
+function load(){for(const k of [SAVE_KEY,SAVE_BAK,'cafeLog_v3']){try{const j=localStorage.getItem(k);if(!j)continue;const o=JSON.parse(j);if(okSave(o)){S=o;if(k!==SAVE_KEY)setTimeout(()=>toast('已從備份還原存檔'),800);return true}}catch(e){}}return false}
+try{if(typeof navigator!=='undefined'&&navigator.storage&&navigator.storage.persist)navigator.storage.persist()}catch(e){}
+function exportDlg(){save();const code=btoa(unescape(encodeURIComponent(JSON.stringify(S))));
+ openModal(`<h2 class="px" style="margin:0 0 6px;font-weight:400">💾 匯出存檔</h2><p class="sub">把下面這串存檔碼複製起來（貼到備忘錄或傳給自己）。換手機、換瀏覽器或資料被清掉時，用「匯入存檔」貼回來就能接著玩。</p>
+ <textarea id="svc" readonly style="width:100%;height:120px;font-size:11px;border:1px solid var(--line);border-radius:10px;padding:8px;box-sizing:border-box">${code}</textarea>
+ <div class="row" style="margin-top:10px"><button class="btn dark" onclick="copySave()">複製存檔碼</button><button class="btn" onclick="closeModal()">關閉</button></div>`)}
+function copySave(){const t=document.getElementById('svc');t.select();t.setSelectionRange(0,t.value.length);let ok=false;
+ try{if(navigator.clipboard){navigator.clipboard.writeText(t.value);ok=true}}catch(e){}if(!ok){try{ok=document.execCommand('copy')}catch(e){}}
+ S.lastExport=S.day;save();toast(ok?'✅ 已複製，記得貼到安全的地方':'請長按文字框手動複製')}
+function importDlg(){openModal(`<h2 class="px" style="margin:0 0 6px;font-weight:400">📥 匯入存檔</h2><p class="sub">貼上之前匯出的存檔碼。目前的進度會先自動備份一份。</p>
+ <textarea id="svi" style="width:100%;height:120px;font-size:11px;border:1px solid var(--line);border-radius:10px;padding:8px;box-sizing:border-box" placeholder="在這裡貼上存檔碼"></textarea>
+ <div class="row" style="margin-top:10px"><button class="btn dark" onclick="doImport()">匯入</button><button class="btn" onclick="closeModal()">取消</button></div>`)}
+function doImport(){const v=(document.getElementById('svi').value||'').trim();let o=null;
+ try{o=JSON.parse(decodeURIComponent(escape(atob(v.replace(/\s/g,'')))))}catch(e){try{o=JSON.parse(v)}catch(e2){}}
+ if(!okSave(o)){toast('存檔碼不正確，請確認有完整複製');return}
+ backupSave();try{localStorage.setItem(SAVE_KEY,JSON.stringify(o))}catch(e){toast('儲存空間不足');return}
+ toast('✅ 匯入成功，重新載入中…');setTimeout(()=>location.reload(),600)}
 function normalize(){
  const d={owner:{lv:1,xp:0,sp:1,sk:{}},mast:{},sig:[],guide:null,pass:null,cfurn:[],cats:['mikan'],catAff:{mikan:1},catPet:{},sets:[],labLog:[],weekWins:0,themes:['wood'],theme:'wood',yearRev:0,trophies:[],staff:[],cands:[],rec:{},lab:null,hype:{},br:{},ch:0,medals:{gold:0,silver:0,bronze:0},totalRev:0,loan:null,beanGrade:0,maxRep:S.rep||30,artBest:0,stories:[],reviews:[],reg:{},mods:[],pending:[]};
  for(const k in d)if(S[k]===undefined||S[k]===null&&k!=='lab'&&k!=='loan')S[k]=d[k];
@@ -1388,7 +1407,7 @@ function playStories(list,done){
  const lines=REGS[s.id].story[s.lv]||[];
  showVN([['sys',`💗 ${REGS[s.id].n} · 好感度 Lv${s.lv}「${LVN[s.lv]}」`]].concat(lines).concat(REGS[s.id].perks[s.lv]?[['sys',`🎁 解鎖效果：${REGS[s.id].perks[s.lv]}`]]:[]),()=>playStories(list,done));
 }
-function nextDay(){S.day++;startDay();closeModal();tab='shop';render()}
+function nextDay(){backupSave();S.day++;startDay();closeModal();tab='shop';render()}
 
 /* ---------- 評論 ---------- */
 const RNAMES=['Ann','小林','J.C.','咖啡控','路過的貓','Wendy','阿凱','Yuki','老張','Sean','momo','小綠'];
@@ -1854,7 +1873,7 @@ function storeView(){
  <tr><td>來客倍率（今日）</td><td>×${trafficMult().toFixed(2)}</td></tr><tr><td>顧客願付倍率</td><td>×${willK().toFixed(2)}</td></tr>
  <tr><td>口碑上限</td><td>${repCap()}</td></tr><tr><td>房租（第 ${cal().y} 年）</td><td>${fm(dailyRent())} / 天</td></tr>
  <tr><td>每日固定支出</td><td>${fm(dailyFixed())}</td></tr></table></div>`:''}
- <div class="card"><div class="kicker">設定</div><div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="btn sm" onclick="renameDlg()">店名</button><button class="btn sm" onclick="showIntro()">玩法說明</button><button class="btn sm" onclick="showVN(PROLOGUE)">重看序章</button><button class="btn sm" onclick="restartDlg()">重新開始</button></div></div>`;
+ <div class="card"><div class="kicker">設定</div><div class="row" style="margin-top:8px;flex-wrap:wrap"><button class="btn sm" onclick="exportDlg()">💾 匯出存檔</button><button class="btn sm" onclick="importDlg()">📥 匯入存檔</button><button class="btn sm" onclick="renameDlg()">店名</button><button class="btn sm" onclick="showIntro()">玩法說明</button><button class="btn sm" onclick="showVN(PROLOGUE)">重看序章</button><button class="btn sm" onclick="restartDlg()">重新開始</button></div></div>`;
 }
 function setPos(id,p){const s=S.staff.find(x=>x.id===id);if(!s)return;if(p!=='rest'&&posOf(s)!==p&&posUsed(p,s)>=slotCap(p)){toast(`${POS[p]}名額已滿（${slotCap(p)} 人），先把其他人調去休息室`);return}s.pos=p;resetCleaners();sfx('click');save();render()}
 function setShift(id,sh){const s=S.staff.find(x=>x.id===id);if(!s)return;s.shift=sh;resetCleaners();sfx('click');save();render()}
